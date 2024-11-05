@@ -1,0 +1,15 @@
+package page
+
+import "likemind/website/widget"
+
+templ ProfilePage() {
+	<!DOCTYPE html>
+	<head>
+		<link rel="stylesheet" href="static/css/styles.css"/>
+	</head>
+	<html>
+		@widget.Header()
+		@widget.Footer()
+		@widget.NotificationContainer()
+	</html>
+}

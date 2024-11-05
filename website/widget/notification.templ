@@ -1,0 +1,32 @@
+package widget
+
+type NotificationType int
+
+const (
+	NotificationInfo NotificationType = iota
+	NotificationWarn
+	NotificationError
+)
+
+type NotificationData struct {
+	Type    NotificationType `json:"type"`
+	Message string           `json:"message"`
+}
+
+css notificationContainerStyle() {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 10px;
+	z-index: 1000;
+}
+
+templ NotificationContainer() {
+	<div class={ "notification-container", notificationContainerStyle() }></div>
+}
+
+templ Notification(NotificationData) {
+}

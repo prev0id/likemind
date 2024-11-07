@@ -1,0 +1,21 @@
+package widget
+
+type SelectOption struct {
+	Value string `json:"value"`
+	Name  string `json:"name"`
+}
+
+type SelectData struct {
+	Label string         `json:"label"`
+	ID    string         `json:"id"`
+	Data  []SelectOption `json:"data"`
+}
+
+templ SelectDropdown(state SelectData) {
+    <label for={ state.ID } class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{ state.Label }</label>
+	<select id={ state.ID } class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+		for _, item := range state.Data {
+			<option value={ item.Value }>{ item.Name }</option>
+		}
+	</select>
+}

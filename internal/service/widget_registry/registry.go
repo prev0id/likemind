@@ -1,4 +1,4 @@
-package internal
+package widget_registry
 
 import (
 	"fmt"
@@ -17,15 +17,17 @@ var fileNameRegex = regexp.MustCompile(`^(\w+)_(\w+)_test\.json$`)
 
 type WidgetGenerator func(data []byte) (templ.Component, error)
 
-type Regestry struct {
+type Registry struct {
 	widgets map[string]WidgetGenerator
 }
 
-func New() *Regestry {
-	return &Regestry{}
+func New() *Registry {
+	return &Registry{
+		widgets: widgets,
+	}
 }
 
-func (r *Regestry) ListTestsForWidget(widget string) ([]string, error) {
+func (r *Registry) ListTestsForWidget(widget string) ([]string, error) {
 	testDir, err := os.ReadDir("website/widget/tests")
 	if err != nil {
 		return nil, fmt.Errorf("os.ReadDir: %w", err)
@@ -53,7 +55,7 @@ func (r *Regestry) ListTestsForWidget(widget string) ([]string, error) {
 	return tests, nil
 }
 
-func (r *Regestry) ListWidgets() []string {
+func (r *Registry) ListWidgets() []string {
 	widgets := make([]string, 0, len(r.widgets))
 
 	for name := range r.widgets {
@@ -63,7 +65,7 @@ func (r *Regestry) ListWidgets() []string {
 	return widgets
 }
 
-func (r *Regestry) GetWidget(widgetName, testName string) (templ.Component, error) {
+func (r *Registry) GetWidget(widgetName, testName string) (templ.Component, error) {
 	widget, exists := r.widgets[widgetName]
 	if !exists {
 		return nil, fmt.Errorf("widget '' not exists", widgetName)

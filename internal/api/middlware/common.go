@@ -2,13 +2,12 @@ package middlware
 
 import (
 	"net/http"
-	"slices"
 )
 
 type Middleware func(http.Handler) http.Handler
 
 func Join(handler http.Handler, middlewares ...Middleware) http.Handler {
-	for _, middleware := range slices.Backward(middlewares) {
+	for _, middleware := range middlewares {
 		handler = middleware(handler)
 	}
 

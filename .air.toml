@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
 args_bin = []
 bin = "./bin/likemind"
-cmd = "go run github.com/a-h/templ/cmd/templ@latest generate && go build -o ./bin/likemind ./cmd/main.go"
+cmd = "go run github.com/a-h/templ/cmd/templ@latest generate && go build -o ./bin/likemind ./cmd/widget_dev/main.go"
 delay = 1000
 exclude_dir = ["website/static", "bin"]
 exclude_file = []

@@ -1,0 +1,43 @@
+package page
+
+import "likemind/website/widget/select_dropdown"
+
+css resizalbeWrapper() {
+	height: 300px;
+	widht: 1000px;
+	min-height: 30px;
+	min-width: 30px;
+	resize: both;
+	overflow: auto;
+	max-height: 300px;
+	max-width: 1000px;
+	border: solid;
+	border-width: 1px;
+}
+
+templ DevPage(widgets, tests select_dropdown.State, widgetToDev templ.Component) {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<link rel="stylesheet" href="/static/css/styles.css"/>
+		</head>
+		<body class="grid grid-flow-row justify-items-left m-8 gap-8">
+			<script src="/static/js/htmx.min.js"></script>
+			<div class="flex flex-wrap flex-row gap-8">
+				<div>
+					@select_dropdown.Component(widgets)
+				</div>
+				<div id="test_selection_wrapper">
+					@select_dropdown.Component(tests)
+				</div>
+			</div>
+			<div id="resizable_wrapper" class={ resizalbeWrapper() }>
+				if widgetToDev == nil {
+					<div>choose widget first</div>
+				} else {
+					@widgetToDev
+				}
+			</div>
+		</body>
+	</html>
+}

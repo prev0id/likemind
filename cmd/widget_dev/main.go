@@ -1,14 +1,18 @@
 package main
 
 import (
-	"likemind/internal/api/handlers/widget_dev"
 	"log"
 	"net/http"
+
+	"likemind/internal/api/handlers/widget_dev"
 )
 
 func main() {
 	w := widget_dev.New()
 	http.HandleFunc("/", w.HandleTestingPage)
+
+	http.HandleFunc("/dev/tests", w.HandleListTests)
+	http.HandleFunc("/dev/test/{widget}", w.HandleWidget)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("website/static"))))
 

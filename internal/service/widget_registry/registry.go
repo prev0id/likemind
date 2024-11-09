@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"slices"
+	"strings"
 
 	"github.com/a-h/templ"
 )
 
 const (
-	nilTest  = "nil-test"
-	testsDir = "website/widget/tests"
+	nilTest = "nil-test"
 )
 
 var fileNameRegex = regexp.MustCompile(`^(\w+)_(\w+)_test\.json$`)
@@ -28,7 +29,7 @@ func New() *Registry {
 }
 
 func (r *Registry) ListTestsForWidget(widget string) ([]string, error) {
-	testDir, err := os.ReadDir("website/widget/tests")
+	testDir, err := os.ReadDir("./website/widget/" + widget + "/tests")
 	if err != nil {
 		return nil, fmt.Errorf("os.ReadDir: %w", err)
 	}
@@ -37,15 +38,8 @@ func (r *Registry) ListTestsForWidget(widget string) ([]string, error) {
 	tests = append(tests, nilTest)
 
 	for _, testFile := range testDir {
-		matches := fileNameRegex.FindStringSubmatch(testFile.Name())
-		if len(matches) < 3 {
-			continue
-		}
-
-		widgetName := matches[1]
-		testName := matches[2]
-
-		if widgetName != widget {
+		testName, withPrefix := strings.CutSuffix(testFile.Name(), "_test.json")
+		if !withPrefix {
 			continue
 		}
 
@@ -62,20 +56,22 @@ func (r *Registry) ListWidgets() []string {
 		widgets = append(widgets, name)
 	}
 
+	slices.Sort(widgets)
+
 	return widgets
 }
 
 func (r *Registry) GetWidget(widgetName, testName string) (templ.Component, error) {
 	widget, exists := r.widgets[widgetName]
 	if !exists {
-		return nil, fmt.Errorf("widget '' not exists", widgetName)
+		return nil, fmt.Errorf("widget '%s' not exists", widgetName)
 	}
 
 	if testName == nilTest {
 		return widget(nil)
 	}
 
-	file, err := os.ReadFile(fmt.Sprintf("%s/%s_%s_test.json", testsDir, widgetName, testName))
+	file, err := os.ReadFile(fmt.Sprintf("website/widget/" + widgetName + "/tests/" + testName + "_test.json"))
 	if err != nil {
 		return nil, fmt.Errorf("os.ReadFile: %w", err)
 	}

@@ -8,7 +8,11 @@ package page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "likemind/website/widget"
+import (
+	"likemind/website/widget/footer"
+	"likemind/website/widget/header"
+	"likemind/website/widget/notification"
+)
 
 func ProfilePage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -35,15 +39,15 @@ func ProfilePage() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = widget.Header().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = header.Component().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = widget.Footer().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = footer.Component().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = widget.NotificationContainer().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = notification.NotificationContainer().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

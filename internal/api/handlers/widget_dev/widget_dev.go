@@ -1,13 +1,17 @@
 package widget_dev
 
 import (
+	"fmt"
+	"net/http"
+
 	"likemind/internal/service/widget_registry"
 	"likemind/website/page"
-	"likemind/website/widget"
-	"net/http"
-	"slices"
+	"likemind/website/widget/select_dropdown"
+)
 
-	"github.com/samber/lo"
+const (
+	defaultTestOption   = "--- test ---"
+	defaultWidgetOption = "--- widget ---"
 )
 
 type Service struct {
@@ -21,37 +25,87 @@ func New() *Service {
 }
 
 func (s *Service) HandleTestingPage(w http.ResponseWriter, r *http.Request) {
-	widgets := s.registry.ListWidgets()
+	widgets := s.listOfWidgets()
 
-	slices.Sort(widgets)
-
-	data := widget.SelectData{
-		Label: "Select Widget",
-		ID:    "selection_data",
-		Data: lo.Map(widgets, func(w string, _ int) widget.SelectOption {
-			return widget.SelectOption{
-				Value: w,
-				Name:  w,
-			}
-		}),
+	tests := select_dropdown.State{
+		Label:   "Select a test",
+		ID:      "test_selection",
+		Name:    "test",
+		Default: defaultTestOption,
 	}
 
-	page.TestPage(widget.SelectDropdown(data)).Render(r.Context(), w)
+	page.DevPage(widgets, tests, nil).Render(r.Context(), w)
 }
 
-func (s *Service) HandleListOfWidgets(w http.ResponseWriter, r *http.Request) {
-	widgets := s.registry.ListWidgets()
-
-	data := widget.SelectData{
-		Label: "label",
-		ID:    "selection_data",
-		Data: lo.Map(widgets, func(w string, _ int) widget.SelectOption {
-			return widget.SelectOption{
-				Value: w,
-				Name:  w,
-			}
-		}),
+func (s *Service) HandleWidget(w http.ResponseWriter, r *http.Request) {
+	widget := r.PathValue("widget")
+	if widget == defaultWidgetOption {
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	widget.SelectDropdown(data).Render(r.Context(), w)
+	query := r.URL.Query()
+	test := query.Get("test")
+	if test == defaultTestOption {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	component, err := s.registry.GetWidget(widget, test)
+	if err != nil {
+		panic(err)
+	}
+
+	component.Render(r.Context(), w)
+}
+
+func (s *Service) HandleListTests(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
+	widget := query.Get("widget")
+	if widget == defaultWidgetOption {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	state, err := s.listOfTests(widget)
+	if err != nil {
+		panic(err)
+	}
+
+	select_dropdown.Component(state).Render(r.Context(), w)
+}
+
+func (s *Service) listOfTests(widgetName string) (select_dropdown.State, error) {
+	tests, err := s.registry.ListTestsForWidget(widgetName)
+	if err != nil {
+		return select_dropdown.State{}, fmt.Errorf("s.registry.ListTestsForWidget widget='%s': %w", widgetName, err)
+	}
+
+	return select_dropdown.State{
+		Label:   "Select a test",
+		ID:      "test_selection",
+		Data:    tests,
+		Name:    "test",
+		Default: defaultTestOption,
+		HTMX: &select_dropdown.HTMX{
+			Get:    "/dev/test/" + widgetName,
+			Target: "#resizable_wrapper",
+		},
+	}, nil
+}
+
+func (s *Service) listOfWidgets() select_dropdown.State {
+	widgets := s.registry.ListWidgets()
+
+	return select_dropdown.State{
+		Name:    "widget",
+		Label:   "Select a widget",
+		ID:      "widget_selection",
+		Data:    widgets,
+		Default: defaultWidgetOption,
+		HTMX: &select_dropdown.HTMX{
+			Get:    "/dev/tests",
+			Target: "#test_selection_wrapper",
+		},
+	}
 }

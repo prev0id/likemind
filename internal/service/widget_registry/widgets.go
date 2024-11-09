@@ -3,25 +3,32 @@ package widget_registry
 import (
 	"encoding/json"
 	"fmt"
-	"likemind/website/widget"
+
+	"likemind/website/widget/footer"
+	"likemind/website/widget/header"
+	"likemind/website/widget/notification"
 
 	"github.com/a-h/templ"
 )
 
 var widgets = map[string]WidgetGenerator{
-	"Notification": func(data []byte) (templ.Component, error) {
-		state := &widget.NotificationData{}
+	"notification": func(data []byte) (templ.Component, error) {
+		if data == nil {
+			return notification.Component(notification.State{}), nil
+		}
+
+		state := &notification.State{}
 
 		if err := json.Unmarshal(data, state); err != nil {
 			return nil, fmt.Errorf("json.Unmarshal: %w", err)
 		}
 
-		return widget.Notification(*state), nil
+		return notification.Component(*state), nil
 	},
-	"Footer": func(data []byte) (templ.Component, error) {
-		return nil, nil
+	"footer": func(data []byte) (templ.Component, error) {
+		return footer.Component(), nil
 	},
-	"Header": func(data []byte) (templ.Component, error) {
-		return nil, nil
+	"header": func(data []byte) (templ.Component, error) {
+		return header.Component(), nil
 	},
 }

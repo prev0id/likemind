@@ -1,0 +1,7 @@
+[db]
+network = "tcp"
+insecure = true
+addr = "localhost:5430"
+user = "user"
+password = "password"
+database = "likemind"

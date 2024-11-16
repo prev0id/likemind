@@ -3,9 +3,11 @@ package domain
 type User struct {
 	Username string
 	Name     string
+	Surname  string
 	About    string
 	Contacts []string
-	ID       uint64
+	ID       int64
+	PfpID    string
 }
 
 type AppliedInterest struct {

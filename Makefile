@@ -1,3 +1,7 @@
+.PHONY: debug
+debug:
+	dlv debug ./cmd/main.go
+
 .PHONY: local
 local: prepare-env
 	go run github.com/air-verse/air@latest -c .air.toml

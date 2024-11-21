@@ -1,11 +1,10 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
+	"runtime"
 
-	profile_adapter "likemind/internal/adapter/profile"
+	"likemind/internal/api"
 	"likemind/internal/config"
 )
 
@@ -15,17 +14,13 @@ func main() {
 		log.Fatalf("cofnig.Parse: %s", err.Error())
 	}
 
+	if !cfg.DB.Insecure {
+		runtime.Breakpoint()
+	}
+
 	log.Printf("cfg: %+v", cfg)
 
-	adapter, err := profile_adapter.New(cfg.DB)
-	if err != nil {
-		log.Fatalf("profile_adapter.New: %s", err.Error())
+	if err := api.BootstrapServer(cfg.API); err != nil {
+		log.Fatalf("api.BootstrapServer: %s", err.Error())
 	}
-
-	user, err := adapter.GetUser(context.Background(), 1)
-	if err != nil {
-		log.Fatalf("%s", err.Error())
-	}
-
-	fmt.Println(user)
 }

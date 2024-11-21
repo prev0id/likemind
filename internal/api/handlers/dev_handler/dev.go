@@ -1,4 +1,4 @@
-package widget_dev
+package dev_handlers
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	defaultTestOption   = "--- test ---"
-	defaultWidgetOption = "--- widget ---"
+	defaultMockOption   = "--- Mock ---"
+	defaultWidgetOption = "--- Widget ---"
 )
 
 type Service struct {
@@ -24,20 +24,20 @@ func New() *Service {
 	}
 }
 
-func (s *Service) HandleTestingPage(w http.ResponseWriter, r *http.Request) {
+func (s *Service) Page(w http.ResponseWriter, r *http.Request) {
 	widgets := s.listOfWidgets()
 
-	tests := select_dropdown.State{
-		Label:   "Select a test",
-		ID:      "test_selection",
-		Name:    "test",
-		Default: defaultTestOption,
+	mocks := select_dropdown.State{
+		Label:   "Select a mock",
+		ID:      "mock_selection",
+		Name:    "mock",
+		Default: defaultMockOption,
 	}
 
-	page.DevPage(widgets, tests, nil).Render(r.Context(), w)
+	page.DevPage(widgets, mocks, nil).Render(r.Context(), w)
 }
 
-func (s *Service) HandleWidget(w http.ResponseWriter, r *http.Request) {
+func (s *Service) MockWidget(w http.ResponseWriter, r *http.Request) {
 	widget := r.PathValue("widget")
 	if widget == defaultWidgetOption {
 		w.WriteHeader(http.StatusBadRequest)
@@ -46,7 +46,7 @@ func (s *Service) HandleWidget(w http.ResponseWriter, r *http.Request) {
 
 	query := r.URL.Query()
 	test := query.Get("test")
-	if test == defaultTestOption {
+	if test == defaultMockOption {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -59,7 +59,7 @@ func (s *Service) HandleWidget(w http.ResponseWriter, r *http.Request) {
 	component.Render(r.Context(), w)
 }
 
-func (s *Service) HandleListTests(w http.ResponseWriter, r *http.Request) {
+func (s *Service) ListMocks(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	widget := query.Get("widget")
 	if widget == defaultWidgetOption {
@@ -67,7 +67,7 @@ func (s *Service) HandleListTests(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	state, err := s.listOfTests(widget)
+	state, err := s.listOfMocks(widget)
 	if err != nil {
 		panic(err)
 	}
@@ -75,7 +75,7 @@ func (s *Service) HandleListTests(w http.ResponseWriter, r *http.Request) {
 	select_dropdown.Component(state).Render(r.Context(), w)
 }
 
-func (s *Service) listOfTests(widgetName string) (select_dropdown.State, error) {
+func (s *Service) listOfMocks(widgetName string) (select_dropdown.State, error) {
 	tests, err := s.registry.ListTestsForWidget(widgetName)
 	if err != nil {
 		return select_dropdown.State{}, fmt.Errorf("s.registry.ListTestsForWidget widget='%s': %w", widgetName, err)
@@ -86,9 +86,9 @@ func (s *Service) listOfTests(widgetName string) (select_dropdown.State, error) 
 		ID:      "test_selection",
 		Data:    tests,
 		Name:    "test",
-		Default: defaultTestOption,
+		Default: defaultMockOption,
 		HTMX: &select_dropdown.HTMX{
-			Get:    "/dev/test/" + widgetName,
+			Get:    "/dev/mock/" + widgetName,
 			Target: "#resizable_wrapper",
 		},
 	}, nil
@@ -104,7 +104,7 @@ func (s *Service) listOfWidgets() select_dropdown.State {
 		Data:    widgets,
 		Default: defaultWidgetOption,
 		HTMX: &select_dropdown.HTMX{
-			Get:    "/dev/tests",
+			Get:    "/dev/mock",
 			Target: "#test_selection_wrapper",
 		},
 	}

@@ -1,3 +1,6 @@
+[api]
+addr = "localhost:8080"
+
 [db]
 network = "tcp"
 insecure = true

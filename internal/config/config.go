@@ -7,7 +7,12 @@ import (
 )
 
 type Config struct {
-	DB DB
+	DB  DB
+	API API
+}
+
+type API struct {
+	Addr string
 }
 
 type DB struct {

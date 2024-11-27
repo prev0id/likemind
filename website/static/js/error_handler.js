@@ -12,20 +12,20 @@ document.addEventListener("htmx:responseError", function (event) {
 });
 
 function showErrorMessage(htmlContent) {
-  let popupContainer = document.getElementById("notification-container");
-  if (!popupContainer) {
-    popupContainer = document.createElement("div");
-    popupContainer.id = "popup-container";
-    document.body.appendChild(popupContainer);
+  let container = document.getElementById("notification-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "notification-container";
+    document.body.appendChild(container);
   }
 
   const errorDiv = document.createElement("div");
   errorDiv.className = "error-popup";
   errorDiv.innerHTML = htmlContent;
 
-  popupContainer.appendChild(errorDiv);
+  container.appendChild(errorDiv);
 
   setTimeout(() => {
     errorDiv.remove();
-  }, 15000);
+  }, 10000);
 }

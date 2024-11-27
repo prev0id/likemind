@@ -1,17 +1,12 @@
 package select_dropdown
 
-type HTMX struct {
-	Get    string `json:"get"`
-	Target string `json:"target"`
-}
-
 type State struct {
-	Label   string   `json:"label"`
-	ID      string   `json:"id"`
-	Name    string   `json:"name"`
-	Data    []string `json:"data"`
-	Default string   `json:"default"`
-	HTMX    *HTMX    `json:"htmx"`
+	Label      string   `json:"label"`
+	ID         string   `json:"id"`
+	Name       string   `json:"name"`
+	Data       []string `json:"data"`
+	HTMXGet    string   `json:"htmx_get"`
+	HTMXTarget string   `json:"htmx_target"`
 }
 
 templ Component(state State) {
@@ -19,13 +14,10 @@ templ Component(state State) {
 	<select
 		name={ state.Name }
 		id={ state.ID }
-		if state.HTMX != nil {
-			hx-get={ state.HTMX.Get }
-			hx-target={ state.HTMX.Target }
-		}
+		hx-get={ state.HTMXGet }
+		hx-target={ state.HTMXTarget }
 		class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
 	>
-		<option selected>{ state.Default }</option>
 		for _, item := range state.Data {
 			<option value={ item }>{ item }</option>
 		}

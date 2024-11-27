@@ -4,9 +4,10 @@ import (
 	"net/http"
 
 	"likemind/internal/service/profile"
+	"likemind/internal/utils"
 	"likemind/website/page"
 
-	"github.com/a-h/templ"
+	"github.com/labstack/echo/v4"
 )
 
 type Handler struct {
@@ -19,15 +20,20 @@ func New(profileService profile.Service) *Handler {
 	}
 }
 
-func (h *Handler) ProfilePage(w http.ResponseWriter, r *http.Request) {
-	page := page.ProfilePage()
-
-	handler := templ.Handler(page)
-
-	handler.ServeHTTP(w, r)
+func (s *Handler) Login(c echo.Context) error {
+	return nil
 }
 
-func (h *Handler) ChangeName(w http.ResponseWriter, r *http.Request) {
+func (s *Handler) Register(c echo.Context) error {
+	return utils.Render(c, http.StatusOK, page.Regeister())
+}
+
+func (h *Handler) ProfilePage(c echo.Context) error {
+	return utils.Render(c, http.StatusOK, page.ProfilePage())
+}
+
+func (h *Handler) ChangeName(c echo.Context) error {
+	return nil
 }
 
 func RegistrationPage(w http.ResponseWriter, r *http.Request) {

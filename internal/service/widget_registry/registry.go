@@ -28,7 +28,19 @@ func New() *Registry {
 	}
 }
 
-func (r *Registry) ListTestsForWidget(widget string) ([]string, error) {
+func (r *Registry) ListWidgets() []string {
+	widgets := make([]string, 0, len(r.widgets))
+
+	for name := range r.widgets {
+		widgets = append(widgets, name)
+	}
+
+	slices.Sort(widgets)
+
+	return widgets
+}
+
+func (r *Registry) ListWidgetMocks(widget string) ([]string, error) {
 	testDir, err := os.ReadDir("./website/widget/" + widget + "/tests")
 	if err != nil {
 		return nil, fmt.Errorf("os.ReadDir: %w", err)
@@ -49,19 +61,7 @@ func (r *Registry) ListTestsForWidget(widget string) ([]string, error) {
 	return tests, nil
 }
 
-func (r *Registry) ListWidgets() []string {
-	widgets := make([]string, 0, len(r.widgets))
-
-	for name := range r.widgets {
-		widgets = append(widgets, name)
-	}
-
-	slices.Sort(widgets)
-
-	return widgets
-}
-
-func (r *Registry) GetWidget(widgetName, testName string) (templ.Component, error) {
+func (r *Registry) GetWidgetMock(widgetName, testName string) (templ.Component, error) {
 	widget, exists := r.widgets[widgetName]
 	if !exists {
 		return nil, fmt.Errorf("widget '%s' not exists", widgetName)

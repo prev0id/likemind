@@ -35,7 +35,7 @@ func ProfilePage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><head><link rel=\"stylesheet\" href=\"static/css/styles.css\"></head><html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><head><link rel=\"stylesheet\" href=\"static/css/styles.css\"></head><html class=\"font-Maple\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +47,7 @@ func ProfilePage() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = notification.NotificationContainer().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = notification.Container().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

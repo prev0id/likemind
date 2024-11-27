@@ -1,0 +1,29 @@
+package tabs
+
+import "strconv"
+
+type State struct {
+	Tabs []Tab `json:"tabs"`
+}
+
+type Tab struct {
+	Name       string `json:"name"`
+	Path       string `json:"path"`
+	IsSelected bool   `json:"is_selected"`
+}
+
+templ Component(state State) {
+	<div class="grid grid-flow-col gap-x-2" role="tablist">
+		for _, tab := range state.Tabs {
+			<button
+				hx-get={ tab.Path }
+				class="px-4 py-2 rounded-t-md border-b-2 bg-green-100"
+				role="tab"
+				aria-selected={ strconv.FormatBool(tab.IsSelected) }
+				aria-controls="tab-content"
+			>
+				{ tab.Name }
+			</button>
+		}
+	</div>
+}

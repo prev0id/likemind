@@ -1,7 +1,3 @@
-.PHONY: debug
-debug:
-	dlv debug ./cmd/main.go
-
 .PHONY: local
 local: prepare-env
 	go run github.com/air-verse/air@latest -c .air.toml
@@ -15,8 +11,8 @@ prepare-env:
 build: build-templ build-tailwind build-app
 
 .PHONY: build-app
-build:
-	go build -o ./bin/likemind ./cmd/widget_dev/main.go
+build-app:
+	go build -o ./bin/likemind ./cmd/main.go
 
 .PHONY: build-templ
 build-templ:
@@ -25,7 +21,3 @@ build-templ:
 .PHONY: build-tailwind
 build-tailwind:
 	npx tailwindcss -i ./website/static/css/src.css -o ./website/static/css/styles.css --minify
-
-.PHONY: generate-pg
-generate-pg:
-	go run github.com/go-jet/jet/v2/cmd/jet@latest -dsn=postgresql://user:password@localhost:5430/likemind?sslmode=disable -schema=public -path=./internal/.gen/sql

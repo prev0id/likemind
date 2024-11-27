@@ -8,7 +8,7 @@ package page
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "likemind/website/widget/select_dropdown"
+import "likemind/website/widget/notification"
 
 func resizalbeWrapper() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder := templruntime.GetBuilder()
@@ -18,7 +18,7 @@ func resizalbeWrapper() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`min-width:30px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`resize:both;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`overflow:auto;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`max-height:300px;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`max-height:1000px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`max-width:1000px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`border:solid;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`border-width:1px;`)
@@ -29,7 +29,7 @@ func resizalbeWrapper() templ.CSSClass {
 	}
 }
 
-func DevPage(widgets, tests select_dropdown.State, widgetToDev templ.Component) templ.Component {
+func DevPage(widgetSelector, mockSelector, widgetToDev templ.Component) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -50,19 +50,27 @@ func DevPage(widgets, tests select_dropdown.State, widgetToDev templ.Component) 
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html><head><link rel=\"stylesheet\" href=\"/static/css/styles.css\"></head><body class=\"grid grid-flow-row justify-items-left m-8 gap-8\"><script src=\"/static/js/htmx.min.js\"></script><div class=\"flex flex-wrap flex-row gap-8\"><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html><head><link rel=\"stylesheet\" href=\"/static/css/styles.css\"></head><body class=\"font-Maple grid grid-flow-row justify-items-left m-8 gap-8\"><script src=\"/static/js/htmx.min.js\"></script><script src=\"/static/js/error_handler.js\"></script><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = select_dropdown.Component(widgets).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = notification.Container().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"test_selection_wrapper\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-wrap flex-row gap-8\"><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = select_dropdown.Component(tests).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = widgetSelector.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"mock_selection_wrapper\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = mockSelector.Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -92,16 +100,9 @@ func DevPage(widgets, tests select_dropdown.State, widgetToDev templ.Component) 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if widgetToDev == nil {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>choose widget first</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		} else {
-			templ_7745c5c3_Err = widgetToDev.Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		templ_7745c5c3_Err = widgetToDev.Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></body></html>")
 		if templ_7745c5c3_Err != nil {

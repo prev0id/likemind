@@ -14,10 +14,10 @@ type State struct {
 	Message string           `json:"message"`
 }
 
-css notificationContainerStyle() {
+css containerStyle() {
 	position: fixed;
-	top: 10px;
-	right: 10px;
+	top: 2rem;
+	right: 8rem;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
@@ -25,8 +25,8 @@ css notificationContainerStyle() {
 	z-index: 1000;
 }
 
-templ NotificationContainer() {
-	<div class={ "notification-container", notificationContainerStyle() }></div>
+templ Container() {
+	<div id="notification-container" class={ containerStyle() }></div>
 }
 
 templ Component(state State) {

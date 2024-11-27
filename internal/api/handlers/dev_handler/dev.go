@@ -5,107 +5,102 @@ import (
 	"net/http"
 
 	"likemind/internal/service/widget_registry"
+	"likemind/internal/utils"
 	"likemind/website/page"
 	"likemind/website/widget/select_dropdown"
+
+	"github.com/a-h/templ"
+	"github.com/labstack/echo/v4"
 )
 
 const (
-	defaultMockOption   = "--- Mock ---"
-	defaultWidgetOption = "--- Widget ---"
+	mockParam   = "mock"
+	widgetParam = "widget"
 )
 
+type mockService interface {
+	ListWidgets() []string
+	ListWidgetMocks(widget string) ([]string, error)
+	GetWidgetMock(widget, mock string) (templ.Component, error)
+}
+
 type Service struct {
-	registry *widget_registry.Registry
+	svc mockService
 }
 
 func New() *Service {
 	return &Service{
-		registry: widget_registry.New(),
+		svc: widget_registry.New(),
 	}
 }
 
-func (s *Service) Page(w http.ResponseWriter, r *http.Request) {
-	widgets := s.listOfWidgets()
+func (s *Service) Page(c echo.Context) error {
+	widgets := s.svc.ListWidgets()
 
-	mocks := select_dropdown.State{
-		Label:   "Select a mock",
-		ID:      "mock_selection",
-		Name:    "mock",
-		Default: defaultMockOption,
-	}
-
-	page.DevPage(widgets, mocks, nil).Render(r.Context(), w)
-}
-
-func (s *Service) MockWidget(w http.ResponseWriter, r *http.Request) {
-	widget := r.PathValue("widget")
-	if widget == defaultWidgetOption {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	query := r.URL.Query()
-	test := query.Get("test")
-	if test == defaultMockOption {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	component, err := s.registry.GetWidget(widget, test)
+	defaultWidgetName := widgets[0]
+	mocks, err := s.svc.ListWidgetMocks(defaultWidgetName)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	component.Render(r.Context(), w)
+	defaultMockName := mocks[0]
+	defaultMock, err := s.svc.GetWidgetMock(defaultWidgetName, defaultMockName)
+	if err != nil {
+		return err
+	}
+
+	devPage := page.DevPage(widgetSelector(widgets), mockSelector(mocks, defaultWidgetName), defaultMock)
+
+	return utils.Render(c, http.StatusOK, devPage)
 }
 
-func (s *Service) ListMocks(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query()
-	widget := query.Get("widget")
-	if widget == defaultWidgetOption {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+func (s *Service) ListMocks(c echo.Context) error {
+	widget := c.QueryParam(widgetParam)
 
-	state, err := s.listOfMocks(widget)
+	mocks, err := s.svc.ListWidgetMocks(widget)
 	if err != nil {
-		panic(err)
+		return utils.RenderErrorNotification(c, http.StatusBadRequest, err)
 	}
 
-	select_dropdown.Component(state).Render(r.Context(), w)
+	return utils.Render(c, http.StatusOK, mockSelector(mocks, widget))
 }
 
-func (s *Service) listOfMocks(widgetName string) (select_dropdown.State, error) {
-	tests, err := s.registry.ListTestsForWidget(widgetName)
+func (s *Service) MockWidget(c echo.Context) error {
+	widget := c.Param(widgetParam)
+	mock := c.QueryParam(mockParam)
+
+	fmt.Println(widget, mock)
+
+	component, err := s.svc.GetWidgetMock(widget, mock)
 	if err != nil {
-		return select_dropdown.State{}, fmt.Errorf("s.registry.ListTestsForWidget widget='%s': %w", widgetName, err)
+		return utils.RenderErrorNotification(c, http.StatusBadRequest, err)
 	}
 
-	return select_dropdown.State{
-		Label:   "Select a test",
-		ID:      "test_selection",
-		Data:    tests,
-		Name:    "test",
-		Default: defaultMockOption,
-		HTMX: &select_dropdown.HTMX{
-			Get:    "/dev/mock/" + widgetName,
-			Target: "#resizable_wrapper",
+	return utils.Render(c, http.StatusOK, component)
+}
+
+func mockSelector(mocks []string, widgetName string) templ.Component {
+	return select_dropdown.Component(
+		select_dropdown.State{
+			Label:      "Select a mock",
+			ID:         "mock_selection",
+			Data:       mocks,
+			Name:       mockParam,
+			HTMXGet:    "/dev/widget/" + widgetName,
+			HTMXTarget: "#resizable_wrapper",
 		},
-	}, nil
+	)
 }
 
-func (s *Service) listOfWidgets() select_dropdown.State {
-	widgets := s.registry.ListWidgets()
-
-	return select_dropdown.State{
-		Name:    "widget",
-		Label:   "Select a widget",
-		ID:      "widget_selection",
-		Data:    widgets,
-		Default: defaultWidgetOption,
-		HTMX: &select_dropdown.HTMX{
-			Get:    "/dev/mock",
-			Target: "#test_selection_wrapper",
+func widgetSelector(widgets []string) templ.Component {
+	return select_dropdown.Component(
+		select_dropdown.State{
+			Name:       widgetParam,
+			Label:      "Select a widget",
+			ID:         "widget_selection",
+			Data:       widgets,
+			HTMXGet:    "/dev/widget/list_mocks",
+			HTMXTarget: "#mock_selection_wrapper",
 		},
-	}
+	)
 }

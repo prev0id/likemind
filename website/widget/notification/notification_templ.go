@@ -22,24 +22,24 @@ type State struct {
 	Message string           `json:"message"`
 }
 
-func notificationContainerStyle() templ.CSSClass {
+func containerStyle() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder := templruntime.GetBuilder()
 	templ_7745c5c3_CSSBuilder.WriteString(`position:fixed;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`top:10px;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`right:10px;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`top:2rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`right:8rem;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`display:flex;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`flex-direction:column;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`align-items:flex-end;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`gap:10px;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`z-index:1000;`)
-	templ_7745c5c3_CSSID := templ.CSSID(`notificationContainerStyle`, templ_7745c5c3_CSSBuilder.String())
+	templ_7745c5c3_CSSID := templ.CSSID(`containerStyle`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,
 		Class: templ.SafeCSS(`.` + templ_7745c5c3_CSSID + `{` + templ_7745c5c3_CSSBuilder.String() + `}`),
 	}
 }
 
-func NotificationContainer() templ.Component {
+func Container() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -60,12 +60,12 @@ func NotificationContainer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{"notification-container", notificationContainerStyle()}
+		var templ_7745c5c3_Var2 = []any{containerStyle()}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"notification-container\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

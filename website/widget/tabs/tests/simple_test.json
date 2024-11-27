@@ -1,0 +1,14 @@
+{
+  "tabs": [
+    {
+      "name": "Sign In",
+      "path": "/",
+      "is_selected": true
+    },
+    {
+      "name": "Register",
+      "path": "/",
+      "is_selected": false
+    }
+  ]
+}

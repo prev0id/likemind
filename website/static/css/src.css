@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @import url("/static/font/MapleMono-Woff2/MapleMono-SemiBold.woff2?family=Maple:wght@600;700&display=swap");
+}

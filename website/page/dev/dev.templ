@@ -1,0 +1,35 @@
+package dev_page
+
+import (
+	"likemind/website/page"
+	"likemind/website/widget/header"
+)
+
+css resizalbeWrapper() {
+	height: 300px;
+	widht: 1000px;
+	min-height: 30px;
+	min-width: 30px;
+	resize: both;
+	overflow: auto;
+	max-height: 1000px;
+	max-width: 1000px;
+	border: solid;
+	border-width: 1px;
+}
+
+templ Page(widgetSelector, mockSelector, widgetToDev templ.Component) {
+	@page.StandardLayout(header.NewState(nil, "")) {
+		<div class="flex flex-wrap flex-row gap-8">
+			<div>
+				@widgetSelector
+			</div>
+			<div id="mock_selection_wrapper">
+				@mockSelector
+			</div>
+		</div>
+		<div id="resizable_wrapper" class={ resizalbeWrapper() }>
+			@widgetToDev
+		</div>
+	}
+}

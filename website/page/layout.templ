@@ -1,0 +1,30 @@
+package page
+
+import (
+	"likemind/website/widget/footer"
+	"likemind/website/widget/header"
+	"likemind/website/widget/notification"
+)
+
+templ StandardLayout(headerState header.State) {
+	<!DOCTYPE html>
+	<html class="h-full">
+		<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link rel="stylesheet" href="/static/css/styles.css"/>
+			<link rel="icon" href="/static/img/favicon.png"/>
+		</head>
+		<body class="min-h-screen flex flex-col">
+			<script src="/static/js/htmx.min.js"></script>
+			<script src="/static/js/error_handler.js"></script>
+			@notification.Container()
+			@header.Component(headerState)
+			<main class="flex-grow flex bg-main-white">
+				<div class="min-h-full min-w-full">
+					{ children... }
+				</div>
+			</main>
+			@footer.Component()
+		</body>
+	</html>
+}

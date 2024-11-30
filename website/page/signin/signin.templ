@@ -1,0 +1,48 @@
+package signin_page
+
+import (
+	"likemind/website/page"
+	"likemind/website/widget/button"
+	"likemind/website/widget/header"
+	"likemind/website/widget/input_with_label"
+)
+
+templ Page() {
+	@page.StandardLayout(header.NewState(header.UnauthorizedTabs, header.SignInTab)) {
+		<div class="text-main-black flex flex-col items-center justify-center px-6 py-8 mx-auto">
+			<a href="/" class="flex items-center mb-6 text-2xl font-semibold text-gray-900">
+				Likemind
+			</a>
+			<div class="w-full bg-main-yellow rounded-lg shadow sm:max-w-md">
+				<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+					<h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+						Log in to your an account
+					</h1>
+					<form class="space-y-4 md:space-y-6" action="#">
+						@input_with_label.Component(input_with_label.State{
+							Label:       "Email",
+							Name:        "email",
+							Type:        "email",
+							Placeholder: "email@example.com",
+							Required:    true,
+						})
+						@input_with_label.Component(input_with_label.State{
+							Label:       "Password",
+							Name:        "password",
+							Type:        "password",
+							Placeholder: "******",
+							Required:    true,
+						})
+						@button.Component(button.State{Text: "Log In"})
+						<p
+							class="text-sm font-light"
+						>
+							Don't have an account?
+							<a href="/register" class="font-medium hover:text-main-orange">Create here</a>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	}
+}

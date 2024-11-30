@@ -31,7 +31,7 @@ var widgets = map[string]WidgetGenerator{
 		return footer.Component(), nil
 	},
 	"header": func(data []byte) (templ.Component, error) {
-		return header.Component(), nil
+		return header.Component(header.NewState(header.AuthorizedTabs, header.PeopleTab)), nil
 	},
 	"login_form": func(data []byte) (templ.Component, error) {
 		return login_form.Component(), nil

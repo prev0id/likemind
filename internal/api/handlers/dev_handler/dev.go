@@ -6,7 +6,7 @@ import (
 
 	"likemind/internal/service/widget_registry"
 	"likemind/internal/utils"
-	"likemind/website/page"
+	dev_page "likemind/website/page/dev"
 	"likemind/website/widget/select_dropdown"
 
 	"github.com/a-h/templ"
@@ -49,7 +49,7 @@ func (s *Service) Page(c echo.Context) error {
 		return err
 	}
 
-	devPage := page.DevPage(widgetSelector(widgets), mockSelector(mocks, defaultWidgetName), defaultMock)
+	devPage := dev_page.Page(widgetSelector(widgets), mockSelector(mocks, defaultWidgetName), defaultMock)
 
 	return utils.Render(c, http.StatusOK, devPage)
 }

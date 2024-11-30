@@ -1,5 +1,65 @@
 package header
 
-templ Component() {
-	<div>Header</div>
+templ Component(state State) {
+	<header class="bg-main-white">
+		<div class="mx-auto max-w-7xl flex items-center justify-between h-14 p-1 lg:px-8 lg:grid lg:grid-cols-3 lg:place-items-center">
+			@logo()
+			@logOut()
+		</div>
+		<nav class="bg-main-pink h-14 flex items-center justify-center p-1 lg:px-8">
+			<div class="flex gap-x-4 lg:gap-x-12">
+				for _, tab := range state.Tabs {
+					@tabSelector(tab)
+				}
+			</div>
+		</nav>
+	</header>
+}
+
+templ logo() {
+	<a
+		href="/"
+		class="group w-60 col-start-2"
+	>
+		<span class="block group-hover:hidden place-self-center text-lg text-main-red font-semibold">
+			(*^ω^)八(⌒▽⌒)八(-‿‿- )ヽ
+		</span>
+		<span class="hidden group-hover:block place-self-center text-xl text-main-red font-semibold">
+			Likemind
+		</span>
+	</a>
+}
+
+templ logOut() {
+	<a
+		href="#"
+		class="group w-24 justify-self-end lg:mx-8"
+		data-state=""
+	>
+		<span class="block group-hover:hidden place-self-center text-md text-main-black">
+			Log out &rarr;
+		</span>
+		<span class="hidden group-hover:block place-self-center text-sm text-main-orange font-semibold">
+			┬┴┬┴┤･ω･)ﾉ
+		</span>
+	</a>
+}
+
+templ tabSelector(state TabState) {
+	<a
+		class="group w-24"
+		href={ templ.URL(state.URL) }
+	>
+		<span
+			class="block group-hover:hidden data-[state=selected]:font-semibold place-self-center text-lg text-main-black"
+			if state.Selected {
+				data-state="selected"
+			}
+		>
+			{ state.Name }
+		</span>
+		<span class="hidden place-self-center group-hover:block text-sm text-main-orange font-semibold">
+			{ state.Kaomoji }
+		</span>
+	</a>
 }

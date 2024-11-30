@@ -1,0 +1,14 @@
+package user_search_page
+
+import (
+	"likemind/website/page"
+	"likemind/website/widget/header"
+)
+
+templ Page() {
+	@page.StandardLayout(header.NewState(header.AuthorizedTabs, header.PeopleTab)) {
+		<div class="">
+			here
+		</div>
+	}
+}

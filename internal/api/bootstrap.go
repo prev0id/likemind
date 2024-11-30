@@ -19,7 +19,10 @@ func BootstrapServer(cfg config.API) error {
 	api := e.Group("/api")
 
 	ph := profile_handlers.New(nil)
-	api.GET("/register", ph.Register)
+	e.GET("/profile", ph.ProfilePage)
+	e.GET("/sign_in", ph.SignIn)
+	e.GET("/register", ph.Register)
+	e.GET("/search/user", ph.SearchUser)
 	api.GET("/user/:username", ph.ProfilePage)
 	api.POST("/user/:username/update_name", ph.ChangeName)
 
@@ -31,6 +34,8 @@ func BootstrapServer(cfg config.API) error {
 	dev.GET("/widget/list_mocks", dh.ListMocks)
 
 	e.Static("/static", "website/static")
+
+	e.HTTPErrorHandler = ph.Error
 
 	return e.Start(cfg.Addr)
 }

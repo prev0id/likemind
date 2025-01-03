@@ -2,31 +2,17 @@ package error_page
 
 import (
 	"likemind/website/page"
-	"likemind/website/widget/header"
 	"net/http"
 	"strconv"
 )
 
-var (
-	authHeader   = header.NewState(header.AuthorizedTabs, "")
-	unauthHeader = header.NewState(header.UnauthorizedTabs, "")
-)
-
 type State struct {
-	Authorized bool
-	Code       int
-}
-
-func getHeaderState(state State) header.State {
-	if state.Authorized {
-		return authHeader
-	}
-	return unauthHeader
+	Code int
 }
 
 templ Page(state State) {
-	@page.StandardLayout(getHeaderState(state)) {
-		<div class="text-main-black text-xl font-medium py-14 flex flex-col items-center justify-center gap-6">
+	@page.StandardLayout() {
+		<div class="text-black text-xl font-medium py-14 flex flex-col items-center justify-center gap-6">
 			<h1 class="text-6xl font-semibold pb-8">
 				{ strconv.Itoa(state.Code) }
 			</h1>
@@ -38,7 +24,7 @@ templ Page(state State) {
 templ message(state State) {
 	switch state.Code {
 		case http.StatusUnauthorized:
-			<p>Please <a href="/sign_in hover:text-main-orange">log in</a> or <a href="/register hover:text-main-orange">register</a> to continue.</p>
+			<p>Please <a href="/sign_in hover:text-orange">log in</a> or <a href="/register hover:text-orange">register</a> to continue.</p>
 			<p>(・`ω´・)</p>
 		case http.StatusNotFound:
 			<p>Couldn't find what you're looking for, maybe the page doesn't exist anymore.</p>

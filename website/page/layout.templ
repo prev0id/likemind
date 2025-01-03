@@ -1,25 +1,29 @@
 package page
 
 import (
+	"likemind/internal/domain"
 	"likemind/website/widget/footer"
 	"likemind/website/widget/header"
 	"likemind/website/widget/notification"
 )
 
-templ StandardLayout(headerState header.State) {
+templ StandardLayout(headerState ...header.State) {
 	<!DOCTYPE html>
 	<html class="h-full">
 		<head>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" href="/static/css/styles.css"/>
-			<link rel="icon" href="/static/img/favicon.png"/>
+			<link rel="stylesheet" href={ domain.PathStaticStyles }/>
+			<link rel="icon" href={ domain.PathStaticFavicon }/>
 		</head>
 		<body class="min-h-screen flex flex-col">
-			<script src="/static/js/htmx.min.js"></script>
-			<script src="/static/js/error_handler.js"></script>
+			<script src={ domain.PathStaticHTMX }></script>
+			<script src={ domain.PathStaticErrorHandler }></script>
 			@notification.Container()
-			@header.Component(headerState)
-			<main class="flex-grow flex bg-main-white">
+			// TODO: move header into children
+			if len(headerState) > 0 {
+				@header.Component(headerState[0])
+			}
+			<main class="flex-grow flex bg-white text-black">
 				<div class="min-h-full min-w-full">
 					{ children... }
 				</div>

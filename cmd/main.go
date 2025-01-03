@@ -2,9 +2,10 @@ package main
 
 import (
 	"log"
-	"runtime"
 
-	"likemind/internal/api"
+	"likemind/internal/app"
+	page_handler "likemind/internal/app/handlers/page"
+	static_handler "likemind/internal/app/handlers/static"
 	"likemind/internal/config"
 )
 
@@ -14,13 +15,25 @@ func main() {
 		log.Fatalf("cofnig.Parse: %s", err.Error())
 	}
 
-	if !cfg.DB.Insecure {
-		runtime.Breakpoint()
-	}
+	log.Printf("Config: %+v", cfg)
 
-	log.Printf("cfg: %+v", cfg)
+	app, ctx := app.InitApp(cfg.App)
 
-	if err := api.BootstrapServer(cfg.API); err != nil {
-		log.Fatalf("api.BootstrapServer: %s", err.Error())
+	// dbConn, dbStopper, err := bootstrap.DB(ctx, cfg.DB)
+
+	pageHandler := page_handler.New()
+	staticHandler := static_handler.New()
+
+	app.WithServer(
+		pageHandler,
+		staticHandler,
+	)
+
+	app.WithStoppers(
+	// dbStopper,
+	)
+
+	if err := app.Run(ctx); err != nil {
+		log.Fatalf("app.Run: %s", err.Error())
 	}
 }

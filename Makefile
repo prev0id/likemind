@@ -1,6 +1,10 @@
 .PHONY: local
 local: prepare-env
-	go run github.com/air-verse/air@latest -c .air.toml
+	go run github.com/air-verse/air@v1.61.5 -c .air.toml
+
+.PHONY: run
+run: build-templ build-tailwind
+	go run ./cmd/main.go
 
 .PHONY: prepare-env
 prepare-env:

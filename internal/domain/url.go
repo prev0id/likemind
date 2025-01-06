@@ -9,6 +9,8 @@ const (
 	PathPing      = "/ping"
 	PathUserPage  = "/user/{username}"
 	PathGroupPage = "/group/{group}"
+	PathSignIn    = "/signin"
+	PathSignUp    = "/signup"
 
 	PathPrefixRoot   = "/"
 	PathPrefixAPI    = "/api"
@@ -16,8 +18,6 @@ const (
 
 	PatternFile       = "/{file}"
 	PathPatternSearch = "/search/{type}"
-	PatternSignIn     = "/signin"
-	PatternSignUp     = "/signup"
 
 	PathVarUsername = "username"
 	PathVarGroup    = "group"

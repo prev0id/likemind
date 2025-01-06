@@ -1,23 +1,54 @@
 package domain
 
+const (
+	TableUser          = "user"
+	TableGroup         = "group"
+	TableInterest      = "interest"
+	TableCredential    = "credential"
+	TableUserInterest  = "user_interest"
+	TableGroupInterest = "group_interest"
+)
+
 type User struct {
-	Username string
+	DataFields
+	Nickname string
 	Name     string
 	Surname  string
 	About    string
-	Contacts []string
-	ID       int64
 	PfpID    string
-}
-
-type AppliedInterest struct {
-	UserID     uint64
-	InterestID uint64
-	IsLiked    bool
+	Contacts []string
 }
 
 type Interest struct {
+	DataFields
 	Name        string
 	Description string
-	ID          uint64
+}
+
+type Group struct {
+	DataFields
+	Name        string
+	Description string
+	PictureID   string
+}
+
+type Post struct {
+	DataFields
+	GroupID  int64
+	AuthorID int64
+	Text     string
+}
+
+type AppliedInterest struct {
+	DataFields
+	InterestID int64
+	EntityID   int64
+}
+
+type Credential struct {
+	Data
+	Password []byte
+	Login    string
+	UserID   int64
+	UUID     string
 }

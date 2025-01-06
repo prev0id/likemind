@@ -29,8 +29,8 @@ func (h *PageHandler) Routes() chi.Router {
 	router := chi.NewRouter()
 
 	router.Get(domain.PathUserPage, common.WrapHTMLHandler(h.profile))
-	router.Get(domain.PatternSignIn, common.WrapHTMLHandler(h.sigin))
-	router.Get(domain.PatternSignUp, common.WrapHTMLHandler(h.signup))
+	router.Get(domain.PathSignIn, common.WrapHTMLHandler(h.sigin))
+	router.Get(domain.PathSignUp, common.WrapHTMLHandler(h.signup))
 
 	return router
 }

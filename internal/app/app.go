@@ -44,7 +44,7 @@ func InitApp(cfg config.App) (*App, context.Context) {
 	}, rootCtx
 }
 
-func (a *App) WithServer(handlers ...Handler) {
+func (a *App) WithHandlers(handlers ...Handler) {
 	a.handlers = append(a.handlers, handlers...)
 }
 

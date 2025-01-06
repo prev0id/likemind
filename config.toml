@@ -4,4 +4,9 @@ graceful_period = "10s"
 request_timeout = "5s"
 
 [db]
-addr = "localhost:5430"
+addr = "http://localhost:5430/"
+
+[auth]
+session_key = "test_key_not_prod"
+cookie_max_age = 604800
+use_http_only = false

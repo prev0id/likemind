@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	DB  DB  `toml:"db"`
-	App App `toml:"app"`
+	DB   DB   `toml:"db"`
+	App  App  `toml:"app"`
+	Auth Auth `toml:"auth"`
 }
 
 type App struct {
@@ -20,6 +21,12 @@ type App struct {
 
 type DB struct {
 	Addr string `toml:"addr"`
+}
+
+type Auth struct {
+	SessionKey   string `toml:"session_key"`
+	CookieMaxAge int    `toml:"cookie_max_age"`
+	UseHTTPOnly  bool   `toml:"use_http_only"`
 }
 
 func Parse() (Config, error) {

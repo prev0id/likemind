@@ -6,7 +6,7 @@ import (
 )
 
 templ Page() {
-	@page.StandardLayout(header.NewState(header.AuthorizedTabs, header.ProfileTab)) {
+	@page.StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
 		<div class="text-black">
 			<div class="mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:gap-20 lg:place-items-center px-6 lg:px-8 py-12">
 				<div class="bg-yellow w-full h-full rounded-3xl flex items-center justify-center">

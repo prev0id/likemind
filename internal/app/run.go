@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"errors"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,6 +11,7 @@ import (
 	"likemind/internal/domain"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/rs/zerolog/log"
 )
 
 func (a *App) Run(ctx context.Context) error {
@@ -26,7 +26,10 @@ func (a *App) Run(ctx context.Context) error {
 	// }))
 	// io.Copy(file, reader)
 
-	log.Printf("starting app at %s", a.server.Addr)
+	log.Info().
+		Str("address", a.server.Addr).
+		Msg("starting app")
+
 	if err := a.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
@@ -44,7 +47,6 @@ func (a *App) registerAPI() {
 	a.router.Use(middleware.Recoverer) // should be last
 
 	for _, handler := range a.handlers {
-		log.Printf("%+v", handler.Routes())
 		a.router.Mount(handler.Prefix(), handler.Routes())
 	}
 }
@@ -55,21 +57,21 @@ func (a *App) setUpGracefulShoutdown(ctx context.Context) {
 
 	go func() {
 		<-sig // waiting for termination signal
-		log.Println("Recieved termination signal")
+		log.Info().Msg("Recieved termination signal")
 
 		shutdownCtx, shutdownCancel := context.WithTimeout(ctx, a.gracefulPeriod)
 		go a.forceExitOnDeadline(shutdownCtx)
 
 		a.stop(shutdownCtx)
 		shutdownCancel()
-		log.Println("Gracefully stopped")
+		log.Info().Msg("Gracefully stopped")
 	}()
 }
 
 func (a *App) forceExitOnDeadline(ctx context.Context) {
 	<-ctx.Done()
 	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
-		log.Fatal("Graceful shutdown timed out. Forcing exit.")
+		log.Fatal().Msg("Graceful shutdown timed out. Forcing exit.")
 	}
 }
 

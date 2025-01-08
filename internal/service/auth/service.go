@@ -29,8 +29,10 @@ const (
 type Service interface {
 	Middleware(http.Handler) http.Handler
 	SetSessionCookie(uuid string, w http.ResponseWriter, r *http.Request) error
+	InvalidateSessionCookie(w http.ResponseWriter, r *http.Request)
+	ValidateSessionCookie(w http.ResponseWriter, r *http.Request) (int64, error)
 	SetCredentials(ctx context.Context, userID int64, login, password string) (string, error)
-	ValidateCredentials(ctx context.Context, login, password string) (string, error)
+	ValidateCredentials(ctx context.Context, login, password string) (domain.Credential, error)
 	Close()
 }
 
@@ -39,7 +41,7 @@ type implementation struct {
 	cookieStore *pgstore.PGStore
 }
 
-func New(provider domain.DataProvider[domain.Credential], dbConn *pgxpool.Pool, cfg config.Auth) (*implementation, error) {
+func New(provider domain.DataProvider[domain.Credential], dbConn *pgxpool.Pool, cfg config.Auth) (Service, error) {
 	cookieStore, err := pgstore.NewPGStoreFromPool(stdlib.OpenDBFromPool(dbConn), []byte(cfg.SessionKey))
 	if err != nil {
 		return nil, fmt.Errorf("pgstore.NewPGStoreFromPool: %w", err)

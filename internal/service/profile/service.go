@@ -5,8 +5,6 @@ import (
 	"fmt"
 
 	"likemind/internal/domain"
-
-	"github.com/samber/lo"
 )
 
 type Service interface {
@@ -27,16 +25,8 @@ func New(provider domain.DataProvider[domain.User]) Service {
 }
 
 func (i *implementation) CreateUser(ctx context.Context, user domain.User) (int64, error) {
-	users, err := i.db.List(ctx)
-	if err != nil {
-		return 0, fmt.Errorf("i.db.ListUsers: %w", err)
-	}
-
-	_, exists := lo.Find(users, func(existing domain.User) bool {
-		return user.Nickname == existing.Nickname
-	})
-
-	if exists {
+	_, err := i.db.Get(ctx, domain.FieldNickname, user.Nickname)
+	if err == nil {
 		return 0, fmt.Errorf("username '%s' already exists", user.Nickname)
 	}
 
@@ -57,7 +47,7 @@ func (i *implementation) UpdateUser(ctx context.Context, user domain.User) error
 }
 
 func (i *implementation) GetUser(ctx context.Context, id int64) (domain.User, error) {
-	user, err := i.db.Get(ctx, id)
+	user, err := i.db.Get(ctx, domain.FieldID, id)
 	if err != nil {
 		return domain.User{}, fmt.Errorf("i.db.GetUser: %w", err)
 	}

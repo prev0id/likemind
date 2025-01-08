@@ -6,7 +6,7 @@ import (
 )
 
 templ Page() {
-	@page.StandardLayout(header.NewState(header.AuthorizedTabs, header.PeopleTab)) {
+	@page.StandardLayout(header.AuthorizedTabs.Select(header.PeopleTab)) {
 		<div class="w-full h-full">
 			<div class="bg-yellow w-full">
 				<div class="text-black mx-auto max-w-4xl px-6 py-4 lg:px-8">

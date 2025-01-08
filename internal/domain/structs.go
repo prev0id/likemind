@@ -7,48 +7,53 @@ const (
 	TableCredential    = "credential"
 	TableUserInterest  = "user_interest"
 	TableGroupInterest = "group_interest"
+
+	FieldID       = "id"
+	FieldUUID     = "uuid"
+	FieldNickname = "nickname"
+	FieldLogin    = "login"
 )
 
 type User struct {
 	DataFields
-	Nickname string
-	Name     string
-	Surname  string
-	About    string
-	PfpID    string
-	Contacts []string
+	Nickname string   `db:"nickname"`
+	Name     string   `db:"name"`
+	Surname  string   `db:"surname"`
+	About    string   `db:"about"`
+	PfpID    string   `db:"pfp_id"`
+	Contacts []string `db:"contacts"`
 }
 
 type Interest struct {
 	DataFields
-	Name        string
-	Description string
+	Name        string `db:"name"`
+	Description string `db:"description"`
 }
 
 type Group struct {
 	DataFields
-	Name        string
-	Description string
-	PictureID   string
+	Name        string `db:"name"`
+	Description string `db:"description"`
+	PictureID   string `db:"picture_id"`
 }
 
 type Post struct {
 	DataFields
-	GroupID  int64
-	AuthorID int64
-	Text     string
+	GroupID  int64  `db:"group_id"`
+	AuthorID int64  `db:"author_id"`
+	Text     string `db:"text"`
 }
 
 type AppliedInterest struct {
 	DataFields
-	InterestID int64
-	EntityID   int64
+	InterestID int64 `db:"interest_id"`
+	EntityID   int64 `db:"entity_id"`
 }
 
 type Credential struct {
-	Data
-	Password []byte
-	Login    string
-	UserID   int64
-	UUID     string
+	DataFields
+	Password []byte `db:"password"`
+	Login    string `db:"login"`
+	UserID   int64  `db:"user_id"`
+	UUID     string `db:"uuid"`
 }

@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
-
 	"likemind/cmd/bootstrap"
 	"likemind/internal/app"
+	api_handler "likemind/internal/app/handlers/api"
 	page_handler "likemind/internal/app/handlers/page"
 	static_handler "likemind/internal/app/handlers/static"
 	"likemind/internal/config"
@@ -12,15 +11,19 @@ import (
 	"likemind/internal/domain"
 	"likemind/internal/service/auth"
 	"likemind/internal/service/profile"
+
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	bootstrap.Deps()
+
 	cfg, err := config.Parse()
 	if err != nil {
-		log.Fatalf("cofnig.Parse: %s", err.Error())
+		log.Fatal().Err(err).Msg("config.Parse")
 	}
 
-	log.Printf("Config: %+v", cfg)
+	log.Info().Interface("config", cfg).Msgf("successfully parsed")
 
 	app, ctx := app.InitApp(cfg.App)
 
@@ -33,15 +36,16 @@ func main() {
 	// groupInterestProvider := data_provider.New[domain.AppliedInterest](dbConn, domain.TableGroupInterest)
 	// userInterestProvider := data_provider.New[domain.AppliedInterest](dbConn, domain.TableUserInterest)
 
-	profile.New(userProvider)
+	profileSvc := profile.New(userProvider)
 
 	authSvc, err := auth.New(credProvider, dbConn, cfg.Auth)
 	if err != nil {
-		log.Fatalf("auth.New: %s", err.Error())
+		log.Fatal().Err(err)
 	}
 
 	app.WithHandlers(
-		page_handler.New(),
+		page_handler.New(authSvc),
+		api_handler.New(authSvc, profileSvc),
 		static_handler.New(),
 	)
 
@@ -51,6 +55,6 @@ func main() {
 	)
 
 	if err := app.Run(ctx); err != nil {
-		log.Fatalf("app.Run: %s", err.Error())
+		log.Fatal().Err(err)
 	}
 }

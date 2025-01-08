@@ -10,7 +10,6 @@ import (
 	"likemind/internal/domain"
 
 	"github.com/google/uuid"
-	"github.com/samber/lo"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -30,34 +29,17 @@ func (i *implementation) SetCredentials(ctx context.Context, userID int64, login
 	return creds.UUID, nil
 }
 
-func (i *implementation) ValidateCredentials(ctx context.Context, login string, password string) (string, error) {
-	creds, err := i.findCredentialByLogin(ctx, login)
+func (i *implementation) ValidateCredentials(ctx context.Context, login string, password string) (domain.Credential, error) {
+	creds, err := i.db.Get(ctx, domain.FieldLogin, login)
 	if err != nil {
-		return "", err
+		return domain.Credential{}, fmt.Errorf("i.db.Get: %w", err)
 	}
 
 	if !validatePassword(creds.Password, creds.UserID, password) {
-		return "", errors.New("incorrect password")
+		return creds, errors.New("incorrect password")
 	}
 
-	return creds.UUID, nil
-}
-
-func (i *implementation) findCredentialByLogin(ctx context.Context, login string) (domain.Credential, error) {
-	creds, err := i.db.List(ctx)
-	if err != nil {
-		return domain.Credential{}, fmt.Errorf("i.db.List: %w", err)
-	}
-
-	cred, found := lo.Find(creds, func(cred domain.Credential) bool {
-		return cred.Login == login
-	})
-
-	if !found {
-		return domain.Credential{}, fmt.Errorf("user with login '%s' not found", login)
-	}
-
-	return cred, nil
+	return creds, nil
 }
 
 func validateNewPassword(login, password string) error {

@@ -7,7 +7,9 @@ create table "user"(
     surname  TEXT DEFAULT '' NOT NULL,
     pfp_id   TEXT DEFAULT '' NOT NULL,
     about    TEXT DEFAULT '' NOT NULL,
-    contacts TEXT[] DEFAULT ARRAY[]::TEXT[] NOT NULL
+    contacts TEXT[] DEFAULT ARRAY[]::TEXT[] NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
 -- +goose StatementEnd
 

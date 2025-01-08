@@ -1,43 +1,32 @@
 package domain
 
-import (
-	"regexp"
-	"strings"
-)
-
 const (
 	PathPing      = "/ping"
-	PathUserPage  = "/user/{username}"
+	PathUserPage  = "/user/{nickname}"
 	PathGroupPage = "/group/{group}"
 	PathSignIn    = "/signin"
 	PathSignUp    = "/signup"
-
-	PathPrefixRoot   = "/"
-	PathPrefixAPI    = "/api"
-	PathPrefixStatic = "/static"
-
-	PatternFile       = "/{file}"
-	PathPatternSearch = "/search/{type}"
-
-	PathVarUsername = "username"
-	PathVarGroup    = "group"
-	PathVarType     = "type"
+	PathLogOut    = "/logout"
+	PathSearch    = "/search/{type}"
 
 	PathStaticHTMX         = "/static/htmx.js"
 	PathStaticErrorHandler = "/static/error_handler.js"
 	PathStaticFavicon      = "/static/favicon.png"
 	PathStaticStyles       = "/static/styles.css"
+
+	PathAPISignIn = PathPrefixAPI + PathSignIn
+	PathAPISignUp = PathPrefixAPI + PathSignUp
+
+	PathPrefixRoot   = "/"
+	PathPrefixAPI    = "/api"
+	PathPrefixStatic = "/static"
+
+	PatternFile = "/{file}"
+
+	PathVarNickname = "nickname"
+	PathVarGroup    = "group"
+	PathVarType     = "type"
+
+	TypeGroup = "group"
+	TypeUser  = "user"
 )
-
-var varRegex = regexp.MustCompile(`{\w+}`)
-
-func SetPathVariables(path string, values map[string]string) string {
-	return varRegex.ReplaceAllStringFunc(path, func(pathVar string) string {
-		key := strings.Trim(pathVar, "{}")
-		val, ok := values[key]
-		if !ok {
-			return pathVar
-		}
-		return val
-	})
-}

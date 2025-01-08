@@ -1,6 +1,7 @@
 package config
 
 import (
+	"flag"
 	"fmt"
 	"time"
 
@@ -28,6 +29,8 @@ type Auth struct {
 	CookieMaxAge int    `toml:"cookie_max_age"`
 	UseHTTPOnly  bool   `toml:"use_http_only"`
 }
+
+var configPath = flag.String("config", "./config.toml", "path to application config")
 
 func Parse() (Config, error) {
 	cfg := Config{}

@@ -10,9 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"likemind/website/page"
-	"likemind/website/widget/button"
 	"likemind/website/widget/header"
-	"likemind/website/widget/input_with_label"
+	"likemind/website/widget/signin_form"
 )
 
 func Page() templ.Component {
@@ -48,41 +47,21 @@ func Page() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"text-black flex flex-col items-center justify-center px-6 py-8 mx-auto\"><a href=\"/\" class=\"flex items-center mb-6 text-2xl font-semibold text-gray-900\">Likemind</a><div class=\"w-full bg-yellow rounded-lg shadow sm:max-w-md\"><div class=\"p-6 space-y-4 md:space-y-6 sm:p-8\"><h1 class=\"text-xl font-bold leading-tight tracking-tight md:text-2xl\">Log in to your an account</h1><form class=\"space-y-4 md:space-y-6\" action=\"#\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"text-black flex flex-col items-center justify-center px-6 py-8 mx-auto\"><a href=\"/\" class=\"flex items-center mb-6 text-2xl font-semibold text-gray-900\">Likemind</a><div class=\"w-full bg-yellow rounded-lg shadow sm:max-w-md\"><div class=\"p-6 space-y-4 md:space-y-6 sm:p-8\"><h1 class=\"text-xl font-bold leading-tight tracking-tight md:text-2xl\">Log in to your an account</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = input_with_label.Component(input_with_label.State{
-				Label:       "Email",
-				Name:        "email",
-				Type:        "email",
-				Placeholder: "email@example.com",
-				Required:    true,
-			}).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = signin_form.Component().Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = input_with_label.Component(input_with_label.State{
-				Label:       "Password",
-				Name:        "password",
-				Type:        "password",
-				Placeholder: "******",
-				Required:    true,
-			}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = button.Component(button.State{Text: "Log In"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p class=\"text-sm font-light\">Don't have an account? <a href=\"/register\" class=\"font-medium hover:text-orange\">Create here</a></p></form></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = page.StandardLayout(header.NewState(header.UnauthorizedTabs, header.SignInTab)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = page.StandardLayout(header.UnauthorizedTabs.Select(header.SignInTab)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

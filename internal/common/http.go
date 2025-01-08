@@ -3,6 +3,10 @@ package common
 import (
 	"errors"
 	"net/http"
+	"regexp"
+	"strings"
+
+	"likemind/internal/domain"
 
 	"github.com/a-h/templ"
 )
@@ -14,24 +18,6 @@ type (
 	ErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
 )
 
-// func BindPage[T any](router chi.Router, method, path string, handler Handler) {
-// 	bind[T](router, method, path, handler, errorPage)
-// }
-
-// func BindAPI[T any](router chi.Router, method, path string, handler Handler) {
-// 	bind[T](router, method, path, handler, errorAPI)
-// }
-
-// func bind[T any](router chi.Router, method, path string, handler Handler, errorHandler ErrorHandler) {
-// 	inputStruct := new(T)
-// 	router.With(
-// 		httpin.NewInput(
-// 			inputStruct,
-// 			httpin.Option.WithErrorHandler(errorHandler),
-// 		),
-// 	).Method(method, path, render(handler))
-// }
-
 func WrapHTMLHandler(handler Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		component, statusCode := handler(w, r)
@@ -40,23 +26,29 @@ func WrapHTMLHandler(handler Handler) http.HandlerFunc {
 	}
 }
 
-// func errorPage(w http.ResponseWriter, r *http.Request, _ error) {
-// 	handler := func(w http.ResponseWriter, r *http.Request) (int, templ.Component) {
-// 		statusCode := http.StatusBadRequest
-// 		return statusCode, error_page.Page(error_page.State{Code: statusCode})
-// 	}
+func Redirect(w http.ResponseWriter, url string) {
+	w.WriteHeader(http.StatusFound)
+	w.Header().Set(domain.HTMXRedirectHeader, url)
+}
 
-// 	render(handler)(w, r)
-// }
+func ServeError(w http.ResponseWriter, r *http.Request, err error, status int) {
+	w.WriteHeader(status)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
+}
 
-// func errorAPI(w http.ResponseWriter, r *http.Request, err error) {
-// 	handler := func(w http.ResponseWriter, r *http.Request) (int, templ.Component) {
-// 		statusCode := http.StatusBadRequest
-// 		return statusCode, notification.Component(notification.State{
-// 			Type:    notification.Error,
-// 			Message: err.Error(),
-// 		})
-// 	}
+var varRegex = regexp.MustCompile(`{\w+}`)
 
-// 	render(handler)(w, r)
-// }
+type PathVars map[string]string
+
+func SetPathVariables(path string, values PathVars) string {
+	return varRegex.ReplaceAllStringFunc(path, func(pathVar string) string {
+		key := strings.Trim(pathVar, "{}")
+		val, ok := values[key]
+		if !ok {
+			return pathVar
+		}
+		return val
+	})
+}

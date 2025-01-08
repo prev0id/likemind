@@ -1,0 +1,38 @@
+package signin_form
+
+import (
+	"likemind/internal/domain"
+	"likemind/website/widget/button"
+	"likemind/website/widget/input_with_label"
+)
+
+templ Component() {
+	<form
+		hx-post={ domain.PathAPISignIn }
+		hx-target="this"
+		hx-swap="outerHTML"
+		class="space-y-4 md:space-y-6"
+	>
+		@input_with_label.Component(input_with_label.State{
+			Label:       "Email",
+			Name:        "email",
+			Type:        "email",
+			Placeholder: "email@example.com",
+			Required:    true,
+		})
+		@input_with_label.Component(input_with_label.State{
+			Label:       "Password",
+			Name:        "password",
+			Type:        "password",
+			Placeholder: "******",
+			Required:    true,
+		})
+		@button.Component(button.State{Text: "Log In"})
+		<p
+			class="text-sm font-light"
+		>
+			Don't have an account?
+			<a href={ domain.PathSignUp } class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange">Create here</a>
+		</p>
+	</form>
+}

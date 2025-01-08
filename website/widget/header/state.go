@@ -1,42 +1,48 @@
 package header
 
+import "likemind/internal/domain"
+
 const (
-	GroupTab    = "Groups"
-	PeopleTab   = "People"
-	ProfileTab  = "Profile"
-	SignInTab   = "Sign In"
-	RegisterTab = "Register"
+	GroupTab   = "Groups"
+	PeopleTab  = "People"
+	ProfileTab = "Profile"
+	SignInTab  = "Sign In"
+	SignUpTab  = "Sign up"
 )
 
 var (
-	AuthorizedTabs = []TabState{
-		{
-			URL:     "/group",
-			Name:    GroupTab,
-			Kaomoji: `\( ˙▿˙ )/\( ˙▿˙ )/`,
-		},
-		{
-			URL:     "/search/user",
-			Name:    PeopleTab,
-			Kaomoji: `⊂(￣▽￣)⊃`,
-		},
-		{
-			URL:     "/profile",
-			Name:    ProfileTab,
-			Kaomoji: `(„• ᴗ •„)`,
+	AuthorizedTabs = State{
+		Tabs: []TabState{
+			{
+				URL:     "/group",
+				Name:    GroupTab,
+				Kaomoji: `\( ˙▿˙ )/\( ˙▿˙ )/`,
+			},
+			{
+				URL:     "/search/user",
+				Name:    PeopleTab,
+				Kaomoji: `⊂(￣▽￣)⊃`,
+			},
+			{
+				URL:     "/profile",
+				Name:    ProfileTab,
+				Kaomoji: `(„• ᴗ •„)`,
+			},
 		},
 	}
 
-	UnauthorizedTabs = []TabState{
-		{
-			URL:     "/sign_in",
-			Name:    SignInTab,
-			Kaomoji: `(„• ֊ •„)੭`,
-		},
-		{
-			URL:     "/register",
-			Name:    RegisterTab,
-			Kaomoji: `(⸝⸝ᵕᴗᵕ⸝⸝)`,
+	UnauthorizedTabs = State{
+		Tabs: []TabState{
+			{
+				URL:     domain.PathSignIn,
+				Name:    SignInTab,
+				Kaomoji: `(„• ֊ •„)੭`,
+			},
+			{
+				URL:     domain.PathSignUp,
+				Name:    SignUpTab,
+				Kaomoji: `(⸝⸝ᵕᴗᵕ⸝⸝)`,
+			},
 		},
 	}
 )
@@ -52,16 +58,15 @@ type TabState struct {
 	Selected bool
 }
 
-func NewState(tabs []TabState, selectedTab string) State {
-	result := make([]TabState, 0, len(tabs))
-	for _, tab := range tabs {
-		if tab.Name == selectedTab {
+func (s State) Select(selected string) State {
+	tabs := make([]TabState, 0, len(s.Tabs))
+
+	for _, tab := range s.Tabs {
+		if tab.Name == selected {
 			tab.Selected = true
 		}
-		result = append(result, tab)
+		tabs = append(tabs, tab)
 	}
 
-	return State{
-		Tabs: result,
-	}
+	return State{Tabs: tabs}
 }

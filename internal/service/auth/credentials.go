@@ -2,91 +2,70 @@ package auth
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"strings"
-	"unicode/utf8"
 
+	"likemind/internal/database/model"
 	"likemind/internal/domain"
 
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func (i *implementation) SetCredentials(ctx context.Context, userID int64, login, password string) (string, error) {
-	creds := domain.Credential{
-		UserID:   userID,
-		Login:    login,
-		Password: encryptPassword(userID, password),
-		UUID:     uuid.NewString(),
+func (i *implementation) NewUserCredentials(ctx context.Context, userID int64, login domain.Email, password domain.Password) (string, error) {
+	if err := password.Validate(); err != nil {
+		return "", err
 	}
 
-	_, err := i.db.Insert(ctx, creds)
-	if err != nil {
+	if err := login.Validate(); err != nil {
+		return "", err
+	}
+
+	creds := model.Credentials{
+		ID:       uuid.NewString(),
+		UserID:   userID,
+		Login:    string(login),
+		Password: password.Hash(userID),
+	}
+
+	if err := i.db.Create(ctx, creds); err != nil {
 		return "", fmt.Errorf("i.db.Insert: %w", err)
 	}
 
-	return creds.UUID, nil
+	return creds.ID, nil
 }
 
-func (i *implementation) ValidateCredentials(ctx context.Context, login string, password string) (domain.Credential, error) {
-	creds, err := i.db.Get(ctx, domain.FieldLogin, login)
+func (i *implementation) Signin(ctx context.Context, login domain.Email, password domain.Password) (string, error) {
+	creds, err := i.db.GetByLogin(ctx, string(login))
 	if err != nil {
-		return domain.Credential{}, fmt.Errorf("i.db.Get: %w", err)
+		return "", fmt.Errorf("i.db.Get: %w", err)
 	}
 
-	if !validatePassword(creds.Password, creds.UserID, password) {
-		return creds, errors.New("incorrect password")
+	if !password.CompareWithHash(creds.Password, creds.UserID) {
+		return "", domain.ErrUnauthenticated
 	}
 
-	return creds, nil
+	return creds.ID, nil
 }
 
-func validateNewPassword(login, password string) error {
-	if len(password) < passwordMinLen {
-		return fmt.Errorf("password is to short (min lenght is %d", passwordMinLen)
+func (i *implementation) Authenticate(ctx context.Context, credsID string) (int64, error) {
+	creds, err := i.db.GetByID(ctx, credsID)
+	if err != nil {
+		return 0, domain.ErrUnauthenticated
 	}
 
-	if len(password) > passwordMaxLen {
-		return fmt.Errorf("password is to long (max lenght is %d", passwordMaxLen)
+	return creds.UserID, nil
+}
+
+func (i *implementation) UpdatePassword(ctx context.Context, id string, newPassword domain.Password) error {
+	creds, err := i.db.GetByID(ctx, id)
+	if err != nil {
+		return err
 	}
 
-	if !utf8.ValidString(password) {
-		return errors.New("password should be valid UTF-8 string")
-	}
+	creds.Password = newPassword.Hash(creds.UserID)
 
-	if !strings.ContainsAny(password, numbers) {
-		return errors.New("password must contain any number")
-	}
-
-	if !strings.ContainsAny(password, specialChars) {
-		return fmt.Errorf("password must contain any of specital symbols %s", specialChars)
-	}
-
-	if strings.Contains(password, login) {
-		return errors.New("password must not contain your login")
-	}
-
-	if strings.Contains(login, password) {
-		return errors.New("password must not be part of your login")
+	if err := i.db.Update(ctx, creds); err != nil {
+		return err
 	}
 
 	return nil
-}
-
-func encryptPassword(userID int64, password string) []byte {
-	withSalt := passwordWithSalt(userID, password)
-	encrypted, _ := bcrypt.GenerateFromPassword(withSalt, bcrypt.DefaultCost)
-	return encrypted
-}
-
-func validatePassword(encrypted []byte, userID int64, password string) bool {
-	withSalt := passwordWithSalt(userID, password)
-	err := bcrypt.CompareHashAndPassword(encrypted, withSalt)
-	return err == nil
-}
-
-func passwordWithSalt(userID int64, password string) []byte {
-	result := fmt.Sprintf(saltPattern, userID, password)
-	return []byte(result)
 }

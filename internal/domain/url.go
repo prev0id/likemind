@@ -10,6 +10,7 @@ const (
 	PathSearch    = "/search/{type}"
 
 	PathStaticHTMX         = "/static/htmx.js"
+	PathStaticAlpine       = "/static/alpine.js"
 	PathStaticErrorHandler = "/static/error_handler.js"
 	PathStaticFavicon      = "/static/favicon.png"
 	PathStaticStyles       = "/static/styles.css"

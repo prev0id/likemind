@@ -1,4 +1,4 @@
-package creds_repo
+package credentials_repo
 
 import (
 	"context"
@@ -6,17 +6,18 @@ import (
 
 	"likemind/internal/database"
 	"likemind/internal/database/model"
-	"likemind/internal/domain"
 
 	sql "github.com/huandu/go-sqlbuilder"
 )
 
 type DB interface {
 	Create(ctx context.Context, creds model.Credentials) error
-	UpdatePassword(ctx context.Context, id string, newPassword []byte) error
-	GetByLogin(ctx context.Context, login domain.Email) (model.Credentials, error)
+	Update(ctx context.Context, creds model.Credentials) error
+	GetByLogin(ctx context.Context, login string) (model.Credentials, error)
 	GetByID(ctx context.Context, id string) (model.Credentials, error)
 }
+
+var _ DB = (*Repo)(nil)
 
 type Repo struct{}
 
@@ -48,13 +49,14 @@ func (r *Repo) Create(ctx context.Context, creds model.Credentials) error {
 	return nil
 }
 
-func (r *Repo) UpdatePassword(ctx context.Context, id string, newPassword []byte) error {
+func (r *Repo) Update(ctx context.Context, creds model.Credentials) error {
 	q := sql.Update(model.TableCredentials)
 	q.Set(
-		q.Assign(model.CredentialsPassword, newPassword),
+		q.Assign(model.CredentialsLogin, creds.Login),
+		q.Assign(model.CredentialsPassword, creds.Password),
 		q.Assign(model.CredentialsUpdatedAt, time.Now()),
 	)
-	q.Where(q.Equal(model.CredentialsID, id))
+	q.Where(q.Equal(model.CredentialsID, creds.ID))
 
 	if _, err := database.Exec(ctx, q); err != nil {
 		return err
@@ -63,7 +65,7 @@ func (r *Repo) UpdatePassword(ctx context.Context, id string, newPassword []byte
 	return nil
 }
 
-func (r *Repo) GetByLogin(ctx context.Context, login domain.Email) (model.Credentials, error) {
+func (r *Repo) GetByLogin(ctx context.Context, login string) (model.Credentials, error) {
 	q := sql.Select(
 		model.CredentialsID,
 		model.CredentialsPassword,

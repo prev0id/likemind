@@ -13,7 +13,6 @@ import (
 type DB interface {
 	AddProfilePicutre(ctx context.Context, picture model.ProfilePicture) error
 	GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]model.ProfilePicture, error)
-	UpdatePicture(ctx context.Context, picture model.ProfilePicture) error
 	RemovePictureByID(ctx context.Context, id string) error
 }
 
@@ -63,24 +62,6 @@ func (r *Repo) GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]
 	}
 
 	return results, nil
-}
-
-func (r *Repo) UpdatePicture(ctx context.Context, picture model.ProfilePicture) error {
-	now := time.Now()
-	picture.UpdatedAt = now
-
-	q := sql.Update(model.TableProfilePicture)
-	q.Set(
-		q.Assign(model.ProfilePictureID, picture.ID),
-		q.Assign(model.ProfilePictureUpdatedAt, picture.UpdatedAt),
-	)
-	q.Where(q.Equal(model.ProfilePictureUserID, picture.UserID))
-
-	if _, err := database.Exec(ctx, q); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (r *Repo) RemovePictureByID(ctx context.Context, id string) error {

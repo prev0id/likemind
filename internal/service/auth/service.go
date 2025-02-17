@@ -6,42 +6,30 @@ import (
 	"net/http"
 
 	"likemind/internal/config"
+	"likemind/internal/database/repo/credentials_repo"
 	"likemind/internal/domain"
 
 	"github.com/antonlindstrom/pgstore"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
-	"golang.org/x/crypto/bcrypt"
-)
-
-const (
-	saltPattern = "%d$%s"
-	cost        = bcrypt.DefaultCost
-
-	passwordMaxLen = 50
-	passwordMinLen = 5
-
-	numbers      = "0123456789"
-	specialChars = "$@!%*#?&"
 )
 
 type Service interface {
-	Middleware(http.Handler) http.Handler
 	SetSessionCookie(uuid string, w http.ResponseWriter, r *http.Request) error
-	InvalidateSessionCookie(w http.ResponseWriter, r *http.Request)
 	ValidateSessionCookie(w http.ResponseWriter, r *http.Request) (int64, error)
-	SetCredentials(ctx context.Context, userID int64, login, password string) (string, error)
-	ValidateCredentials(ctx context.Context, login, password string) (domain.Credential, error)
+	NewUserCredentials(ctx context.Context, userID int64, login domain.Email, password domain.Password) (string, error)
+	Signin(ctx context.Context, login domain.Email, password domain.Password) (string, error)
+	Authenticate(ctx context.Context, credsID string) (int64, error)
 	Close()
 }
 
 type implementation struct {
-	db          domain.DataProvider[domain.Credential]
+	db          credentials_repo.DB
 	cookieStore *pgstore.PGStore
 }
 
-func New(provider domain.DataProvider[domain.Credential], dbConn *pgxpool.Pool, cfg config.Auth) (Service, error) {
+func New(db credentials_repo.DB, dbConn *pgxpool.Pool, cfg config.Auth) (Service, error) {
 	cookieStore, err := pgstore.NewPGStoreFromPool(stdlib.OpenDBFromPool(dbConn), []byte(cfg.SessionKey))
 	if err != nil {
 		return nil, fmt.Errorf("pgstore.NewPGStoreFromPool: %w", err)
@@ -55,7 +43,7 @@ func New(provider domain.DataProvider[domain.Credential], dbConn *pgxpool.Pool, 
 	}
 
 	return &implementation{
-		db:          provider,
+		db:          db,
 		cookieStore: cookieStore,
 	}, nil
 }

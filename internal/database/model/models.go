@@ -72,7 +72,6 @@ type Contact struct {
 const (
 	ProfilePictureID        = "id"
 	ProfilePictureUserID    = "user_id"
-	ProfilePictureContact   = "contact"
 	ProfilePictureCreatedAt = "created_at"
 	ProfilePictureUpdatedAt = "updated_at"
 )
@@ -80,7 +79,6 @@ const (
 type ProfilePicture struct {
 	ID        string    `db:"id"`
 	UserID    int64     `db:"user_id"`
-	Contact   string    `db:"contact"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }

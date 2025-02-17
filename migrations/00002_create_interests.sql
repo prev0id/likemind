@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE interests (
+CREATE TABLE interest (
     id bigint PRIMARY KEY NOT NULL,
     name text NOT NULL UNIQUE,
     description text NOT NULL,
@@ -8,14 +8,14 @@ CREATE TABLE interests (
     updated_at timestamptz NOT NULL
 );
 
-CREATE TABLE user_interests (
+CREATE TABLE user_interest (
     user_id bigint NOT NULL,
     interest_id bigint NOT NULL,
     created_at timestamptz NOT NULL,
     PRIMARY KEY (user_id, interest_id)
 );
 
-CREATE TABLE group_interests (
+CREATE TABLE group_interest (
     group_id bigint NOT NULL,
     interest_id bigint NOT NULL,
     created_at timestamptz NOT NULL,

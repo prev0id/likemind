@@ -1,70 +1,55 @@
 package auth
 
 import (
-	"errors"
 	"fmt"
-	"log"
 	"net/http"
 
-	"likemind/internal/common"
 	"likemind/internal/domain"
 
 	"github.com/gorilla/sessions"
+	"github.com/rs/zerolog/log"
 )
 
 const (
 	sessionName = "app-session"
-	userUUIDKey = "user-uuid"
+	userIDKey   = "public-user-id"
 )
-
-func (i *implementation) Middleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userID, err := i.ValidateSessionCookie(w, r)
-		if err != nil {
-			http.Redirect(w, r, domain.PathSignIn, http.StatusFound)
-			return
-		}
-
-		ctx := common.ContextWithUserID(r.Context(), userID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
 
 func (i *implementation) ValidateSessionCookie(w http.ResponseWriter, r *http.Request) (int64, error) {
 	session, err := i.cookieStore.Get(r, sessionName)
 	if err != nil || session.IsNew {
-		return 0, errors.New("no session cookie")
+		return 0, domain.ErrNoSession
 	}
 
-	rawUUID, ok := session.Values[userUUIDKey]
+	rawID, ok := session.Values[userIDKey]
 	if !ok {
-		return 0, errors.New("no uuid in session")
+		return 0, domain.ErrInvalidSession
 	}
 
-	uuid, ok := rawUUID.(string)
+	id, ok := rawID.(string)
 	if !ok {
 		i.invalidateSession(session, w, r)
-		return 0, errors.New("invalid uuid type")
+		return 0, domain.ErrInvalidSession
 	}
 
 	ctx := r.Context()
 
-	creds, err := i.db.Get(ctx, domain.FieldUUID, uuid)
+	creds, err := i.db.GetByID(ctx, id)
 	if err != nil {
 		i.invalidateSession(session, w, r)
-		return 0, errors.New("invalid uuid in session")
+		return 0, domain.ErrInvalidSession
 	}
 
 	return creds.UserID, nil
 }
 
-func (i *implementation) SetSessionCookie(uuid string, w http.ResponseWriter, r *http.Request) error {
+func (i *implementation) SetSessionCookie(publicId string, w http.ResponseWriter, r *http.Request) error {
 	session, err := i.cookieStore.Get(r, sessionName)
 	if err != nil {
 		return fmt.Errorf("i.cookieStore.Get: %w", err)
 	}
 
-	session.Values[userUUIDKey] = uuid
+	session.Values[userIDKey] = publicId
 
 	if err := session.Save(r, w); err != nil {
 		return fmt.Errorf("session.Save: %w", err)
@@ -73,9 +58,9 @@ func (i *implementation) SetSessionCookie(uuid string, w http.ResponseWriter, r 
 	return nil
 }
 
-func (i *implementation) InvalidateSessionCookie(w http.ResponseWriter, r *http.Request) {
+func (i *implementation) IvalidateSessionCookie(w http.ResponseWriter, r *http.Request) {
 	session, err := i.cookieStore.Get(r, sessionName)
-	if err != nil { // no cookie
+	if err != nil {
 		return
 	}
 
@@ -85,6 +70,6 @@ func (i *implementation) InvalidateSessionCookie(w http.ResponseWriter, r *http.
 func (i *implementation) invalidateSession(session *sessions.Session, w http.ResponseWriter, r *http.Request) {
 	session.Options.MaxAge = -1
 	if err := session.Save(r, w); err != nil {
-		log.Printf("session.Save: %s", err.Error())
+		log.Error().Err(err).Msg("session.Save")
 	}
 }

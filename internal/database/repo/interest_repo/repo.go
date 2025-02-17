@@ -151,9 +151,6 @@ func (r *Repo) RemoveInterestFromGroup(ctx context.Context, groupID, interestID 
 	return nil
 }
 
-// --- Helper Function ---
-
-// toInterfaceSlice converts a slice of int64 to a slice of interface{}.
 func toInterfaceSlice(ints []int64) []interface{} {
 	s := make([]interface{}, len(ints))
 	for i, v := range ints {

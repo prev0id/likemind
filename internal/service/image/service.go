@@ -91,7 +91,7 @@ func (s *ImageService) UploadImage(ctx context.Context, file io.Reader, fileSize
 }
 
 func (s *ImageService) DeleteImage(ctx context.Context, image string, userID int64) error {
-	pics, err := s.repo.GetProfilePicutresByUserID(ctx, userID)
+	pics, err := s.repo.GetProfilePicturesByUserID(ctx, userID)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (s *ImageService) DeleteImage(ctx context.Context, image string, userID int
 }
 
 func (s *ImageService) GetImage(ctx context.Context, image string, userID int64) (io.ReadCloser, error) {
-	pics, err := s.repo.GetProfilePicutresByUserID(ctx, userID)
+	pics, err := s.repo.GetProfilePicturesByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

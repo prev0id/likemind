@@ -58,7 +58,7 @@ func (i *implementation) SetSessionCookie(publicId string, w http.ResponseWriter
 	return nil
 }
 
-func (i *implementation) IvalidateSessionCookie(w http.ResponseWriter, r *http.Request) {
+func (i *implementation) InvalidateSessionCookie(w http.ResponseWriter, r *http.Request) {
 	session, err := i.cookieStore.Get(r, sessionName)
 	if err != nil {
 		return

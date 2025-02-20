@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"likemind/internal/database/model"
 	"likemind/internal/domain"
 
 	"github.com/google/uuid"
@@ -19,7 +18,7 @@ func (i *implementation) NewUserCredentials(ctx context.Context, userID int64, l
 		return "", err
 	}
 
-	creds := model.Credentials{
+	creds := domain.Credentials{
 		ID:       uuid.NewString(),
 		UserID:   userID,
 		Login:    string(login),
@@ -33,17 +32,17 @@ func (i *implementation) NewUserCredentials(ctx context.Context, userID int64, l
 	return creds.ID, nil
 }
 
-func (i *implementation) Signin(ctx context.Context, login domain.Email, password domain.Password) (string, error) {
-	creds, err := i.db.GetByLogin(ctx, string(login))
+func (i *implementation) Signin(ctx context.Context, login domain.Email, password domain.Password) (domain.Credentials, error) {
+	creds, err := i.db.GetByLogin(ctx, login)
 	if err != nil {
-		return "", fmt.Errorf("i.db.Get: %w", err)
+		return domain.Credentials{}, fmt.Errorf("i.db.Get: %w", err)
 	}
 
 	if !password.CompareWithHash(creds.Password, creds.UserID) {
-		return "", domain.ErrUnauthenticated
+		return domain.Credentials{}, domain.ErrUnauthenticated
 	}
 
-	return creds.ID, nil
+	return creds, nil
 }
 
 func (i *implementation) Authenticate(ctx context.Context, credsID string) (int64, error) {

@@ -3,6 +3,7 @@ package api_handler
 import (
 	"net/http"
 
+	"likemind/internal/app/middleware"
 	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/internal/service/auth"
@@ -13,14 +14,16 @@ import (
 )
 
 type ApiHandler struct {
-	authSvc auth.Service
-	profile profile.Service
+	auth        middleware.Middleware
+	authService auth.Service
+	profile     profile.Service
 }
 
-func New(authSvc auth.Service, profileSvc profile.Service) *ApiHandler {
+func New(profileSvc profile.Service, authService auth.Service, authMiddleware middleware.Middleware) *ApiHandler {
 	return &ApiHandler{
-		authSvc: authSvc,
-		profile: profileSvc,
+		auth:        authMiddleware,
+		profile:     profileSvc,
+		authService: authService,
 	}
 }
 
@@ -37,7 +40,7 @@ func (h *ApiHandler) Routes() chi.Router {
 	})
 
 	router.Group(func(protected chi.Router) {
-		protected.Use(h.authSvc.Middleware)
+		protected.Use(h.auth)
 
 		protected.Post(domain.PathLogOut, h.LogOut)
 	})
@@ -46,7 +49,7 @@ func (h *ApiHandler) Routes() chi.Router {
 }
 
 func (h *ApiHandler) SignIn(w http.ResponseWriter, r *http.Request) {
-	if userID, err := h.authSvc.ValidateSessionCookie(w, r); err == nil {
+	if userID, err := h.authService.ValidateSessionCookie(w, r); err == nil {
 		h.redirectToProfile(userID, w, r)
 		return
 	}
@@ -59,13 +62,17 @@ func (h *ApiHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	creds, err := h.authSvc.ValidateCredentials(ctx, request.Email, request.Password)
+	creds, err := h.authService.Signin(
+		ctx,
+		domain.Email(request.Email),
+		domain.Password(request.Password),
+	)
 	if err != nil {
 		common.ServeError(w, r, err, http.StatusBadRequest)
 		return
 	}
 
-	if err := h.authSvc.SetSessionCookie(creds.UUID, w, r); err != nil {
+	if err := h.authService.SetSessionCookie(creds.ID, w, r); err != nil {
 		common.ServeError(w, r, err, http.StatusInternalServerError)
 		return
 	}
@@ -74,7 +81,7 @@ func (h *ApiHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ApiHandler) SignUp(w http.ResponseWriter, r *http.Request) {
-	if userID, err := h.authSvc.ValidateSessionCookie(w, r); err == nil {
+	if userID, err := h.authService.ValidateSessionCookie(w, r); err == nil {
 		h.redirectToProfile(userID, w, r)
 		return
 	}
@@ -93,13 +100,18 @@ func (h *ApiHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uuid, err := h.authSvc.SetCredentials(ctx, userID, request.Email, request.Password)
+	uuid, err := h.authService.NewUserCredentials(
+		ctx,
+		userID,
+		domain.Email(request.Email),
+		domain.Password(request.Password),
+	)
 	if err != nil {
 		common.ServeError(w, r, err, http.StatusInternalServerError)
 		return
 	}
 
-	if err := h.authSvc.SetSessionCookie(uuid, w, r); err != nil {
+	if err := h.authService.SetSessionCookie(uuid, w, r); err != nil {
 		common.ServeError(w, r, err, http.StatusInternalServerError)
 		return
 	}
@@ -108,14 +120,14 @@ func (h *ApiHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ApiHandler) LogOut(w http.ResponseWriter, r *http.Request) {
-	h.authSvc.InvalidateSessionCookie(w, r)
+	h.authService.InvalidateSessionCookie(w, r)
 	http.Redirect(w, r, domain.PathSignIn, http.StatusFound)
 }
 
 func (h *ApiHandler) redirectToProfile(userID int64, w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	profile, err := h.profile.GetUser(ctx, userID)
+	profile, err := h.profile.GetProfile(ctx, userID)
 	if err != nil {
 		// corner case
 		searchUsersPath := common.SetPathVariables(domain.PathSearch, common.PathVars{domain.PathVarType: domain.TypeUser})
@@ -123,6 +135,6 @@ func (h *ApiHandler) redirectToProfile(userID int64, w http.ResponseWriter, r *h
 		return
 	}
 
-	profilePath := common.SetPathVariables(domain.PathUserPage, common.PathVars{domain.PathVarNickname: profile.Nickname})
+	profilePath := common.SetPathVariables(domain.PathUserPage, common.PathVars{domain.PathVarNickname: profile.User.Nickname})
 	common.Redirect(w, profilePath)
 }

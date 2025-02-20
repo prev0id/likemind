@@ -1,13 +1,14 @@
 package domain
 
 const (
-	PathPing      = "/ping"
-	PathUserPage  = "/user/{nickname}"
-	PathGroupPage = "/group/{group}"
-	PathSignIn    = "/signin"
-	PathSignUp    = "/signup"
-	PathLogOut    = "/logout"
-	PathSearch    = "/search/{type}"
+	PathPing       = "/ping"
+	PathUserPage   = "/user/{nickname}"
+	PathGroupPage  = "/group/{group}"
+	PathSignIn     = "/signin"
+	PathSignUp     = "/signup"
+	PathLogOut     = "/logout"
+	PathSearch     = "/search/{type}"
+	PathSearchUser = "/search/user"
 
 	PathStaticHTMX         = "/static/htmx.js"
 	PathStaticAlpine       = "/static/alpine.js"

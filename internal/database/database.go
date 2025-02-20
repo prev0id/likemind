@@ -17,7 +17,7 @@ type postgresConn interface {
 	Exec(ctx context.Context, sql string, args ...any) (pgconn.CommandTag, error)
 }
 
-var globalDB *pgxpool.Pool
+var DB *pgxpool.Pool
 
 func InitDB(ctx context.Context, cfg config.DB) error {
 	pool, err := pgxpool.New(ctx, cfg.Addr)
@@ -25,7 +25,7 @@ func InitDB(ctx context.Context, cfg config.DB) error {
 		return err
 	}
 
-	globalDB = pool
+	DB = pool
 	return nil
 }
 
@@ -63,7 +63,7 @@ func Select[T any](ctx context.Context, sql SQL) ([]T, error) {
 }
 
 func InTransaction(ctx context.Context, fn func(ctx context.Context) error) error {
-	tx, err := globalDB.Begin(ctx)
+	tx, err := DB.Begin(ctx)
 	if err != nil {
 		log.Err(err).Msg("starting db failed")
 	}
@@ -100,7 +100,7 @@ var txKey = txKeyType{}
 func txOrPool(ctx context.Context) postgresConn {
 	tx, ok := ctx.Value(txKey).(pgx.Tx)
 	if !ok {
-		return globalDB
+		return DB
 	}
 
 	return tx

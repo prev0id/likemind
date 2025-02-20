@@ -11,8 +11,8 @@ import (
 )
 
 type DB interface {
-	AddProfilePicutre(ctx context.Context, picture model.ProfilePicture) error
-	GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]model.ProfilePicture, error)
+	AddProfilePicture(ctx context.Context, picture model.ProfilePicture) error
+	GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]model.ProfilePicture, error)
 	RemovePictureByID(ctx context.Context, id string) error
 }
 
@@ -20,7 +20,7 @@ var _ DB = (*Repo)(nil)
 
 type Repo struct{}
 
-func (r *Repo) AddProfilePicutre(ctx context.Context, picture model.ProfilePicture) error {
+func (r *Repo) AddProfilePicture(ctx context.Context, picture model.ProfilePicture) error {
 	now := time.Now()
 	picture.CreatedAt = now
 	picture.UpdatedAt = now
@@ -46,7 +46,7 @@ func (r *Repo) AddProfilePicutre(ctx context.Context, picture model.ProfilePictu
 	return nil
 }
 
-func (r *Repo) GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]model.ProfilePicture, error) {
+func (r *Repo) GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]model.ProfilePicture, error) {
 	q := sql.Select(
 		model.ProfilePictureID,
 		model.ProfilePictureUserID,

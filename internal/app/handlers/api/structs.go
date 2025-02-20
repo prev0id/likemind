@@ -17,8 +17,8 @@ type SignUpRequest struct {
 
 func (r *SignUpRequest) getCreateUserRequest() domain.User {
 	return domain.User{
-		Name:     r.Name,
-		Surname:  r.Surname,
+		Name:     domain.Name(r.Name),
+		Surname:  domain.Surname(r.Surname),
 		Nickname: r.Nickname,
 	}
 }

@@ -11,24 +11,24 @@ import (
 )
 
 type DB interface {
-	CreateUser(ctx context.Context, user model.User) error
+	CreateUser(ctx context.Context, user model.User) (int64, error)
 	UpdateUser(ctx context.Context, user model.User) error
 	GetUserByID(ctx context.Context, id int64) (model.User, error)
 	ListUsers(ctx context.Context) ([]model.User, error)
+	RemoveUser(ctx context.Context, userID int64) error
 }
 
 var _ DB = (*Repo)(nil)
 
 type Repo struct{}
 
-func (r *Repo) CreateUser(ctx context.Context, user model.User) error {
+func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	now := time.Now()
 	user.CreatedAt = now
 	user.UpdatedAt = now
 
 	q := sql.InsertInto(model.TableUser)
 	q.Cols(
-		model.UserID,
 		model.UserNickname,
 		model.UserName,
 		model.UserSurname,
@@ -37,7 +37,6 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) error {
 		model.UserUpdatedAt,
 	)
 	q.Values(
-		user.ID,
 		user.Nickname,
 		user.Name,
 		user.Surname,
@@ -45,12 +44,14 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) error {
 		user.CreatedAt,
 		user.UpdatedAt,
 	)
+	q.SQL("RETURNING " + model.UserID)
 
-	if _, err := database.Exec(ctx, q); err != nil {
-		return err
+	id, err := database.Get[int64](ctx, q)
+	if err != nil {
+		return 0, err
 	}
 
-	return nil
+	return id, nil
 }
 
 func (r *Repo) UpdateUser(ctx context.Context, user model.User) error {
@@ -112,4 +113,15 @@ func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
 	}
 
 	return result, nil
+}
+
+func (r *Repo) RemoveUser(ctx context.Context, userID int64) error {
+	q := sql.DeleteFrom(model.TableUser)
+	q.Where(q.Equal(model.UserID, userID))
+
+	if _, err := database.Exec(ctx, q); err != nil {
+		return err
+	}
+
+	return nil
 }

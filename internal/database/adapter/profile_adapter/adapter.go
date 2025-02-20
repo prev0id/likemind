@@ -2,7 +2,9 @@ package profile_adapter
 
 import (
 	"context"
+	"fmt"
 
+	"likemind/internal/database"
 	"likemind/internal/database/repo/contact_repo"
 	profile_picture_repo "likemind/internal/database/repo/picture_repo"
 	"likemind/internal/database/repo/user_repo"
@@ -13,15 +15,16 @@ type Adapter interface {
 	GetProfileByUserID(ctx context.Context, userID int64) (domain.Profile, error)
 	ListProfiles(ctx context.Context) ([]domain.Profile, error)
 
-	CreateUser(ctx context.Context, user domain.User) error
+	CreateUser(ctx context.Context, user domain.User) (int64, error)
 	UpdateUser(ctx context.Context, user domain.User) error
+	RemoveUser(ctx context.Context, userID int64) error
 
 	AddContact(ctx context.Context, userID int64, contact domain.Contact) error
 	UpdateContact(ctx context.Context, userID int64, contact domain.Contact) error
 	RemoveContactByID(ctx context.Context, contactID int64) error
 
-	AddProfilePicutre(ctx context.Context, userID int64, pictureID string) error
-	GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]string, error)
+	AddProfilePicture(ctx context.Context, userID int64, pictureID string) error
+	GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]string, error)
 	RemovePictureByID(ctx context.Context, pictureID string) error
 }
 
@@ -50,7 +53,7 @@ func (i *implementation) GetProfileByUserID(ctx context.Context, userID int64) (
 		return domain.Profile{}, err
 	}
 
-	pictures, err := i.pictureDB.GetProfilePicutresByUserID(ctx, userID)
+	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, userID)
 	if err != nil {
 		return domain.Profile{}, err
 	}
@@ -79,12 +82,42 @@ func (i *implementation) ListProfiles(ctx context.Context) ([]domain.Profile, er
 	return profiles, nil
 }
 
-func (i *implementation) CreateUser(ctx context.Context, user domain.User) error {
+func (i *implementation) CreateUser(ctx context.Context, user domain.User) (int64, error) {
 	return i.userDB.CreateUser(ctx, domainUserToModel(user))
 }
 
 func (i *implementation) UpdateUser(ctx context.Context, user domain.User) error {
 	return i.userDB.UpdateUser(ctx, domainUserToModel(user))
+}
+
+func (i *implementation) RemoveUser(ctx context.Context, userID int64) error {
+	database.InTransaction(ctx, func(ctx context.Context) error {
+		pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, userID)
+		if err != nil {
+			return fmt.Errorf("failed to get profile pictures: %w", err)
+		}
+		for _, picture := range pictures {
+			if err := i.pictureDB.RemovePictureByID(ctx, picture.ID); err != nil {
+				return fmt.Errorf("failed to remove picture: %w", err)
+			}
+		}
+
+		contacts, err := i.contactDB.GetContactsByUserID(ctx, userID)
+		if err != nil {
+			return fmt.Errorf("failed to get contacts: %w", err)
+		}
+		for _, contact := range contacts {
+			if err := i.contactDB.RemoveContactByID(ctx, contact.ID); err != nil {
+				return fmt.Errorf("failed to remove contact: %w", err)
+			}
+		}
+
+		if err := i.userDB.RemoveUser(ctx, userID); err != nil {
+			return fmt.Errorf("failed to remove user: %w", err)
+		}
+		return nil
+	})
+	return nil
 }
 
 func (i *implementation) AddContact(ctx context.Context, userID int64, contact domain.Contact) error {
@@ -99,12 +132,12 @@ func (i *implementation) RemoveContactByID(ctx context.Context, contactID int64)
 	return i.contactDB.RemoveContactByID(ctx, contactID)
 }
 
-func (i *implementation) AddProfilePicutre(ctx context.Context, userID int64, pictureID string) error {
-	return i.pictureDB.AddProfilePicutre(ctx, domainProfilePictureToModel(pictureID, userID))
+func (i *implementation) AddProfilePicture(ctx context.Context, userID int64, pictureID string) error {
+	return i.pictureDB.AddProfilePicture(ctx, domainProfilePictureToModel(pictureID, userID))
 }
 
-func (i *implementation) GetProfilePicutresByUserID(ctx context.Context, userID int64) ([]string, error) {
-	pictures, err := i.pictureDB.GetProfilePicutresByUserID(ctx, userID)
+func (i *implementation) GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]string, error) {
+	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"likemind/internal/app/middleware"
 	"likemind/internal/common"
 	"likemind/internal/domain"
-	"likemind/internal/service/auth"
 
 	profile_page "likemind/website/page/profile"
 	signin_page "likemind/website/page/signin"
@@ -18,12 +18,12 @@ import (
 )
 
 type PageHandler struct {
-	authSvc auth.Service
+	auth middleware.Middleware
 }
 
-func New(authSvc auth.Service) *PageHandler {
+func New(auth middleware.Middleware) *PageHandler {
 	return &PageHandler{
-		authSvc: authSvc,
+		auth: auth,
 	}
 }
 
@@ -37,10 +37,11 @@ func (h *PageHandler) Routes() chi.Router {
 	router.Group(func(public chi.Router) {
 		router.Get(domain.PathSignIn, common.WrapHTMLHandler(h.signin))
 		router.Get(domain.PathSignUp, common.WrapHTMLHandler(h.signup))
+		router.Get("/search", common.WrapHTMLHandler(h.search))
 	})
 
 	router.Group(func(protected chi.Router) {
-		protected.Use(h.authSvc.Middleware)
+		protected.Use(h.auth)
 
 		protected.Get(domain.PathUserPage, common.WrapHTMLHandler(h.profile))
 	})

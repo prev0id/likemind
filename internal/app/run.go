@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"errors"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -30,11 +29,15 @@ func (a *App) Run(ctx context.Context) error {
 		Str("address", a.server.Addr).
 		Msg("starting app")
 
-	if err := a.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	if err := a.server.ListenAndServe(); err != nil {
+		log.Info().AnErr("reason", err).Msg("Server stopped")
 		return err
 	}
 
 	<-ctx.Done()
+
+	log.Info().Msg("Stopped without reason")
+
 	return nil
 }
 

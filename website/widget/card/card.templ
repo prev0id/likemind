@@ -1,0 +1,92 @@
+package card
+
+templ Container() {
+	<div class="max-w-3xl mx-auto my-8 space-y-8">
+		{ children... }
+	</div>
+}
+
+templ Card(attributes templ.Attributes) {
+	<div
+		class="bg-white rounded-2xl p-6 shadow-lg ring ring-pink grid grid-flow-row gap-4"
+		{ attributes... }
+	>
+		{ children... }
+	</div>
+}
+
+templ PinkCard() {
+	<div class="bg-pink/30 p-4 rounded-lg">
+		{ children... }
+	</div>
+}
+
+templ Title(title string) {
+	<h1 class="text-3xl font-bold text-black">
+		{ title }
+	</h1>
+}
+
+templ Subtitle(subtitle string) {
+	<h1 class="text-xl font-bold text-black">
+		{ subtitle }
+	</h1>
+}
+
+templ Text(text string) {
+	<p class="text-black/90 leading-relaxed">
+		{ text }
+	</p>
+}
+
+templ TextSM(text string) {
+	<p class="text-black/90 text-sm">
+		{ text }
+	</p>
+}
+
+templ Header() {
+	<div class="mb-4">
+		{ children... }
+	</div>
+}
+
+templ Author(author, link string) {
+	<a
+		href={ templ.SafeURL(link) }
+		class="text-orange font-medium hover:text-red"
+	>
+		{ author }
+	</a>
+}
+
+templ AuthorSM(author, link string) {
+	<a
+		href={ templ.SafeURL(link) }
+		class="text-orange/90 text-sm hover:text-red"
+	>
+		{ author }
+	</a>
+}
+
+templ Date(date string) {
+	<span class="text-black/60 text-sm ml-2">
+		{ date }
+	</span>
+}
+
+templ Footer() {
+	<div class="border-t border-pink pt-4">
+		{ children... }
+	</div>
+}
+
+templ Image(src, description string) {
+	<div class="w-20 h-20 overflow-hidden rounded-xl border-2 border-pink shadow-md transition-transform hover:scale-105">
+		<img
+			src={ src }
+			alt={ description }
+			class="w-full h-full object-cover object-center"
+		/>
+	</div>
+}

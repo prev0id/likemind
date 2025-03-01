@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/BurntSushi/toml v1.4.0
-	github.com/a-h/templ v0.3.819
+	github.com/a-h/templ v0.3.833
 	github.com/antonlindstrom/pgstore v0.0.0-20220421113606-e3a6e3fed12a
 	github.com/georgysavva/scany/v2 v2.1.3
 	github.com/ggicci/httpin v0.19.0

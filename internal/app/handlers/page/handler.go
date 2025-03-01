@@ -11,6 +11,7 @@ import (
 	profile_page "likemind/website/page/profile"
 	signin_page "likemind/website/page/signin"
 	signup_page "likemind/website/page/signup"
+	group_page "likemind/website/page/group"
 	user_search_page "likemind/website/page/user_search"
 
 	"github.com/a-h/templ"
@@ -35,9 +36,11 @@ func (h *PageHandler) Routes() chi.Router {
 	router := chi.NewRouter()
 
 	router.Group(func(public chi.Router) {
-		router.Get(domain.PathSignIn, common.WrapHTMLHandler(h.signin))
-		router.Get(domain.PathSignUp, common.WrapHTMLHandler(h.signup))
-		router.Get("/search", common.WrapHTMLHandler(h.search))
+		public.Get(domain.PathSignIn, common.WrapHTMLHandler(h.signin))
+		public.Get(domain.PathSignUp, common.WrapHTMLHandler(h.signup))
+		public.Get("/search", common.WrapHTMLHandler(h.search))
+		public.Get(domain.PathUserPage, common.WrapHTMLHandler(h.profile))
+		public.Get(domain.PathGroupPage, common.WrapHTMLHandler(h.group))
 	})
 
 	router.Group(func(protected chi.Router) {
@@ -55,6 +58,11 @@ func (h *PageHandler) profile(_ http.ResponseWriter, r *http.Request) (component
 	return profile_page.Page(), http.StatusOK
 }
 
+func (h *PageHandler) group(_ http.ResponseWriter, _ *http.Request) (component templ.Component, statusCode int) {
+	return group_page.Page(), http.StatusOK
+}
+
+
 func (h *PageHandler) search(_ http.ResponseWriter, _ *http.Request) (component templ.Component, statusCode int) {
 	return user_search_page.Page(), http.StatusOK
 }
@@ -66,3 +74,4 @@ func (h *PageHandler) signin(_ http.ResponseWriter, _ *http.Request) (component 
 func (h *PageHandler) signup(_ http.ResponseWriter, _ *http.Request) (component templ.Component, statusCode int) {
 	return signup_page.Page(), http.StatusOK
 }
+

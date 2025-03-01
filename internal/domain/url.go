@@ -2,8 +2,8 @@ package domain
 
 const (
 	PathPing       = "/ping"
-	PathUserPage   = "/user/{nickname}"
-	PathGroupPage  = "/group/{group}"
+	PathUserPage   = "/user/prevoid"
+	PathGroupPage  = "/group/group1"
 	PathSignIn     = "/signin"
 	PathSignUp     = "/signup"
 	PathLogOut     = "/logout"

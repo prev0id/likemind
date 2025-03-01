@@ -1,5 +1,5 @@
 .PHONY: local
-local: prepare-env
+local:
 	go run github.com/air-verse/air@v1.61.5 -c .air.toml
 
 .PHONY: run

@@ -1,3 +1,27 @@
+# environment
+.PHONY: prepare-env
+prepare-env: docker-up migrate create-bucket
+
+.PHONY: clear-env
+clear-env:
+	docker-compose down -v
+
+.PHONY: docker-up
+	docker compose up -d
+
+.PHONY: migrate
+migrate:
+	sleep 5s
+	GOOSE_MIGRATION_DIR=./migrations goose postgres "postgresql://user:password@localhost:5432/likemind?sslmode=disable" up
+
+.PHONY: create-bucket
+create-bucket:
+	docker-compose exec minio mc mb minio/my-bucket
+
+# app
+.PHONY: build
+build: build-templ build-tailwind build-app
+
 .PHONY: local
 local:
 	go run github.com/air-verse/air@v1.61.5 -c .air.toml
@@ -5,14 +29,6 @@ local:
 .PHONY: run
 run: build-templ build-tailwind
 	go run ./cmd/main.go
-
-.PHONY: prepare-env
-prepare-env:
-	docker compose up -d
-	GOOSE_MIGRATION_DIR=./migrations goose postgres "postgresql://user:password@localhost:5430/likemind?sslmode=disable" up
-
-.PHONY: build
-build: build-templ build-tailwind build-app
 
 .PHONY: build-app
 build-app:

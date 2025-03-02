@@ -21,8 +21,8 @@ CREATE TABLE group_interest (
     created_at timestamptz NOT NULL,
     PRIMARY KEY (group_id, interest_id)
 );
-
 -- +goose StatementEnd
+
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS group_interest;
@@ -30,5 +30,4 @@ DROP TABLE IF EXISTS group_interest;
 DROP TABLE IF EXISTS user_interest;
 
 DROP TABLE IF EXISTS interest;
-
 -- +goose StatementEnd

@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE group (
+CREATE TABLE "group" (
     id bigint PRIMARY KEY NOT NULL,
     picture_id text NOT NULL,
     name text NOT NULL,
@@ -11,13 +11,12 @@ CREATE TABLE group (
     updated_at timestamptz NOT NULL
 );
 
-CREATE INDEX idx_group_author_id ON groups (author_id);
-
--- +goose StatementBegin
--- +goose Down
+CREATE INDEX idx_group_author_id ON "group" (author_id);
 -- +goose StatementEnd
+
+-- +goose Down
+-- +goose StatementBegin
 DROP INDEX IF EXISTS idx_group_author_id;
 
-DROP TABLE IF EXISTS group;
-
+DROP TABLE IF EXISTS "group";
 -- +goose StatementEnd

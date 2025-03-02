@@ -40,6 +40,7 @@ CREATE TABLE contact (
 );
 
 CREATE INDEX idx_contacts_user_id ON contact (user_id);
+-- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
@@ -56,5 +57,4 @@ DROP TABLE IF EXISTS credential;
 DROP INDEX IF EXISTS idx_credential_user_id;
 
 DROP TABLE IF EXISTS user;
-
 -- +goose StatementEnd

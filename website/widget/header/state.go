@@ -14,17 +14,17 @@ var (
 	AuthorizedTabs = State{
 		Tabs: []TabState{
 			{
-				URL:     "/group",
+				URL:     domain.PathGroupPage,
 				Name:    GroupTab,
 				Kaomoji: `\( ˙▿˙ )/\( ˙▿˙ )/`,
 			},
 			{
-				URL:     "/search/user",
+				URL:     "/search",
 				Name:    PeopleTab,
 				Kaomoji: `⊂(￣▽￣)⊃`,
 			},
 			{
-				URL:     "/profile",
+				URL:     domain.PathUserPage,
 				Name:    ProfileTab,
 				Kaomoji: `(„• ᴗ •„)`,
 			},

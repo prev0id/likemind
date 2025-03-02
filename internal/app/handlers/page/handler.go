@@ -8,10 +8,10 @@ import (
 	"likemind/internal/common"
 	"likemind/internal/domain"
 
+	group_page "likemind/website/page/group"
 	profile_page "likemind/website/page/profile"
 	signin_page "likemind/website/page/signin"
 	signup_page "likemind/website/page/signup"
-	group_page "likemind/website/page/group"
 	user_search_page "likemind/website/page/user_search"
 
 	"github.com/a-h/templ"
@@ -45,8 +45,6 @@ func (h *PageHandler) Routes() chi.Router {
 
 	router.Group(func(protected chi.Router) {
 		protected.Use(h.auth)
-
-		protected.Get(domain.PathUserPage, common.WrapHTMLHandler(h.profile))
 	})
 
 	return router
@@ -62,7 +60,6 @@ func (h *PageHandler) group(_ http.ResponseWriter, _ *http.Request) (component t
 	return group_page.Page(), http.StatusOK
 }
 
-
 func (h *PageHandler) search(_ http.ResponseWriter, _ *http.Request) (component templ.Component, statusCode int) {
 	return user_search_page.Page(), http.StatusOK
 }
@@ -74,4 +71,3 @@ func (h *PageHandler) signin(_ http.ResponseWriter, _ *http.Request) (component 
 func (h *PageHandler) signup(_ http.ResponseWriter, _ *http.Request) (component templ.Component, statusCode int) {
 	return signup_page.Page(), http.StatusOK
 }
-

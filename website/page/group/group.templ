@@ -80,7 +80,7 @@ var state = PageState{
 }
 
 templ Page() {
-	@page.StandardLayout(header.AuthorizedTabs.Select(header.PeopleTab)) {
+	@page.StandardLayout(header.AuthorizedTabs.Select(header.GroupTab)) {
 		@card.Container() {
 			@card.Card(nil) {
 				@card.Header() {

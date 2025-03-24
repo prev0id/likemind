@@ -1,0 +1,71 @@
+signin:
+  get:
+    summary: Get sign-in page
+    description: Returns an HTML page for user sign-in.
+    tags:
+      - page
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+signup:
+  get:
+    summary: Get sign-up page
+    description: Returns an HTML page for user sign-up.
+    tags:
+      - page
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+profile:
+  get:
+    summary: Get user profile page
+    description: Returns an HTML page displaying the user's profile information. Requires authentication.
+    tags:
+      - page
+    parameters:
+      - $ref: "../components/parameters.yaml#/username"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+group:
+  get:
+    summary: Get group page
+    description: Returns an HTML page displaying details of a specific user group. Requires authentication.
+    tags:
+      - page
+    parameters:
+      - $ref: "../components/parameters.yaml#/group_name"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+search:
+  get:
+    summary: Get search page
+    description: Returns an HTML page where users can search for other users, groups, or content.
+    tags:
+      - page
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"

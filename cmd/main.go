@@ -2,13 +2,10 @@ package main
 
 import (
 	"context"
+	"net/http"
 
 	"likemind/cmd/bootstrap"
-	"likemind/internal/app"
-	api_handler "likemind/internal/app/handlers/api"
-	page_handler "likemind/internal/app/handlers/page"
-	static_handler "likemind/internal/app/handlers/static"
-	"likemind/internal/app/middleware"
+	"likemind/internal/api"
 	"likemind/internal/config"
 	"likemind/internal/database"
 	"likemind/internal/database/adapter/credentials_adapter"
@@ -17,6 +14,7 @@ import (
 	"likemind/internal/database/repo/credentials_repo"
 	profile_picture_repo "likemind/internal/database/repo/picture_repo"
 	"likemind/internal/database/repo/user_repo"
+	desc "likemind/internal/pkg/api"
 	"likemind/internal/service/auth"
 	"likemind/internal/service/profile"
 
@@ -42,14 +40,14 @@ type DataProvider[Data any] interface {
 func main() {
 	bootstrap.Deps()
 
+	ctx := context.Background()
+
 	cfg, err := config.Parse()
 	if err != nil {
 		log.Fatal().Err(err).Msg("config.Parse")
 	}
 
 	log.Info().Interface("config", cfg).Msgf("successfully parsed")
-
-	app, ctx := app.InitApp(cfg.App)
 
 	database.InitDB(ctx, cfg.DB)
 
@@ -67,20 +65,14 @@ func main() {
 		log.Fatal().Err(err).Msg("auth.New")
 	}
 
-	authMiddleware := middleware.NewAuthMiddleware(authService)
+	server := api.NewServer(authService, profileService)
 
-	app.WithHandlers(
-		page_handler.New(authMiddleware),
-		api_handler.New(profileService, authService, authMiddleware),
-		static_handler.New(),
-	)
+	app, err := desc.NewServer(server, desc.WithNotFound(server.NotFound))
+	if err != nil {
+		log.Fatal().Err(err).Msg("desc.NewServer")
+	}
 
-	app.WithStoppers(
-		authService.Close,
-		database.DB.Close,
-	)
-
-	if err := app.Run(ctx); err != nil {
-		log.Fatal().Err(err)
+	if err := http.ListenAndServe(":8080", app); err != nil {
+		log.Fatal().Err(err).Msg("http.ListenAndServe")
 	}
 }

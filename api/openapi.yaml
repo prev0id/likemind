@@ -1,0 +1,39 @@
+openapi: 3.1.0
+info:
+  title: Likemind API
+  version: 1.0.0
+  description: An application similar to a social network for finding interesting friends based on your interests, see [readme for more](https://github.com/prev0id/likemind/blob/master/README.md)
+
+servers:
+  - url: http://localhost:8080
+    description: local (development) run
+
+paths:
+  /signin:
+    $ref: "./paths/pages.yaml#/signin"
+  /signup:
+    $ref: "./paths/pages.yaml#/signup"
+  /profile/{username}:
+    $ref: "./paths/pages.yaml#/profile"
+  /group/{group_name}:
+    $ref: "./paths/pages.yaml#/group"
+  /search:
+    $ref: "./paths/pages.yaml#/search"
+
+tags:
+  - name: page
+    description: handler returns full html page
+    externalDocs:
+      url: https://github.com/prev0id/likemind/blob/master/docs/pages.md
+  - name: user
+    description: user api
+    externalDocs:
+      url: https://github.com/prev0id/likemind/blob/master/docs/user_api.md
+  - name: group
+    description: group api
+    externalDocs:
+      url: https://github.com/prev0id/likemind/blob/master/docs/group_api.md
+  - name: search
+    description: search api
+    externalDocs:
+      url: https://github.com/prev0id/likemind/blob/master/docs/search_api.md

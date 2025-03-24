@@ -1,0 +1,15 @@
+group_name:
+  name: group_name
+  in: path
+  required: true
+  description: The name of the group.
+  schema:
+    type: string
+
+username:
+  name: username
+  in: path
+  required: true
+  description: The nickname of the user.
+  schema:
+    type: string

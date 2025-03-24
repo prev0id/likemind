@@ -8,7 +8,7 @@ import (
 
 templ Component() {
 	<form
-		hx-post={ domain.PathAPISignIn }
+		hx-post={ domain.PathAPIUserSignin }
 		hx-target="this"
 		hx-swap="outerHTML"
 		class="space-y-4 md:space-y-6"
@@ -32,7 +32,7 @@ templ Component() {
 			class="text-sm font-light"
 		>
 			Don't have an account?
-			<a href={ domain.PathSignUp } class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange">Create here</a>
+			<a href={ domain.PathPageSignUp } class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange">Create here</a>
 		</p>
 	</form>
 }

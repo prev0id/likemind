@@ -1,0 +1,10 @@
+parser:
+  allow_remote: true
+
+generator:
+  features:
+    disable:
+      - "paths/client"
+      - "webhooks/client"
+      - "ogen/unimplemented"
+      - "debug/example_tests"

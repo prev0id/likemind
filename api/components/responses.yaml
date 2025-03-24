@@ -1,0 +1,27 @@
+HTMLResponse:
+  description: HTML page response.
+  content:
+    text/html:
+      schema:
+        $ref: "schemas.yaml#/HTMLPage"
+
+InternalError:
+  description: Internal server error response
+  content:
+    text/plain:
+      schema:
+        $ref: "schemas.yaml#/ErrorResponse"
+
+NotAuthorized:
+  description: Not authorized error response
+  content:
+    text/plain:
+      schema:
+        $ref: "schemas.yaml#/ErrorResponse"
+
+NotFound:
+  description: Not found error response
+  content:
+    text/plain:
+      schema:
+        $ref: "schemas.yaml#/ErrorResponse"

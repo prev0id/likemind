@@ -1,34 +1,41 @@
 package domain
 
 const (
-	PathPing       = "/ping"
-	PathUserPage   = "/user/prevoid"
-	PathGroupPage  = "/group/group1"
-	PathSignIn     = "/signin"
-	PathSignUp     = "/signup"
-	PathLogOut     = "/logout"
-	PathSearch     = "/search/{type}"
-	PathSearchUser = "/search/user"
+	PathPageRoot = "/"
 
+	PathPageSignIn      = "/signin"
+	PathPageSignUp      = "/signup"
+	PathPageCurrentUser = "/user"
+	PathPageUser        = "/user/{username}"
+	PathPageGroup       = "/group/{groupname}"
+	PathPageSearchUser  = "/search/user"
+	PathPageSearchGroup = "/search/group"
+
+	PathAPIPing        = "/api/ping"
+	PathAPISearchUser  = "/api/search/user"
+	PathAPISearchGroup = "/api/search/group"
+
+	PathAPIUserSignup    = "/api/user"
+	PathAPIUserSignin    = "/api/user/sigin"
+	PathAPIUserLogout    = "/api/user/logout"
+	PathAPIUserDesc      = "/api/user/desc"
+	PathAPIUserEmail     = "/api/user/email"
+	PathAPIUserPassword  = "/api/user/password"
+	PathAPIUserPicture   = "/api/user/picture"
+	PathAPIUserInterests = "/api/user/interests"
+
+	PathAPIGroup          = "/api/group"
+	PathAPIGroupDesc      = "/api/group/desc"
+	PathAPIGroupInterests = "/api/group/interests"
+
+	PathStatic             = "/static/{filepath}"
 	PathStaticHTMX         = "/static/htmx.js"
 	PathStaticAlpine       = "/static/alpine.js"
 	PathStaticErrorHandler = "/static/error_handler.js"
 	PathStaticFavicon      = "/static/favicon.png"
 	PathStaticStyles       = "/static/styles.css"
 
-	PathAPISignIn = PathPrefixAPI + PathSignIn
-	PathAPISignUp = PathPrefixAPI + PathSignUp
-
-	PathPrefixRoot   = "/"
-	PathPrefixAPI    = "/api"
-	PathPrefixStatic = "/static"
-
-	PatternFile = "/{file}"
-
-	PathVarNickname = "nickname"
-	PathVarGroup    = "group"
-	PathVarType     = "type"
-
-	TypeGroup = "group"
-	TypeUser  = "user"
+	PathParamUsername  = "username"
+	PathParamGroupname = "groupname"
+	PathParamFilePath  = "filepath"
 )

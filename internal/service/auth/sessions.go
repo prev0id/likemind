@@ -1,35 +1,34 @@
 package auth
 
 import (
-	"fmt"
-	"net/http"
-
+	"likemind/internal/common"
 	"likemind/internal/domain"
+	"net/http"
 
 	"github.com/gorilla/sessions"
 	"github.com/rs/zerolog/log"
 )
 
 const (
-	sessionName = "app-session"
+	sessionName = "SESSION"
 	userIDKey   = "public-user-id"
 )
 
 func (i *implementation) ValidateSessionCookie(w http.ResponseWriter, r *http.Request) (int64, error) {
 	session, err := i.cookieStore.Get(r, sessionName)
 	if err != nil || session.IsNew {
-		return 0, domain.ErrNoSession
+		return 0, domain.ErrNotAuthenticated
 	}
 
 	rawID, ok := session.Values[userIDKey]
 	if !ok {
-		return 0, domain.ErrInvalidSession
+		return 0, domain.ErrNotAuthenticated
 	}
 
 	id, ok := rawID.(string)
 	if !ok {
 		i.invalidateSession(session, w, r)
-		return 0, domain.ErrInvalidSession
+		return 0, domain.ErrNotAuthenticated
 	}
 
 	ctx := r.Context()
@@ -37,7 +36,10 @@ func (i *implementation) ValidateSessionCookie(w http.ResponseWriter, r *http.Re
 	creds, err := i.db.GetByID(ctx, id)
 	if err != nil {
 		i.invalidateSession(session, w, r)
-		return 0, domain.ErrInvalidSession
+		if common.ErrorIs(err, common.NotFoundErrorType) {
+			err = domain.ErrNotAuthenticated
+		}
+		return 0, err
 	}
 
 	return creds.UserID, nil
@@ -46,13 +48,13 @@ func (i *implementation) ValidateSessionCookie(w http.ResponseWriter, r *http.Re
 func (i *implementation) SetSessionCookie(publicId string, w http.ResponseWriter, r *http.Request) error {
 	session, err := i.cookieStore.Get(r, sessionName)
 	if err != nil {
-		return fmt.Errorf("i.cookieStore.Get: %w", err)
+		return err
 	}
 
 	session.Values[userIDKey] = publicId
 
 	if err := session.Save(r, w); err != nil {
-		return fmt.Errorf("session.Save: %w", err)
+		return err
 	}
 
 	return nil

@@ -1,12 +1,12 @@
-# environment
 .PHONY: prepare-env
 prepare-env: docker-up migrate create-bucket
 
-.PHONY: clear-env
-clear-env:
-	docker-compose down -v
+.PHONY: docker-down
+docker-down:
+	docker compose down -v
 
 .PHONY: docker-up
+docker-up:
 	docker compose up -d
 
 .PHONY: migrate
@@ -18,7 +18,6 @@ migrate:
 create-bucket:
 	docker-compose exec minio mc mb minio/my-bucket
 
-# app
 .PHONY: build
 build: build-templ build-tailwind build-app
 

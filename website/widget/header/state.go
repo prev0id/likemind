@@ -14,7 +14,7 @@ var (
 	AuthorizedTabs = State{
 		Tabs: []TabState{
 			{
-				URL:     domain.PathGroupPage,
+				URL:     domain.PathPageGroup,
 				Name:    GroupTab,
 				Kaomoji: `\( ˙▿˙ )/\( ˙▿˙ )/`,
 			},
@@ -24,7 +24,7 @@ var (
 				Kaomoji: `⊂(￣▽￣)⊃`,
 			},
 			{
-				URL:     domain.PathUserPage,
+				URL:     domain.PathPageUser,
 				Name:    ProfileTab,
 				Kaomoji: `(„• ᴗ •„)`,
 			},
@@ -34,12 +34,12 @@ var (
 	UnauthorizedTabs = State{
 		Tabs: []TabState{
 			{
-				URL:     domain.PathSignIn,
+				URL:     domain.PathPageSignIn,
 				Name:    SignInTab,
 				Kaomoji: `(„• ֊ •„)੭`,
 			},
 			{
-				URL:     domain.PathSignUp,
+				URL:     domain.PathPageSignUp,
 				Name:    SignUpTab,
 				Kaomoji: `(⸝⸝ᵕᴗᵕ⸝⸝)`,
 			},

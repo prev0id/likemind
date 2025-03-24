@@ -10,7 +10,7 @@ type State struct{}
 
 templ Component() {
 	<form
-		hx-post={ domain.PathAPISignUp }
+		hx-post={ domain.PathAPIUserSignup }
 		hx-target="this"
 		hx-swap="outerHTML"
 		class="space-y-4 md:space-y-6"
@@ -62,7 +62,7 @@ templ Component() {
 			class="text-sm font-light"
 		>
 			Already have an account?
-			<a href={ domain.PathSignIn } class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange">log in here</a>
+			<a href={ domain.PathPageSignIn } class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange">log in here</a>
 		</p>
 	</form>
 }

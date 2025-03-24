@@ -1,0 +1,12 @@
+Location:
+  description: The URL to which the client should be redirected
+  schema:
+    type: string
+    format: uri
+    example: "/new-location"
+
+SessionCookie:
+  description: Set or delete a session cookie
+  schema:
+    type: string
+    example: "SESSION=xyz123; Path=/; HttpOnly; Secure"

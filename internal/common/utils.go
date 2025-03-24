@@ -1,9 +1,28 @@
 package common
 
 import (
+	"context"
 	"fmt"
+	"io"
 	"time"
+
+	"github.com/a-h/templ"
+	"github.com/rs/zerolog/log"
 )
+
+func RenderComponent(ctx context.Context, component templ.Component) io.Reader {
+	reader, writer := io.Pipe()
+
+	go func() {
+		defer writer.Close()
+
+		if err := component.Render(ctx, writer); err != nil {
+			log.Err(err).Msg("component.Render")
+		}
+	}()
+
+	return reader
+}
 
 func PrettyTime(t time.Time) string {
 	now := time.Now()

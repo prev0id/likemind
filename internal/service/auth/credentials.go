@@ -2,8 +2,8 @@ package auth
 
 import (
 	"context"
-	"fmt"
 
+	"likemind/internal/common"
 	"likemind/internal/domain"
 
 	"github.com/google/uuid"
@@ -26,7 +26,7 @@ func (i *implementation) NewUserCredentials(ctx context.Context, userID int64, l
 	}
 
 	if err := i.db.Create(ctx, creds); err != nil {
-		return "", fmt.Errorf("i.db.Insert: %w", err)
+		return "", err
 	}
 
 	return creds.ID, nil
@@ -35,11 +35,11 @@ func (i *implementation) NewUserCredentials(ctx context.Context, userID int64, l
 func (i *implementation) Signin(ctx context.Context, login domain.Email, password domain.Password) (domain.Credentials, error) {
 	creds, err := i.db.GetByLogin(ctx, login)
 	if err != nil {
-		return domain.Credentials{}, fmt.Errorf("i.db.Get: %w", err)
+		return domain.Credentials{}, err
 	}
 
 	if !password.CompareWithHash(creds.Password, creds.UserID) {
-		return domain.Credentials{}, domain.ErrUnauthenticated
+		return domain.Credentials{}, domain.ErrNotAuthenticated
 	}
 
 	return creds, nil
@@ -47,8 +47,8 @@ func (i *implementation) Signin(ctx context.Context, login domain.Email, passwor
 
 func (i *implementation) Authenticate(ctx context.Context, credsID string) (int64, error) {
 	creds, err := i.db.GetByID(ctx, credsID)
-	if err != nil {
-		return 0, domain.ErrUnauthenticated
+	if common.ErrorIs(err, common.NotFoundErrorType) {
+		return 0, domain.ErrNotAuthenticated
 	}
 
 	return creds.UserID, nil

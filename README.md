@@ -1,6 +1,9 @@
+## TODO
++ code gen `npx @redocly/cli build-docs api/openapi.yaml`
+
 ## Resources
-https://www.svgrepo.com/svg/458824/out
-https://good.store/
-https://emojicombos.com
-https://symbl.cc/en/kaomoji/
-https://kaomoji.ru/
++ https://www.svgrepo.com/svg/458824/out
++ https://good.store/
++ https://emojicombos.com
++ https://symbl.cc/en/kaomoji/
++ https://kaomoji.ru/

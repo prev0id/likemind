@@ -1,0 +1,4 @@
+sessionAuth:
+  type: apiKey
+  in: cookie
+  name: SESSION

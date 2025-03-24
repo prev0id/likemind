@@ -6,9 +6,9 @@ package desc
 type OperationName = string
 
 const (
-	GroupGroupNameGetOperation  OperationName = "GroupGroupNameGet"
-	ProfileUsernameGetOperation OperationName = "ProfileUsernameGet"
-	SearchGetOperation          OperationName = "SearchGet"
-	SigninGetOperation          OperationName = "SigninGet"
-	SignupGetOperation          OperationName = "SignupGet"
+	V1PageGroupGroupNameGetOperation  OperationName = "V1PageGroupGroupNameGet"
+	V1PageProfileUsernameGetOperation OperationName = "V1PageProfileUsernameGet"
+	V1PageSearchGetOperation          OperationName = "V1PageSearchGet"
+	V1PageSigninGetOperation          OperationName = "V1PageSigninGet"
+	V1PageSignupGetOperation          OperationName = "V1PageSignupGet"
 )

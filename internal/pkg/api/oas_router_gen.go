@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/v1/page/"
 
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/v1/page/"); len(elem) >= l && elem[0:l] == "/v1/page/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -82,7 +82,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleGroupGroupNameGetRequest([1]string{
+						s.handleV1PageGroupGroupNameGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -113,7 +113,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleProfileUsernameGetRequest([1]string{
+						s.handleV1PageProfileUsernameGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -147,7 +147,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleSearchGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleV1PageSearchGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -179,7 +179,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleSigninGetRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleV1PageSigninGetRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "GET")
 							}
@@ -199,7 +199,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleSignupGetRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleV1PageSignupGetRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "GET")
 							}
@@ -293,9 +293,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/"
+		case '/': // Prefix: "/v1/page/"
 
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+			if l := len("/v1/page/"); len(elem) >= l && elem[0:l] == "/v1/page/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -326,10 +326,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = GroupGroupNameGetOperation
+						r.name = V1PageGroupGroupNameGetOperation
 						r.summary = "Get group page"
 						r.operationID = ""
-						r.pathPattern = "/group/{group_name}"
+						r.pathPattern = "/v1/page/group/{group_name}"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -359,10 +359,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = ProfileUsernameGetOperation
+						r.name = V1PageProfileUsernameGetOperation
 						r.summary = "Get user profile page"
 						r.operationID = ""
-						r.pathPattern = "/profile/{username}"
+						r.pathPattern = "/v1/page/profile/{username}"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -395,10 +395,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = SearchGetOperation
+							r.name = V1PageSearchGetOperation
 							r.summary = "Get search page"
 							r.operationID = ""
-							r.pathPattern = "/search"
+							r.pathPattern = "/v1/page/search"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -431,10 +431,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = SigninGetOperation
+								r.name = V1PageSigninGetOperation
 								r.summary = "Get sign-in page"
 								r.operationID = ""
-								r.pathPattern = "/signin"
+								r.pathPattern = "/v1/page/signin"
 								r.args = args
 								r.count = 0
 								return r, true
@@ -455,10 +455,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = SignupGetOperation
+								r.name = V1PageSignupGetOperation
 								r.summary = "Get sign-up page"
 								r.operationID = ""
-								r.pathPattern = "/signup"
+								r.pathPattern = "/v1/page/signup"
 								r.args = args
 								r.count = 0
 								return r, true

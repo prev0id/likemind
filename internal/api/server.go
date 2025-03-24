@@ -28,31 +28,31 @@ func NewServer(auth auth.Service, profile profile.Service) *Server {
 	}
 }
 
-func (s *Server) GroupGroupNameGet(ctx context.Context, params desc.GroupGroupNameGetParams) (desc.GroupGroupNameGetRes, error) {
+func (s *Server) V1PageGroupGroupNameGet(ctx context.Context, params desc.V1PageGroupGroupNameGetParams) (desc.V1PageGroupGroupNameGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, group_page.Page()),
 	}, nil
 }
 
-func (s *Server) ProfileUsernameGet(ctx context.Context, params desc.ProfileUsernameGetParams) (desc.ProfileUsernameGetRes, error) {
+func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, profile_page.Page()),
 	}, nil
 }
 
-func (s *Server) SearchGet(ctx context.Context) (desc.SearchGetRes, error) {
+func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, user_search_page.Page()),
 	}, nil
 }
 
-func (s *Server) SigninGet(ctx context.Context) (desc.SigninGetRes, error) {
+func (s *Server) V1PageSigninGet(ctx context.Context) (desc.V1PageSigninGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, signin_page.Page()),
 	}, nil
 }
 
-func (s *Server) SignupGet(ctx context.Context) (desc.SignupGetRes, error) {
+func (s *Server) V1PageSignupGet(ctx context.Context) (desc.V1PageSignupGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, signup_page.Page()),
 	}, nil

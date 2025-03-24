@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func encodeGroupGroupNameGetResponse(response GroupGroupNameGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1PageGroupGroupNameGetResponse(response V1PageGroupGroupNameGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -66,7 +66,7 @@ func encodeGroupGroupNameGetResponse(response GroupGroupNameGetRes, w http.Respo
 	}
 }
 
-func encodeProfileUsernameGetResponse(response ProfileUsernameGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1PageProfileUsernameGetResponse(response V1PageProfileUsernameGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -121,7 +121,7 @@ func encodeProfileUsernameGetResponse(response ProfileUsernameGetRes, w http.Res
 	}
 }
 
-func encodeSearchGetResponse(response SearchGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1PageSearchGetResponse(response V1PageSearchGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -152,7 +152,7 @@ func encodeSearchGetResponse(response SearchGetRes, w http.ResponseWriter, span 
 	}
 }
 
-func encodeSigninGetResponse(response SigninGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1PageSigninGetResponse(response V1PageSigninGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -183,7 +183,7 @@ func encodeSigninGetResponse(response SigninGetRes, w http.ResponseWriter, span 
 	}
 }
 
-func encodeSignupGetResponse(response SignupGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1PageSignupGetResponse(response V1PageSignupGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")

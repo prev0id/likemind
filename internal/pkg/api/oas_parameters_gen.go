@@ -15,13 +15,13 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// GroupGroupNameGetParams is parameters of GET /group/{group_name} operation.
-type GroupGroupNameGetParams struct {
+// V1PageGroupGroupNameGetParams is parameters of GET /v1/page/group/{group_name} operation.
+type V1PageGroupGroupNameGetParams struct {
 	// The name of the group.
 	GroupName string
 }
 
-func unpackGroupGroupNameGetParams(packed middleware.Parameters) (params GroupGroupNameGetParams) {
+func unpackV1PageGroupGroupNameGetParams(packed middleware.Parameters) (params V1PageGroupGroupNameGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "group_name",
@@ -32,7 +32,7 @@ func unpackGroupGroupNameGetParams(packed middleware.Parameters) (params GroupGr
 	return params
 }
 
-func decodeGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params GroupGroupNameGetParams, _ error) {
+func decodeV1PageGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1PageGroupGroupNameGetParams, _ error) {
 	// Decode path: group_name.
 	if err := func() error {
 		param := args[0]
@@ -81,13 +81,13 @@ func decodeGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// ProfileUsernameGetParams is parameters of GET /profile/{username} operation.
-type ProfileUsernameGetParams struct {
+// V1PageProfileUsernameGetParams is parameters of GET /v1/page/profile/{username} operation.
+type V1PageProfileUsernameGetParams struct {
 	// The nickname of the user.
 	Username string
 }
 
-func unpackProfileUsernameGetParams(packed middleware.Parameters) (params ProfileUsernameGetParams) {
+func unpackV1PageProfileUsernameGetParams(packed middleware.Parameters) (params V1PageProfileUsernameGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "username",
@@ -98,7 +98,7 @@ func unpackProfileUsernameGetParams(packed middleware.Parameters) (params Profil
 	return params
 }
 
-func decodeProfileUsernameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params ProfileUsernameGetParams, _ error) {
+func decodeV1PageProfileUsernameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1PageProfileUsernameGetParams, _ error) {
 	// Decode path: username.
 	if err := func() error {
 		param := args[0]

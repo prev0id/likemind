@@ -22,11 +22,11 @@ func (s HTMLResponse) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*HTMLResponse) groupGroupNameGetRes()  {}
-func (*HTMLResponse) profileUsernameGetRes() {}
-func (*HTMLResponse) searchGetRes()          {}
-func (*HTMLResponse) signinGetRes()          {}
-func (*HTMLResponse) signupGetRes()          {}
+func (*HTMLResponse) v1PageGroupGroupNameGetRes()  {}
+func (*HTMLResponse) v1PageProfileUsernameGetRes() {}
+func (*HTMLResponse) v1PageSearchGetRes()          {}
+func (*HTMLResponse) v1PageSigninGetRes()          {}
+func (*HTMLResponse) v1PageSignupGetRes()          {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -44,11 +44,11 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*InternalError) groupGroupNameGetRes()  {}
-func (*InternalError) profileUsernameGetRes() {}
-func (*InternalError) searchGetRes()          {}
-func (*InternalError) signinGetRes()          {}
-func (*InternalError) signupGetRes()          {}
+func (*InternalError) v1PageGroupGroupNameGetRes()  {}
+func (*InternalError) v1PageProfileUsernameGetRes() {}
+func (*InternalError) v1PageSearchGetRes()          {}
+func (*InternalError) v1PageSigninGetRes()          {}
+func (*InternalError) v1PageSignupGetRes()          {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -66,8 +66,8 @@ func (s NotAuthorized) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotAuthorized) groupGroupNameGetRes()  {}
-func (*NotAuthorized) profileUsernameGetRes() {}
+func (*NotAuthorized) v1PageGroupGroupNameGetRes()  {}
+func (*NotAuthorized) v1PageProfileUsernameGetRes() {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -85,5 +85,5 @@ func (s NotFound) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotFound) groupGroupNameGetRes()  {}
-func (*NotFound) profileUsernameGetRes() {}
+func (*NotFound) v1PageGroupGroupNameGetRes()  {}
+func (*NotFound) v1PageProfileUsernameGetRes() {}

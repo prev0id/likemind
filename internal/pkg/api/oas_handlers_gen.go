@@ -29,21 +29,21 @@ func (c *codeRecorder) WriteHeader(status int) {
 	c.ResponseWriter.WriteHeader(status)
 }
 
-// handleGroupGroupNameGetRequest handles GET /group/{group_name} operation.
+// handleV1PageGroupGroupNameGetRequest handles GET /v1/page/group/{group_name} operation.
 //
 // Returns an HTML page displaying details of a specific user group. Requires authentication.
 //
-// GET /group/{group_name}
-func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/page/group/{group_name}
+func (s *Server) handleV1PageGroupGroupNameGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/group/{group_name}"),
+		semconv.HTTPRouteKey.String("/v1/page/group/{group_name}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), GroupGroupNameGetOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), V1PageGroupGroupNameGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -98,11 +98,11 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: GroupGroupNameGetOperation,
+			Name: V1PageGroupGroupNameGetOperation,
 			ID:   "",
 		}
 	)
-	params, err := decodeGroupGroupNameGetParams(args, argsEscaped, r)
+	params, err := decodeV1PageGroupGroupNameGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -113,11 +113,11 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 		return
 	}
 
-	var response GroupGroupNameGetRes
+	var response V1PageGroupGroupNameGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    GroupGroupNameGetOperation,
+			OperationName:    V1PageGroupGroupNameGetOperation,
 			OperationSummary: "Get group page",
 			OperationID:      "",
 			Body:             nil,
@@ -132,8 +132,8 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 
 		type (
 			Request  = struct{}
-			Params   = GroupGroupNameGetParams
-			Response = GroupGroupNameGetRes
+			Params   = V1PageGroupGroupNameGetParams
+			Response = V1PageGroupGroupNameGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -142,14 +142,14 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 		](
 			m,
 			mreq,
-			unpackGroupGroupNameGetParams,
+			unpackV1PageGroupGroupNameGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.GroupGroupNameGet(ctx, params)
+				response, err = s.h.V1PageGroupGroupNameGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.GroupGroupNameGet(ctx, params)
+		response, err = s.h.V1PageGroupGroupNameGet(ctx, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -157,7 +157,7 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 		return
 	}
 
-	if err := encodeGroupGroupNameGetResponse(response, w, span); err != nil {
+	if err := encodeV1PageGroupGroupNameGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -166,21 +166,21 @@ func (s *Server) handleGroupGroupNameGetRequest(args [1]string, argsEscaped bool
 	}
 }
 
-// handleProfileUsernameGetRequest handles GET /profile/{username} operation.
+// handleV1PageProfileUsernameGetRequest handles GET /v1/page/profile/{username} operation.
 //
 // Returns an HTML page displaying the user's profile information. Requires authentication.
 //
-// GET /profile/{username}
-func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/page/profile/{username}
+func (s *Server) handleV1PageProfileUsernameGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/profile/{username}"),
+		semconv.HTTPRouteKey.String("/v1/page/profile/{username}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), ProfileUsernameGetOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), V1PageProfileUsernameGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -235,11 +235,11 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: ProfileUsernameGetOperation,
+			Name: V1PageProfileUsernameGetOperation,
 			ID:   "",
 		}
 	)
-	params, err := decodeProfileUsernameGetParams(args, argsEscaped, r)
+	params, err := decodeV1PageProfileUsernameGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -250,11 +250,11 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 		return
 	}
 
-	var response ProfileUsernameGetRes
+	var response V1PageProfileUsernameGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    ProfileUsernameGetOperation,
+			OperationName:    V1PageProfileUsernameGetOperation,
 			OperationSummary: "Get user profile page",
 			OperationID:      "",
 			Body:             nil,
@@ -269,8 +269,8 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 
 		type (
 			Request  = struct{}
-			Params   = ProfileUsernameGetParams
-			Response = ProfileUsernameGetRes
+			Params   = V1PageProfileUsernameGetParams
+			Response = V1PageProfileUsernameGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -279,14 +279,14 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 		](
 			m,
 			mreq,
-			unpackProfileUsernameGetParams,
+			unpackV1PageProfileUsernameGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.ProfileUsernameGet(ctx, params)
+				response, err = s.h.V1PageProfileUsernameGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.ProfileUsernameGet(ctx, params)
+		response, err = s.h.V1PageProfileUsernameGet(ctx, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -294,7 +294,7 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 		return
 	}
 
-	if err := encodeProfileUsernameGetResponse(response, w, span); err != nil {
+	if err := encodeV1PageProfileUsernameGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -303,21 +303,21 @@ func (s *Server) handleProfileUsernameGetRequest(args [1]string, argsEscaped boo
 	}
 }
 
-// handleSearchGetRequest handles GET /search operation.
+// handleV1PageSearchGetRequest handles GET /v1/page/search operation.
 //
 // Returns an HTML page where users can search for other users, groups, or content.
 //
-// GET /search
-func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/page/search
+func (s *Server) handleV1PageSearchGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/search"),
+		semconv.HTTPRouteKey.String("/v1/page/search"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), SearchGetOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), V1PageSearchGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -373,11 +373,11 @@ func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http
 		err error
 	)
 
-	var response SearchGetRes
+	var response V1PageSearchGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    SearchGetOperation,
+			OperationName:    V1PageSearchGetOperation,
 			OperationSummary: "Get search page",
 			OperationID:      "",
 			Body:             nil,
@@ -388,7 +388,7 @@ func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = SearchGetRes
+			Response = V1PageSearchGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -399,12 +399,12 @@ func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.SearchGet(ctx)
+				response, err = s.h.V1PageSearchGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.SearchGet(ctx)
+		response, err = s.h.V1PageSearchGet(ctx)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -412,7 +412,7 @@ func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	if err := encodeSearchGetResponse(response, w, span); err != nil {
+	if err := encodeV1PageSearchGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -421,21 +421,21 @@ func (s *Server) handleSearchGetRequest(args [0]string, argsEscaped bool, w http
 	}
 }
 
-// handleSigninGetRequest handles GET /signin operation.
+// handleV1PageSigninGetRequest handles GET /v1/page/signin operation.
 //
 // Returns an HTML page for user sign-in.
 //
-// GET /signin
-func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/page/signin
+func (s *Server) handleV1PageSigninGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/signin"),
+		semconv.HTTPRouteKey.String("/v1/page/signin"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), SigninGetOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), V1PageSigninGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -491,11 +491,11 @@ func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http
 		err error
 	)
 
-	var response SigninGetRes
+	var response V1PageSigninGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    SigninGetOperation,
+			OperationName:    V1PageSigninGetOperation,
 			OperationSummary: "Get sign-in page",
 			OperationID:      "",
 			Body:             nil,
@@ -506,7 +506,7 @@ func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = SigninGetRes
+			Response = V1PageSigninGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -517,12 +517,12 @@ func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.SigninGet(ctx)
+				response, err = s.h.V1PageSigninGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.SigninGet(ctx)
+		response, err = s.h.V1PageSigninGet(ctx)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -530,7 +530,7 @@ func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	if err := encodeSigninGetResponse(response, w, span); err != nil {
+	if err := encodeV1PageSigninGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -539,21 +539,21 @@ func (s *Server) handleSigninGetRequest(args [0]string, argsEscaped bool, w http
 	}
 }
 
-// handleSignupGetRequest handles GET /signup operation.
+// handleV1PageSignupGetRequest handles GET /v1/page/signup operation.
 //
 // Returns an HTML page for user sign-up.
 //
-// GET /signup
-func (s *Server) handleSignupGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/page/signup
+func (s *Server) handleV1PageSignupGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/signup"),
+		semconv.HTTPRouteKey.String("/v1/page/signup"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), SignupGetOperation,
+	ctx, span := s.cfg.Tracer.Start(r.Context(), V1PageSignupGetOperation,
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -609,11 +609,11 @@ func (s *Server) handleSignupGetRequest(args [0]string, argsEscaped bool, w http
 		err error
 	)
 
-	var response SignupGetRes
+	var response V1PageSignupGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    SignupGetOperation,
+			OperationName:    V1PageSignupGetOperation,
 			OperationSummary: "Get sign-up page",
 			OperationID:      "",
 			Body:             nil,
@@ -624,7 +624,7 @@ func (s *Server) handleSignupGetRequest(args [0]string, argsEscaped bool, w http
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = SignupGetRes
+			Response = V1PageSignupGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -635,12 +635,12 @@ func (s *Server) handleSignupGetRequest(args [0]string, argsEscaped bool, w http
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.SignupGet(ctx)
+				response, err = s.h.V1PageSignupGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.SignupGet(ctx)
+		response, err = s.h.V1PageSignupGet(ctx)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -648,7 +648,7 @@ func (s *Server) handleSignupGetRequest(args [0]string, argsEscaped bool, w http
 		return
 	}
 
-	if err := encodeSignupGetResponse(response, w, span); err != nil {
+	if err := encodeV1PageSignupGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

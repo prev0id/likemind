@@ -28,12 +28,11 @@ const (
 	PathAPIGroupDesc      = "/api/group/desc"
 	PathAPIGroupInterests = "/api/group/interests"
 
-	PathStatic             = "/static/{filepath}"
-	PathStaticHTMX         = "/static/htmx.js"
-	PathStaticAlpine       = "/static/alpine.js"
-	PathStaticErrorHandler = "/static/error_handler.js"
-	PathStaticFavicon      = "/static/favicon.png"
-	PathStaticStyles       = "/static/styles.css"
+	PathStaticHTMX         = "/static/js/htmx.min.js"
+	PathStaticAlpine       = "/static/js/alpine.js"
+	PathStaticErrorHandler = "/static/js/error_handler.js"
+	PathStaticFavicon      = "/static/img/favicon.png"
+	PathStaticStyles       = "/static/css/styles.css"
 
 	PathParamUsername  = "username"
 	PathParamGroupname = "groupname"

@@ -9,15 +9,15 @@ servers:
     description: local (development) run
 
 paths:
-  /signin:
+  /v1/page/signin:
     $ref: "./paths/pages.yaml#/signin"
-  /signup:
+  /v1/page/signup:
     $ref: "./paths/pages.yaml#/signup"
-  /profile/{username}:
+  /v1/page/profile/{username}:
     $ref: "./paths/pages.yaml#/profile"
-  /group/{group_name}:
+  /v1/page/group/{group_name}:
     $ref: "./paths/pages.yaml#/group"
-  /search:
+  /v1/page/search:
     $ref: "./paths/pages.yaml#/search"
 
 tags:

@@ -2,6 +2,8 @@ package bootstrap
 
 import (
 	"fmt"
+	"net/http"
+
 	"likemind/internal/api"
 	"likemind/internal/config"
 	"likemind/internal/domain"
@@ -9,7 +11,6 @@ import (
 	"likemind/internal/service/auth"
 	"likemind/internal/service/profile"
 	"likemind/website"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

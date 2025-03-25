@@ -10,7 +10,7 @@ var (
 	ErrInvalidImageNameProvided = errors.New("image not found")
 	ErrFileSizeExceedsLimit     = errors.New("file size exceeds 4 MB")
 	ErrInvalidFile              = errors.New("invalid file")
-	ErrUsupportedImageFormat    = errors.New("unsupported image format (only JPEG and PNG allowed)")
+	ErrUnsupportedImageFormat   = errors.New("unsupported image format (only JPEG and PNG allowed)")
 	ErrWrongResolution          = errors.New("image resolution exceeds 2K")
 	ErrWrongAspectRation        = errors.New("image aspect ratio not allowed")
 )

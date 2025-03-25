@@ -56,7 +56,7 @@ func (s *ImageService) UploadImage(ctx context.Context, file io.Reader, fileSize
 	case "png":
 		contentType = "image/png"
 	default:
-		return "", domain.ErrUsupportedImageFormat
+		return "", domain.ErrUnsupportedImageFormat
 	}
 
 	if config.Width > MaxDimension || config.Height > MaxDimension {

@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"net/http"
+
 	"likemind/internal/common"
 	desc "likemind/internal/pkg/api"
 	"likemind/internal/service/auth"
@@ -11,7 +13,6 @@ import (
 	signin_page "likemind/website/page/signin"
 	signup_page "likemind/website/page/signup"
 	user_search_page "likemind/website/page/user_search"
-	"net/http"
 )
 
 type Server struct {

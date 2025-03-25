@@ -1,9 +1,10 @@
 package auth
 
 import (
+	"net/http"
+
 	"likemind/internal/common"
 	"likemind/internal/domain"
-	"net/http"
 
 	"github.com/gorilla/sessions"
 	"github.com/rs/zerolog/log"

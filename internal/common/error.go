@@ -3,8 +3,9 @@ package common
 import (
 	"errors"
 	"io"
-	"likemind/internal/domain"
 	"strings"
+
+	"likemind/internal/domain"
 )
 
 type errorType int
@@ -23,7 +24,7 @@ var domainErrors = map[error]errorType{
 	domain.ErrInvalidImageNameProvided: BadRequestErrorType,
 	domain.ErrFileSizeExceedsLimit:     BadRequestErrorType,
 	domain.ErrInvalidFile:              BadRequestErrorType,
-	domain.ErrUsupportedImageFormat:    BadRequestErrorType,
+	domain.ErrUnsupportedImageFormat:   BadRequestErrorType,
 	domain.ErrWrongResolution:          BadRequestErrorType,
 	domain.ErrWrongAspectRation:        BadRequestErrorType,
 }

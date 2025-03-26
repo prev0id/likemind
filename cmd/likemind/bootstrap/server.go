@@ -19,6 +19,7 @@ import (
 
 func Server(cfg config.App, sessionService session.Service, profileService profile.Service) error {
 	server := api.NewServer(sessionService, profileService)
+	security := api.NewSecurityHandler(sessionService)
 
 	router := chi.NewRouter()
 
@@ -31,7 +32,11 @@ func Server(cfg config.App, sessionService session.Service, profileService profi
 		middleware.Recoverer, // should be last
 	)
 
-	app, err := desc.NewServer(server, desc.WithNotFound(server.NotFound))
+	app, err := desc.NewServer(
+		server,
+		security,
+		desc.WithNotFound(server.NotFound),
+	)
 	if err != nil {
 		return fmt.Errorf("desc.NewServer: %w", err)
 	}

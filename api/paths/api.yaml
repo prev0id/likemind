@@ -1,11 +1,43 @@
 signin:
   post:
-    summary: Sign-in into accout
+    summary: Sign-in into account
     description: Redirects to profile page if ok.
     tags:
       - user
     requestBody:
-      $ref: "../components/requestBodies.yaml#/signin"
+      $ref: "../components/requestBodies.yaml#/SignIn"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+signup:
+  post:
+    summary: Create new account
+    description: Redirects to profile page if ok.
+    tags:
+      - user
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/SignUp"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+logout:
+  post:
+    summary: Log out of account
+    description: Terminates the user session and redirects to the sign-in page.
+    tags:
+      - user
+    security:
+      - SessionAuth: []
     responses:
       "302":
         $ref: "../components/responses.yaml#/Redirect302"

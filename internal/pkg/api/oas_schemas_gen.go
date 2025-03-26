@@ -5,7 +5,26 @@ package desc
 import (
 	"io"
 	"net/url"
+	"time"
 )
+
+// A plain text error message.
+// Ref: #/ErrorResponse
+type BadRequest struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s BadRequest) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*BadRequest) v1APISignupPostRes() {}
 
 // HTML page content.
 // Ref: #/HTMLPage
@@ -45,7 +64,9 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
+func (*InternalError) v1APILogoutPostRes()          {}
 func (*InternalError) v1APISigninPostRes()          {}
+func (*InternalError) v1APISignupPostRes()          {}
 func (*InternalError) v1PageGroupGroupNameGetRes()  {}
 func (*InternalError) v1PageProfileUsernameGetRes() {}
 func (*InternalError) v1PageSearchGetRes()          {}
@@ -68,6 +89,7 @@ func (s NotAuthorized) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
+func (*NotAuthorized) v1APILogoutPostRes()          {}
 func (*NotAuthorized) v1APISigninPostRes()          {}
 func (*NotAuthorized) v1PageGroupGroupNameGetRes()  {}
 func (*NotAuthorized) v1PageProfileUsernameGetRes() {}
@@ -209,29 +231,129 @@ func (s *Redirect302) SetSetCookie(val OptString) {
 	s.SetCookie = val
 }
 
+func (*Redirect302) v1APILogoutPostRes() {}
 func (*Redirect302) v1APISigninPostRes() {}
+func (*Redirect302) v1APISignupPostRes() {}
+func (*Redirect302) v1PageSigninGetRes() {}
+func (*Redirect302) v1PageSignupGetRes() {}
 
-type V1APISigninPostReq struct {
+type SessionAuth struct {
+	APIKey string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *SessionAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *SessionAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// Ref: #/SignIn
+type SignIn struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 // GetEmail returns the value of Email.
-func (s *V1APISigninPostReq) GetEmail() string {
+func (s *SignIn) GetEmail() string {
 	return s.Email
 }
 
 // GetPassword returns the value of Password.
-func (s *V1APISigninPostReq) GetPassword() string {
+func (s *SignIn) GetPassword() string {
 	return s.Password
 }
 
 // SetEmail sets the value of Email.
-func (s *V1APISigninPostReq) SetEmail(val string) {
+func (s *SignIn) SetEmail(val string) {
 	s.Email = val
 }
 
 // SetPassword sets the value of Password.
-func (s *V1APISigninPostReq) SetPassword(val string) {
+func (s *SignIn) SetPassword(val string) {
 	s.Password = val
+}
+
+// Ref: #/SignUp
+type SignUp struct {
+	Email          string    `json:"email"`
+	Password       string    `json:"password"`
+	PasswordRepeat string    `json:"password_repeat"`
+	Username       string    `json:"username"`
+	Name           string    `json:"name"`
+	Surname        string    `json:"surname"`
+	DateOfBirth    time.Time `json:"date_of_birth"`
+}
+
+// GetEmail returns the value of Email.
+func (s *SignUp) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *SignUp) GetPassword() string {
+	return s.Password
+}
+
+// GetPasswordRepeat returns the value of PasswordRepeat.
+func (s *SignUp) GetPasswordRepeat() string {
+	return s.PasswordRepeat
+}
+
+// GetUsername returns the value of Username.
+func (s *SignUp) GetUsername() string {
+	return s.Username
+}
+
+// GetName returns the value of Name.
+func (s *SignUp) GetName() string {
+	return s.Name
+}
+
+// GetSurname returns the value of Surname.
+func (s *SignUp) GetSurname() string {
+	return s.Surname
+}
+
+// GetDateOfBirth returns the value of DateOfBirth.
+func (s *SignUp) GetDateOfBirth() time.Time {
+	return s.DateOfBirth
+}
+
+// SetEmail sets the value of Email.
+func (s *SignUp) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *SignUp) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetPasswordRepeat sets the value of PasswordRepeat.
+func (s *SignUp) SetPasswordRepeat(val string) {
+	s.PasswordRepeat = val
+}
+
+// SetUsername sets the value of Username.
+func (s *SignUp) SetUsername(val string) {
+	s.Username = val
+}
+
+// SetName sets the value of Name.
+func (s *SignUp) SetName(val string) {
+	s.Name = val
+}
+
+// SetSurname sets the value of Surname.
+func (s *SignUp) SetSurname(val string) {
+	s.Surname = val
+}
+
+// SetDateOfBirth sets the value of DateOfBirth.
+func (s *SignUp) SetDateOfBirth(val time.Time) {
+	s.DateOfBirth = val
 }

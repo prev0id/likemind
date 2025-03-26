@@ -5,3 +5,52 @@ ErrorResponse:
 HTMLPage:
   type: string
   description: HTML page content.
+
+SignIn:
+  type: object
+  required: [email, password]
+  properties:
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      minLength: 8
+      maxLength: 20
+
+SignUp:
+  type: object
+  required:
+    - email
+    - password
+    - password_repeat
+    - username
+    - name
+    - surname
+    - date_of_birth
+  properties:
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      minLength: 8
+      maxLength: 20
+    password_repeat:
+      type: string
+      minLength: 8
+      maxLength: 20
+    username:
+      type: string
+      pattern: "^[a-zA-Z0-9_]+$"
+    name:
+      type: string
+      pattern: "^[a-zA-Z0-9_]+$"
+      maxLength: 50
+    surname:
+      type: string
+      pattern: "^[a-zA-Z0-9_]+$"
+      maxLength: 50
+    date_of_birth:
+      type: string
+      format: date

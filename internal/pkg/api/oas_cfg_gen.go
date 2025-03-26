@@ -11,9 +11,13 @@ import (
 
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/ogenregex"
 	"github.com/ogen-go/ogen/otelogen"
 )
 
+var regexMap = map[string]ogenregex.Regexp{
+	"^[a-zA-Z0-9_]+$": ogenregex.MustCompile("^[a-zA-Z0-9_]+$"),
+}
 var (
 	// Allocate option closure once.
 	serverSpanKind = trace.WithSpanKind(trace.SpanKindServer)

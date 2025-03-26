@@ -1,17 +1,21 @@
 package common
 
-import "context"
+import (
+	"context"
+
+	"likemind/internal/domain"
+)
 
 type userIDType struct{}
 
 var userIDKey userIDType
 
-func ContextWithUserID(ctx context.Context, id int64) context.Context {
+func ContextWithUserID(ctx context.Context, id domain.UserID) context.Context {
 	return context.WithValue(ctx, userIDKey, id)
 }
 
-func UserIDFromContext(ctx context.Context) int64 {
-	userID, ok := ctx.Value(userIDKey).(int64)
+func UserIDFromContext(ctx context.Context) domain.UserID {
+	userID, ok := ctx.Value(userIDKey).(domain.UserID)
 	if !ok {
 		return 0
 	}

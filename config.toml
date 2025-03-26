@@ -6,6 +6,4 @@ request_timeout = "5s"
 addr = "postgres://user:password@localhost:5432/likemind"
 
 [auth]
-session_key = "test_key_not_prod"
-cookie_max_age = 604800
-use_http_only = false
+expiration = "48h"

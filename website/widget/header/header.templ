@@ -4,7 +4,7 @@ import "likemind/internal/domain"
 
 templ Component(state State) {
 	<header class="bg-white">
-		<div class="mx-auto max-w-7xl flex items-center justify-between h-14 p-1 lg:px-8 lg:grid lg:grid-cols-3 lg:place-items-center">
+		<div class="mx-auto max-w-7xl flex items-center justify-between h-14 p-1 md:px-8 md:grid md:grid-cols-3 md:place-items-center">
 			@logo()
 			@logOut()
 		</div>
@@ -19,22 +19,14 @@ templ Component(state State) {
 }
 
 templ logo() {
-	<a
-		href="/"
-		class="group w-60 col-start-2"
-	>
-		<span class="block group-hover:hidden place-self-center text-lg text-red font-semibold">
-			(*^ω^)八(⌒▽⌒)八(-‿‿- )ヽ
-		</span>
-		<span class="hidden group-hover:block place-self-center text-xl text-red font-semibold">
-			Likemind
-		</span>
-	</a>
+	<div class="w-60 col-start-2 text-xl text-red font-semibold text-center">
+		Likemind
+	</div>
 }
 
 templ logOut() {
 	<a
-		href="#"
+		href={ domain.PathAPILogout }
 		class="group w-24 justify-self-end lg:mx-8"
 		data-state={ domain.PathPageSignIn }
 	>

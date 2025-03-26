@@ -18,12 +18,12 @@ type Service interface {
 
 type implementation struct {
 	db         session_adapter.Adapter
-	exparation time.Duration
+	expiration time.Duration
 }
 
 func New(db session_adapter.Adapter, cfg config.Auth) Service {
 	return &implementation{
 		db:         db,
-		exparation: cfg.Exparation,
+		expiration: cfg.Expiration,
 	}
 }

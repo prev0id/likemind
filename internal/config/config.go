@@ -16,7 +16,6 @@ type Config struct {
 
 type App struct {
 	Addr           string        `toml:"addr"`
-	GracefulPeriod time.Duration `toml:"graceful_period"`
 	RequestTimeout time.Duration `toml:"request_timeout"`
 }
 
@@ -25,9 +24,7 @@ type DB struct {
 }
 
 type Auth struct {
-	Exparation   time.Duration `toml:"exparation"`
-	CookieMaxAge int           `toml:"cookie_max_age"`
-	UseHTTPOnly  bool          `toml:"use_http_only"`
+	Expiration time.Duration `toml:"expiration"`
 }
 
 var configPath = flag.String("config", "./config.toml", "path to application config")

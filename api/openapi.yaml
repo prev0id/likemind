@@ -21,6 +21,15 @@ paths:
     $ref: "./paths/pages.yaml#/search"
   /v1/api/signin:
     $ref: "./paths/api.yaml#/signin"
+  /v1/api/signup:
+    $ref: "./paths/api.yaml#/signup"
+  /v1/api/logout:
+    $ref: "./paths/api.yaml#/logout"
+
+components:
+  securitySchemes:
+    SessionAuth:
+      $ref: "./components/securitySchemas.yaml#/SessionAuth"
 
 tags:
   - name: page

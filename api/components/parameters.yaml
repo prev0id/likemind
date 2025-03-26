@@ -17,6 +17,5 @@ username:
 session:
   in: cookie
   name: SESSION
-  required: true
   schema:
     type: string

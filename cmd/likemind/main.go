@@ -19,9 +19,9 @@ import (
 )
 
 func main() {
-	bootstrap.Deps()
-
 	ctx := context.Background()
+
+	bootstrap.Libs()
 
 	cfg, err := config.Parse()
 	if err != nil {

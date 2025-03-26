@@ -1,4 +1,4 @@
-sessionAuth:
+SessionAuth:
   type: apiKey
   in: cookie
   name: SESSION

@@ -4,9 +4,13 @@ signin:
     description: Returns an HTML page for user sign-in.
     tags:
       - page
+    parameters:
+      - $ref: "../components/parameters.yaml#/session"
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 
@@ -16,9 +20,13 @@ signup:
     description: Returns an HTML page for user sign-up.
     tags:
       - page
+    parameters:
+      - $ref: "../components/parameters.yaml#/session"
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 

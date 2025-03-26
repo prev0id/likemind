@@ -8,12 +8,24 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1APILogoutPost implements POST /v1/api/logout operation.
+	//
+	// Terminates the user session and redirects to the sign-in page.
+	//
+	// POST /v1/api/logout
+	V1APILogoutPost(ctx context.Context) (V1APILogoutPostRes, error)
 	// V1APISigninPost implements POST /v1/api/signin operation.
 	//
 	// Redirects to profile page if ok.
 	//
 	// POST /v1/api/signin
-	V1APISigninPost(ctx context.Context, req *V1APISigninPostReq) (V1APISigninPostRes, error)
+	V1APISigninPost(ctx context.Context, req *SignIn) (V1APISigninPostRes, error)
+	// V1APISignupPost implements POST /v1/api/signup operation.
+	//
+	// Redirects to profile page if ok.
+	//
+	// POST /v1/api/signup
+	V1APISignupPost(ctx context.Context, req *SignUp) (V1APISignupPostRes, error)
 	// V1PageGroupGroupNameGet implements GET /v1/page/group/{group_name} operation.
 	//
 	// Returns an HTML page displaying details of a specific user group. Requires authentication.
@@ -37,30 +49,32 @@ type Handler interface {
 	// Returns an HTML page for user sign-in.
 	//
 	// GET /v1/page/signin
-	V1PageSigninGet(ctx context.Context) (V1PageSigninGetRes, error)
+	V1PageSigninGet(ctx context.Context, params V1PageSigninGetParams) (V1PageSigninGetRes, error)
 	// V1PageSignupGet implements GET /v1/page/signup operation.
 	//
 	// Returns an HTML page for user sign-up.
 	//
 	// GET /v1/page/signup
-	V1PageSignupGet(ctx context.Context) (V1PageSignupGetRes, error)
+	V1PageSignupGet(ctx context.Context, params V1PageSignupGetParams) (V1PageSignupGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and
 // calls Handler to handle requests.
 type Server struct {
-	h Handler
+	h   Handler
+	sec SecurityHandler
 	baseServer
 }
 
 // NewServer creates new Server.
-func NewServer(h Handler, opts ...ServerOption) (*Server, error) {
+func NewServer(h Handler, sec SecurityHandler, opts ...ServerOption) (*Server, error) {
 	s, err := newServerConfig(opts...).baseServer()
 	if err != nil {
 		return nil, err
 	}
 	return &Server{
 		h:          h,
+		sec:        sec,
 		baseServer: s,
 	}, nil
 }

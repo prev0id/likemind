@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Deps() {
+func Libs() {
 	flag.Parse()
 
 	msk, _ := time.LoadLocation("Europe/Moscow")

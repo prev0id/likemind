@@ -146,3 +146,127 @@ func decodeV1PageProfileUsernameGetParams(args [1]string, argsEscaped bool, r *h
 	}
 	return params, nil
 }
+
+// V1PageSigninGetParams is parameters of GET /v1/page/signin operation.
+type V1PageSigninGetParams struct {
+	SESSION OptString
+}
+
+func unpackV1PageSigninGetParams(packed middleware.Parameters) (params V1PageSigninGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SESSION",
+			In:   "cookie",
+		}
+		if v, ok := packed[key]; ok {
+			params.SESSION = v.(OptString)
+		}
+	}
+	return params
+}
+
+func decodeV1PageSigninGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1PageSigninGetParams, _ error) {
+	c := uri.NewCookieDecoder(r)
+	// Decode cookie: SESSION.
+	if err := func() error {
+		cfg := uri.CookieParameterDecodingConfig{
+			Name:    "SESSION",
+			Explode: true,
+		}
+		if err := c.HasParam(cfg); err == nil {
+			if err := c.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotSESSIONVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotSESSIONVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.SESSION.SetTo(paramsDotSESSIONVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SESSION",
+			In:   "cookie",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1PageSignupGetParams is parameters of GET /v1/page/signup operation.
+type V1PageSignupGetParams struct {
+	SESSION OptString
+}
+
+func unpackV1PageSignupGetParams(packed middleware.Parameters) (params V1PageSignupGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "SESSION",
+			In:   "cookie",
+		}
+		if v, ok := packed[key]; ok {
+			params.SESSION = v.(OptString)
+		}
+	}
+	return params
+}
+
+func decodeV1PageSignupGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1PageSignupGetParams, _ error) {
+	c := uri.NewCookieDecoder(r)
+	// Decode cookie: SESSION.
+	if err := func() error {
+		cfg := uri.CookieParameterDecodingConfig{
+			Name:    "SESSION",
+			Explode: true,
+		}
+		if err := c.HasParam(cfg); err == nil {
+			if err := c.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotSESSIONVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotSESSIONVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.SESSION.SetTo(paramsDotSESSIONVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "SESSION",
+			In:   "cookie",
+			Err:  err,
+		}
+	}
+	return params, nil
+}

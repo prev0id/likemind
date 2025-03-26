@@ -15,9 +15,10 @@ const (
 	PathAPISearchUser  = prefixAPI + "/search/user"
 	PathAPISearchGroup = prefixAPI + "/search/group"
 
-	PathAPIUserSignup    = prefixAPI + "/user"
-	PathAPIUserSignin    = prefixAPI + "/user/sigin"
-	PathAPIUserLogout    = prefixAPI + "/user/logout"
+	PathAPISignup = prefixAPI + "/signup"
+	PathAPISignin = prefixAPI + "/signin"
+	PathAPILogout = prefixAPI + "/logout"
+
 	PathAPIUserDesc      = prefixAPI + "/user/desc"
 	PathAPIUserEmail     = prefixAPI + "/user/email"
 	PathAPIUserPassword  = prefixAPI + "/user/password"

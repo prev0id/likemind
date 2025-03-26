@@ -38,14 +38,14 @@ func (i *implementation) CreateSessionCookie(ctx context.Context, id domain.User
 	session := domain.Session{
 		UserID:    id,
 		Token:     domain.SessionToken(token),
-		ExpiresAt: time.Now().Add(i.exparation),
+		ExpiresAt: time.Now().Add(i.expiration),
 	}
 
 	if err := i.db.Create(ctx, session); err != nil {
 		return nil, fmt.Errorf("i.db.Create: %w", err)
 	}
 
-	return createCookie(token, int(i.exparation.Seconds())), nil
+	return createCookie(token, int(i.expiration.Seconds())), nil
 }
 
 func createCookie(token string, maxAge int) *http.Cookie {

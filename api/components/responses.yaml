@@ -26,6 +26,13 @@ NotFound:
       schema:
         $ref: "schemas.yaml#/ErrorResponse"
 
+BadRequest:
+  description: Bad request response
+  content:
+    text/plain:
+      schema:
+        $ref: "schemas.yaml#/ErrorResponse"
+
 Redirect302:
   description: 302 Found - Redirect response with session cookie.
   headers:

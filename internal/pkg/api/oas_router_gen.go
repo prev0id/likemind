@@ -61,24 +61,92 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "api/signin"
+			case 'a': // Prefix: "api/"
 
-				if l := len("api/signin"); len(elem) >= l && elem[0:l] == "api/signin" {
+				if l := len("api/"); len(elem) >= l && elem[0:l] == "api/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'l': // Prefix: "logout"
+
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1APILogoutPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				case 's': // Prefix: "sign"
+
+					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "in"
+
+						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					case 'u': // Prefix: "up"
+
+						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1APISignupPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+					}
+
 				}
 
 			case 'p': // Prefix: "page/"
@@ -339,28 +407,104 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "api/signin"
+			case 'a': // Prefix: "api/"
 
-				if l := len("api/signin"); len(elem) >= l && elem[0:l] == "api/signin" {
+				if l := len("api/"); len(elem) >= l && elem[0:l] == "api/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = V1APISigninPostOperation
-						r.summary = "Sign-in into accout"
-						r.operationID = ""
-						r.pathPattern = "/v1/api/signin"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'l': // Prefix: "logout"
+
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1APILogoutPostOperation
+							r.summary = "Log out of account"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/logout"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 's': // Prefix: "sign"
+
+					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "in"
+
+						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = V1APISigninPostOperation
+								r.summary = "Sign-in into account"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/signin"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'u': // Prefix: "up"
+
+						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = V1APISignupPostOperation
+								r.summary = "Create new account"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/signup"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
 				}
 
 			case 'p': // Prefix: "page/"

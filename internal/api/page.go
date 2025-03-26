@@ -32,13 +32,13 @@ func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, 
 	}, nil
 }
 
-func (s *Server) V1PageSigninGet(ctx context.Context) (desc.V1PageSigninGetRes, error) {
+func (s *Server) V1PageSigninGet(ctx context.Context, params desc.V1PageSigninGetParams) (desc.V1PageSigninGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, signin_page.Page()),
 	}, nil
 }
 
-func (s *Server) V1PageSignupGet(ctx context.Context) (desc.V1PageSignupGetRes, error) {
+func (s *Server) V1PageSignupGet(ctx context.Context, params desc.V1PageSignupGetParams) (desc.V1PageSignupGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, signup_page.Page()),
 	}, nil

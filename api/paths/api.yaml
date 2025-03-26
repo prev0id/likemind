@@ -14,22 +14,6 @@ signin:
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 
-signup:
-  post:
-    summary: Create new account
-    description: Redirects to profile page if ok.
-    tags:
-      - user
-    requestBody:
-      $ref: "../components/requestBodies.yaml#/SignUp"
-    responses:
-      "302":
-        $ref: "../components/responses.yaml#/Redirect302"
-      "400":
-        $ref: "../components/responses.yaml#/BadRequest"
-      "500":
-        $ref: "../components/responses.yaml#/InternalError"
-
 logout:
   post:
     summary: Log out of account
@@ -41,7 +25,135 @@ logout:
     responses:
       "302":
         $ref: "../components/responses.yaml#/Redirect302"
-      "401":
-        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+profile:
+  post:
+    summary: Create new user profile
+    description: Redirects to profile page if ok.
+    tags:
+      - user
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/ProfileCreate"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  put:
+    summary: Update user profile
+    description: Updates an existing user profile.
+    tags:
+      - user
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/ProfileUpdate"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete user profile
+    description: Permanently deletes the user profile and all associated data.
+    tags:
+      - user
+    security:
+      - SessionAuth: []
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+interest:
+  post:
+    summary: Add interest to the user
+    description: Adds an interest with the specified ID to the user's profile.
+    tags:
+      - user
+    parameters:
+      - $ref: "../components/parameters.yaml#/interest_id"
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete interest from the user
+    description: Removes an interest with the specified ID from the user's profile.
+    tags:
+      - user
+    parameters:
+      - $ref: "../components/parameters.yaml#/interest_id"
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+create_contact:
+  post:
+    summary: Add contact to the user
+    description: Adds a contact with the specified ID to the user's profile.
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Contact"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+contact:
+  put:
+    summary: Update user's contact
+    description: Updates user's contact with the specified ID
+    tags:
+      - user
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/contact_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Contact"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete contact from the user
+    description: Removes a contact with the specified ID from the user's profile.
+    tags:
+      - user
+    parameters:
+      - $ref: "../components/parameters.yaml#/contact_id"
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
       "500":
         $ref: "../components/responses.yaml#/InternalError"

@@ -17,12 +17,22 @@ const (
 )
 
 type Service interface {
-	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
-	UpdateUser(ctx context.Context, user domain.User) error
 	DeleteProfile(ctx context.Context, id domain.UserID) error
 	GetProfile(ctx context.Context, id domain.UserID) (domain.Profile, error)
+
+	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
+	UpdateUser(ctx context.Context, user domain.User) error
+	GetUser(ctx context.Context, id domain.UserID) (domain.User, error)
 	UpdatePassword(ctx context.Context, id domain.UserID, oldPassword, newPassword domain.Password) error
 	SignIn(ctx context.Context, login domain.Email, password domain.Password) (domain.User, error)
+
+	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
+	UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
+	RemoveContact(ctx context.Context, id domain.UserID, contactID int64) error
+
+	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID string) error
+	GetProfilePictures(ctx context.Context, id domain.UserID) ([]string, error)
+	RemovePicture(ctx context.Context, pictureID string) error
 }
 
 type implementation struct {
@@ -68,6 +78,7 @@ func (s *implementation) UpdateUser(ctx context.Context, user domain.User) error
 	if err := s.db.UpdateUser(ctx, user); err != nil {
 		return fmt.Errorf("s.db.UpdateUser: %w", err)
 	}
+
 	return nil
 }
 
@@ -75,6 +86,7 @@ func (s *implementation) DeleteProfile(ctx context.Context, id domain.UserID) er
 	if err := s.db.RemoveUser(ctx, id); err != nil {
 		return fmt.Errorf("s.db.RemoveUser: %w", err)
 	}
+
 	return nil
 }
 
@@ -83,7 +95,17 @@ func (s *implementation) GetProfile(ctx context.Context, id domain.UserID) (doma
 	if err != nil {
 		return domain.Profile{}, fmt.Errorf("s.db.GetProfileByUserID: %w", err)
 	}
+
 	return profile, nil
+}
+
+func (s *implementation) GetUser(ctx context.Context, id domain.UserID) (domain.User, error) {
+	user, err := s.db.GetUserByID(ctx, id)
+	if err != nil {
+		return domain.User{}, fmt.Errorf("s.db.GetUserByID: %w", err)
+	}
+
+	return user, nil
 }
 
 func (s *implementation) UpdatePassword(ctx context.Context, id domain.UserID, oldPassword, newPassword domain.Password) error {

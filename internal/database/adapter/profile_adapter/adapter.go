@@ -24,6 +24,7 @@ type Adapter interface {
 	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	RemoveContactByID(ctx context.Context, contactID int64) error
+	GetContactsByUserID(ctx context.Context, id domain.UserID) ([]domain.Contact, error)
 
 	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID string) error
 	GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]string, error)
@@ -189,4 +190,13 @@ func (i *implementation) RemovePictureByID(ctx context.Context, pictureID string
 		return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", err)
 	}
 	return nil
+}
+
+func (i *implementation) GetContactsByUserID(ctx context.Context, id domain.UserID) ([]domain.Contact, error) {
+	contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
+	if err != nil {
+		return nil, fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
+	}
+
+	return convert(contacts, modelContactToDomain), nil
 }

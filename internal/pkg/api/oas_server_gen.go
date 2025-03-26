@@ -8,24 +8,66 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1APIContactContactIDDelete implements DELETE /v1/api/contact/{contact_id} operation.
+	//
+	// Removes a contact with the specified ID from the user's profile.
+	//
+	// DELETE /v1/api/contact/{contact_id}
+	V1APIContactContactIDDelete(ctx context.Context, params V1APIContactContactIDDeleteParams) (V1APIContactContactIDDeleteRes, error)
+	// V1APIContactContactIDPut implements PUT /v1/api/contact/{contact_id} operation.
+	//
+	// Updates user's contact with the specified ID.
+	//
+	// PUT /v1/api/contact/{contact_id}
+	V1APIContactContactIDPut(ctx context.Context, req *Contact, params V1APIContactContactIDPutParams) (V1APIContactContactIDPutRes, error)
+	// V1APIContactPost implements POST /v1/api/contact operation.
+	//
+	// Adds a contact with the specified ID to the user's profile.
+	//
+	// POST /v1/api/contact
+	V1APIContactPost(ctx context.Context, req *Contact) (V1APIContactPostRes, error)
+	// V1APIInterestInterestIDDelete implements DELETE /v1/api/interest/{interest_id} operation.
+	//
+	// Removes an interest with the specified ID from the user's profile.
+	//
+	// DELETE /v1/api/interest/{interest_id}
+	V1APIInterestInterestIDDelete(ctx context.Context, params V1APIInterestInterestIDDeleteParams) (V1APIInterestInterestIDDeleteRes, error)
+	// V1APIInterestInterestIDPost implements POST /v1/api/interest/{interest_id} operation.
+	//
+	// Adds an interest with the specified ID to the user's profile.
+	//
+	// POST /v1/api/interest/{interest_id}
+	V1APIInterestInterestIDPost(ctx context.Context, params V1APIInterestInterestIDPostParams) (V1APIInterestInterestIDPostRes, error)
 	// V1APILogoutPost implements POST /v1/api/logout operation.
 	//
 	// Terminates the user session and redirects to the sign-in page.
 	//
 	// POST /v1/api/logout
 	V1APILogoutPost(ctx context.Context) (V1APILogoutPostRes, error)
+	// V1APIProfileDelete implements DELETE /v1/api/profile operation.
+	//
+	// Permanently deletes the user profile and all associated data.
+	//
+	// DELETE /v1/api/profile
+	V1APIProfileDelete(ctx context.Context) (V1APIProfileDeleteRes, error)
+	// V1APIProfilePost implements POST /v1/api/profile operation.
+	//
+	// Redirects to profile page if ok.
+	//
+	// POST /v1/api/profile
+	V1APIProfilePost(ctx context.Context, req *ProfileCreate) (V1APIProfilePostRes, error)
+	// V1APIProfilePut implements PUT /v1/api/profile operation.
+	//
+	// Updates an existing user profile.
+	//
+	// PUT /v1/api/profile
+	V1APIProfilePut(ctx context.Context, req *ProfileUpdate) (V1APIProfilePutRes, error)
 	// V1APISigninPost implements POST /v1/api/signin operation.
 	//
 	// Redirects to profile page if ok.
 	//
 	// POST /v1/api/signin
 	V1APISigninPost(ctx context.Context, req *SignIn) (V1APISigninPostRes, error)
-	// V1APISignupPost implements POST /v1/api/signup operation.
-	//
-	// Redirects to profile page if ok.
-	//
-	// POST /v1/api/signup
-	V1APISignupPost(ctx context.Context, req *SignUp) (V1APISignupPostRes, error)
 	// V1PageGroupGroupNameGet implements GET /v1/page/group/{group_name} operation.
 	//
 	// Returns an HTML page displaying details of a specific user group. Requires authentication.

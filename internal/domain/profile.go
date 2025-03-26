@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type (
 	UserID   int64
 	Password string
@@ -25,6 +27,7 @@ type User struct {
 	Surname        string
 	About          string
 	Login          Email
+	DateOfBirth    time.Time
 	HashedPassword []byte
 	RawPassword    Password
 }

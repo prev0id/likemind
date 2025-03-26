@@ -24,7 +24,34 @@ func (s BadRequest) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*BadRequest) v1APISignupPostRes() {}
+func (*BadRequest) v1APIProfilePostRes() {}
+func (*BadRequest) v1APIProfilePutRes()  {}
+
+// Ref: #/Contact
+type Contact struct {
+	Platform string `json:"platform"`
+	Link     string `json:"link"`
+}
+
+// GetPlatform returns the value of Platform.
+func (s *Contact) GetPlatform() string {
+	return s.Platform
+}
+
+// GetLink returns the value of Link.
+func (s *Contact) GetLink() string {
+	return s.Link
+}
+
+// SetPlatform sets the value of Platform.
+func (s *Contact) SetPlatform(val string) {
+	s.Platform = val
+}
+
+// SetLink sets the value of Link.
+func (s *Contact) SetLink(val string) {
+	s.Link = val
+}
 
 // HTML page content.
 // Ref: #/HTMLPage
@@ -42,11 +69,17 @@ func (s HTMLResponse) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*HTMLResponse) v1PageGroupGroupNameGetRes()  {}
-func (*HTMLResponse) v1PageProfileUsernameGetRes() {}
-func (*HTMLResponse) v1PageSearchGetRes()          {}
-func (*HTMLResponse) v1PageSigninGetRes()          {}
-func (*HTMLResponse) v1PageSignupGetRes()          {}
+func (*HTMLResponse) v1APIContactContactIDDeleteRes()   {}
+func (*HTMLResponse) v1APIContactContactIDPutRes()      {}
+func (*HTMLResponse) v1APIContactPostRes()              {}
+func (*HTMLResponse) v1APIInterestInterestIDDeleteRes() {}
+func (*HTMLResponse) v1APIInterestInterestIDPostRes()   {}
+func (*HTMLResponse) v1APIProfilePutRes()               {}
+func (*HTMLResponse) v1PageGroupGroupNameGetRes()       {}
+func (*HTMLResponse) v1PageProfileUsernameGetRes()      {}
+func (*HTMLResponse) v1PageSearchGetRes()               {}
+func (*HTMLResponse) v1PageSigninGetRes()               {}
+func (*HTMLResponse) v1PageSignupGetRes()               {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -64,14 +97,21 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*InternalError) v1APILogoutPostRes()          {}
-func (*InternalError) v1APISigninPostRes()          {}
-func (*InternalError) v1APISignupPostRes()          {}
-func (*InternalError) v1PageGroupGroupNameGetRes()  {}
-func (*InternalError) v1PageProfileUsernameGetRes() {}
-func (*InternalError) v1PageSearchGetRes()          {}
-func (*InternalError) v1PageSigninGetRes()          {}
-func (*InternalError) v1PageSignupGetRes()          {}
+func (*InternalError) v1APIContactContactIDDeleteRes()   {}
+func (*InternalError) v1APIContactContactIDPutRes()      {}
+func (*InternalError) v1APIContactPostRes()              {}
+func (*InternalError) v1APIInterestInterestIDDeleteRes() {}
+func (*InternalError) v1APIInterestInterestIDPostRes()   {}
+func (*InternalError) v1APILogoutPostRes()               {}
+func (*InternalError) v1APIProfileDeleteRes()            {}
+func (*InternalError) v1APIProfilePostRes()              {}
+func (*InternalError) v1APIProfilePutRes()               {}
+func (*InternalError) v1APISigninPostRes()               {}
+func (*InternalError) v1PageGroupGroupNameGetRes()       {}
+func (*InternalError) v1PageProfileUsernameGetRes()      {}
+func (*InternalError) v1PageSearchGetRes()               {}
+func (*InternalError) v1PageSigninGetRes()               {}
+func (*InternalError) v1PageSignupGetRes()               {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -89,7 +129,6 @@ func (s NotAuthorized) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotAuthorized) v1APILogoutPostRes()          {}
 func (*NotAuthorized) v1APISigninPostRes()          {}
 func (*NotAuthorized) v1PageGroupGroupNameGetRes()  {}
 func (*NotAuthorized) v1PageProfileUsernameGetRes() {}
@@ -110,8 +149,59 @@ func (s NotFound) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotFound) v1PageGroupGroupNameGetRes()  {}
-func (*NotFound) v1PageProfileUsernameGetRes() {}
+func (*NotFound) v1APIContactContactIDDeleteRes()   {}
+func (*NotFound) v1APIContactContactIDPutRes()      {}
+func (*NotFound) v1APIContactPostRes()              {}
+func (*NotFound) v1APIInterestInterestIDDeleteRes() {}
+func (*NotFound) v1APIInterestInterestIDPostRes()   {}
+func (*NotFound) v1PageGroupGroupNameGetRes()       {}
+func (*NotFound) v1PageProfileUsernameGetRes()      {}
+
+// NewOptDate returns new OptDate with value set to v.
+func NewOptDate(v time.Time) OptDate {
+	return OptDate{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDate is optional time.Time.
+type OptDate struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDate was set.
+func (o OptDate) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDate) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDate) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDate) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDate) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
@@ -205,6 +295,146 @@ func (o OptURI) Or(d url.URL) url.URL {
 	return d
 }
 
+// Ref: #/ProfileCreate
+type ProfileCreate struct {
+	Email       string    `json:"email"`
+	Password    string    `json:"password"`
+	Username    string    `json:"username"`
+	Name        string    `json:"name"`
+	Surname     string    `json:"surname"`
+	DateOfBirth time.Time `json:"date_of_birth"`
+}
+
+// GetEmail returns the value of Email.
+func (s *ProfileCreate) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *ProfileCreate) GetPassword() string {
+	return s.Password
+}
+
+// GetUsername returns the value of Username.
+func (s *ProfileCreate) GetUsername() string {
+	return s.Username
+}
+
+// GetName returns the value of Name.
+func (s *ProfileCreate) GetName() string {
+	return s.Name
+}
+
+// GetSurname returns the value of Surname.
+func (s *ProfileCreate) GetSurname() string {
+	return s.Surname
+}
+
+// GetDateOfBirth returns the value of DateOfBirth.
+func (s *ProfileCreate) GetDateOfBirth() time.Time {
+	return s.DateOfBirth
+}
+
+// SetEmail sets the value of Email.
+func (s *ProfileCreate) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *ProfileCreate) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetUsername sets the value of Username.
+func (s *ProfileCreate) SetUsername(val string) {
+	s.Username = val
+}
+
+// SetName sets the value of Name.
+func (s *ProfileCreate) SetName(val string) {
+	s.Name = val
+}
+
+// SetSurname sets the value of Surname.
+func (s *ProfileCreate) SetSurname(val string) {
+	s.Surname = val
+}
+
+// SetDateOfBirth sets the value of DateOfBirth.
+func (s *ProfileCreate) SetDateOfBirth(val time.Time) {
+	s.DateOfBirth = val
+}
+
+// Ref: #/ProfileUpdate
+type ProfileUpdate struct {
+	Email       OptString `json:"email"`
+	Name        OptString `json:"name"`
+	Surname     OptString `json:"surname"`
+	Username    OptString `json:"username"`
+	DateOfBirth OptDate   `json:"date_of_birth"`
+	About       OptString `json:"about"`
+}
+
+// GetEmail returns the value of Email.
+func (s *ProfileUpdate) GetEmail() OptString {
+	return s.Email
+}
+
+// GetName returns the value of Name.
+func (s *ProfileUpdate) GetName() OptString {
+	return s.Name
+}
+
+// GetSurname returns the value of Surname.
+func (s *ProfileUpdate) GetSurname() OptString {
+	return s.Surname
+}
+
+// GetUsername returns the value of Username.
+func (s *ProfileUpdate) GetUsername() OptString {
+	return s.Username
+}
+
+// GetDateOfBirth returns the value of DateOfBirth.
+func (s *ProfileUpdate) GetDateOfBirth() OptDate {
+	return s.DateOfBirth
+}
+
+// GetAbout returns the value of About.
+func (s *ProfileUpdate) GetAbout() OptString {
+	return s.About
+}
+
+// SetEmail sets the value of Email.
+func (s *ProfileUpdate) SetEmail(val OptString) {
+	s.Email = val
+}
+
+// SetName sets the value of Name.
+func (s *ProfileUpdate) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetSurname sets the value of Surname.
+func (s *ProfileUpdate) SetSurname(val OptString) {
+	s.Surname = val
+}
+
+// SetUsername sets the value of Username.
+func (s *ProfileUpdate) SetUsername(val OptString) {
+	s.Username = val
+}
+
+// SetDateOfBirth sets the value of DateOfBirth.
+func (s *ProfileUpdate) SetDateOfBirth(val OptDate) {
+	s.DateOfBirth = val
+}
+
+// SetAbout sets the value of About.
+func (s *ProfileUpdate) SetAbout(val OptString) {
+	s.About = val
+}
+
 // Ref: #/Redirect302
 type Redirect302 struct {
 	Location  OptURI
@@ -231,11 +461,12 @@ func (s *Redirect302) SetSetCookie(val OptString) {
 	s.SetCookie = val
 }
 
-func (*Redirect302) v1APILogoutPostRes() {}
-func (*Redirect302) v1APISigninPostRes() {}
-func (*Redirect302) v1APISignupPostRes() {}
-func (*Redirect302) v1PageSigninGetRes() {}
-func (*Redirect302) v1PageSignupGetRes() {}
+func (*Redirect302) v1APILogoutPostRes()    {}
+func (*Redirect302) v1APIProfileDeleteRes() {}
+func (*Redirect302) v1APIProfilePostRes()   {}
+func (*Redirect302) v1APISigninPostRes()    {}
+func (*Redirect302) v1PageSigninGetRes()    {}
+func (*Redirect302) v1PageSignupGetRes()    {}
 
 type SessionAuth struct {
 	APIKey string
@@ -275,85 +506,4 @@ func (s *SignIn) SetEmail(val string) {
 // SetPassword sets the value of Password.
 func (s *SignIn) SetPassword(val string) {
 	s.Password = val
-}
-
-// Ref: #/SignUp
-type SignUp struct {
-	Email          string    `json:"email"`
-	Password       string    `json:"password"`
-	PasswordRepeat string    `json:"password_repeat"`
-	Username       string    `json:"username"`
-	Name           string    `json:"name"`
-	Surname        string    `json:"surname"`
-	DateOfBirth    time.Time `json:"date_of_birth"`
-}
-
-// GetEmail returns the value of Email.
-func (s *SignUp) GetEmail() string {
-	return s.Email
-}
-
-// GetPassword returns the value of Password.
-func (s *SignUp) GetPassword() string {
-	return s.Password
-}
-
-// GetPasswordRepeat returns the value of PasswordRepeat.
-func (s *SignUp) GetPasswordRepeat() string {
-	return s.PasswordRepeat
-}
-
-// GetUsername returns the value of Username.
-func (s *SignUp) GetUsername() string {
-	return s.Username
-}
-
-// GetName returns the value of Name.
-func (s *SignUp) GetName() string {
-	return s.Name
-}
-
-// GetSurname returns the value of Surname.
-func (s *SignUp) GetSurname() string {
-	return s.Surname
-}
-
-// GetDateOfBirth returns the value of DateOfBirth.
-func (s *SignUp) GetDateOfBirth() time.Time {
-	return s.DateOfBirth
-}
-
-// SetEmail sets the value of Email.
-func (s *SignUp) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetPassword sets the value of Password.
-func (s *SignUp) SetPassword(val string) {
-	s.Password = val
-}
-
-// SetPasswordRepeat sets the value of PasswordRepeat.
-func (s *SignUp) SetPasswordRepeat(val string) {
-	s.PasswordRepeat = val
-}
-
-// SetUsername sets the value of Username.
-func (s *SignUp) SetUsername(val string) {
-	s.Username = val
-}
-
-// SetName sets the value of Name.
-func (s *SignUp) SetName(val string) {
-	s.Name = val
-}
-
-// SetSurname sets the value of Surname.
-func (s *SignUp) SetSurname(val string) {
-	s.Surname = val
-}
-
-// SetDateOfBirth sets the value of DateOfBirth.
-func (s *SignUp) SetDateOfBirth(val time.Time) {
-	s.DateOfBirth = val
 }

@@ -6,12 +6,19 @@ package desc
 type OperationName = string
 
 const (
-	V1APILogoutPostOperation          OperationName = "V1APILogoutPost"
-	V1APISigninPostOperation          OperationName = "V1APISigninPost"
-	V1APISignupPostOperation          OperationName = "V1APISignupPost"
-	V1PageGroupGroupNameGetOperation  OperationName = "V1PageGroupGroupNameGet"
-	V1PageProfileUsernameGetOperation OperationName = "V1PageProfileUsernameGet"
-	V1PageSearchGetOperation          OperationName = "V1PageSearchGet"
-	V1PageSigninGetOperation          OperationName = "V1PageSigninGet"
-	V1PageSignupGetOperation          OperationName = "V1PageSignupGet"
+	V1APIContactContactIDDeleteOperation   OperationName = "V1APIContactContactIDDelete"
+	V1APIContactContactIDPutOperation      OperationName = "V1APIContactContactIDPut"
+	V1APIContactPostOperation              OperationName = "V1APIContactPost"
+	V1APIInterestInterestIDDeleteOperation OperationName = "V1APIInterestInterestIDDelete"
+	V1APIInterestInterestIDPostOperation   OperationName = "V1APIInterestInterestIDPost"
+	V1APILogoutPostOperation               OperationName = "V1APILogoutPost"
+	V1APIProfileDeleteOperation            OperationName = "V1APIProfileDelete"
+	V1APIProfilePostOperation              OperationName = "V1APIProfilePost"
+	V1APIProfilePutOperation               OperationName = "V1APIProfilePut"
+	V1APISigninPostOperation               OperationName = "V1APISigninPost"
+	V1PageGroupGroupNameGetOperation       OperationName = "V1PageGroupGroupNameGet"
+	V1PageProfileUsernameGetOperation      OperationName = "V1PageProfileUsernameGet"
+	V1PageSearchGetOperation               OperationName = "V1PageSearchGet"
+	V1PageSigninGetOperation               OperationName = "V1PageSigninGet"
+	V1PageSignupGetOperation               OperationName = "V1PageSignupGet"
 )

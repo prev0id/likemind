@@ -19,3 +19,19 @@ session:
   name: SESSION
   schema:
     type: string
+
+interest_id:
+  in: path
+  required: true
+  name: interest_id
+  schema:
+    type: integer
+    format: int64
+
+contact_id:
+  in: path
+  required: true
+  name: contact_id
+  schema:
+    type: integer
+    format: int64

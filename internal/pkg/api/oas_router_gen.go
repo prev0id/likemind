@@ -73,6 +73,97 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "contact"
+
+					if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "POST":
+							s.handleV1APIContactPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "contact_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "DELETE":
+								s.handleV1APIContactContactIDDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PUT":
+								s.handleV1APIContactContactIDPutRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE,PUT")
+							}
+
+							return
+						}
+
+					}
+
+				case 'i': // Prefix: "interest/"
+
+					if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "interest_id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleV1APIInterestInterestIDDeleteRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1APIInterestInterestIDPostRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,POST")
+						}
+
+						return
+					}
+
 				case 'l': // Prefix: "logout"
 
 					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
@@ -93,58 +184,48 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 
-				case 's': // Prefix: "sign"
+				case 'p': // Prefix: "profile"
 
-					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+					if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleV1APIProfileDeleteRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1APIProfilePostRequest([0]string{}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleV1APIProfilePutRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,POST,PUT")
+						}
+
+						return
+					}
+
+				case 's': // Prefix: "signin"
+
+					if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+						elem = elem[l:]
+					} else {
 						break
 					}
-					switch elem[0] {
-					case 'i': // Prefix: "in"
 
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
-							elem = elem[l:]
-						} else {
-							break
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-					case 'u': // Prefix: "up"
-
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleV1APISignupPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
+						return
 					}
 
 				}
@@ -419,6 +500,113 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "contact"
+
+					if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "POST":
+							r.name = V1APIContactPostOperation
+							r.summary = "Add contact to the user"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/contact"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "contact_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "DELETE":
+								r.name = V1APIContactContactIDDeleteOperation
+								r.summary = "Delete contact from the user"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/contact/{contact_id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PUT":
+								r.name = V1APIContactContactIDPutOperation
+								r.summary = "Update user's contact"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/contact/{contact_id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				case 'i': // Prefix: "interest/"
+
+					if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "interest_id"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = V1APIInterestInterestIDDeleteOperation
+							r.summary = "Delete interest from the user"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/interest/{interest_id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "POST":
+							r.name = V1APIInterestInterestIDPostOperation
+							r.summary = "Add interest to the user"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/interest/{interest_id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
 				case 'l': // Prefix: "logout"
 
 					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
@@ -443,66 +631,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 
-				case 's': // Prefix: "sign"
+				case 'p': // Prefix: "profile"
 
-					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+					if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = V1APIProfileDeleteOperation
+							r.summary = "Delete user profile"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/profile"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = V1APIProfilePostOperation
+							r.summary = "Create new user profile"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/profile"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "PUT":
+							r.name = V1APIProfilePutOperation
+							r.summary = "Update user profile"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/profile"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 's': // Prefix: "signin"
+
+					if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+						elem = elem[l:]
+					} else {
 						break
 					}
-					switch elem[0] {
-					case 'i': // Prefix: "in"
 
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
-							elem = elem[l:]
-						} else {
-							break
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1APISigninPostOperation
+							r.summary = "Sign-in into account"
+							r.operationID = ""
+							r.pathPattern = "/v1/api/signin"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = V1APISigninPostOperation
-								r.summary = "Sign-in into account"
-								r.operationID = ""
-								r.pathPattern = "/v1/api/signin"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-					case 'u': // Prefix: "up"
-
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = V1APISignupPostOperation
-								r.summary = "Create new account"
-								r.operationID = ""
-								r.pathPattern = "/v1/api/signup"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
 					}
 
 				}

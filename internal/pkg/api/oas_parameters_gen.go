@@ -15,6 +15,266 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// V1APIContactContactIDDeleteParams is parameters of DELETE /v1/api/contact/{contact_id} operation.
+type V1APIContactContactIDDeleteParams struct {
+	ContactID int64
+}
+
+func unpackV1APIContactContactIDDeleteParams(packed middleware.Parameters) (params V1APIContactContactIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "contact_id",
+			In:   "path",
+		}
+		params.ContactID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIContactContactIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIContactContactIDDeleteParams, _ error) {
+	// Decode path: contact_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "contact_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.ContactID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "contact_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIContactContactIDPutParams is parameters of PUT /v1/api/contact/{contact_id} operation.
+type V1APIContactContactIDPutParams struct {
+	ContactID int64
+}
+
+func unpackV1APIContactContactIDPutParams(packed middleware.Parameters) (params V1APIContactContactIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "contact_id",
+			In:   "path",
+		}
+		params.ContactID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIContactContactIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIContactContactIDPutParams, _ error) {
+	// Decode path: contact_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "contact_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.ContactID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "contact_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIInterestInterestIDDeleteParams is parameters of DELETE /v1/api/interest/{interest_id} operation.
+type V1APIInterestInterestIDDeleteParams struct {
+	InterestID int64
+}
+
+func unpackV1APIInterestInterestIDDeleteParams(packed middleware.Parameters) (params V1APIInterestInterestIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "interest_id",
+			In:   "path",
+		}
+		params.InterestID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIInterestInterestIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIInterestInterestIDDeleteParams, _ error) {
+	// Decode path: interest_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "interest_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.InterestID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "interest_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIInterestInterestIDPostParams is parameters of POST /v1/api/interest/{interest_id} operation.
+type V1APIInterestInterestIDPostParams struct {
+	InterestID int64
+}
+
+func unpackV1APIInterestInterestIDPostParams(packed middleware.Parameters) (params V1APIInterestInterestIDPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "interest_id",
+			In:   "path",
+		}
+		params.InterestID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIInterestInterestIDPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIInterestInterestIDPostParams, _ error) {
+	// Decode path: interest_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "interest_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.InterestID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "interest_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1PageGroupGroupNameGetParams is parameters of GET /v1/page/group/{group_name} operation.
 type V1PageGroupGroupNameGetParams struct {
 	// The name of the group.

@@ -21,10 +21,16 @@ paths:
     $ref: "./paths/pages.yaml#/search"
   /v1/api/signin:
     $ref: "./paths/api.yaml#/signin"
-  /v1/api/signup:
-    $ref: "./paths/api.yaml#/signup"
   /v1/api/logout:
     $ref: "./paths/api.yaml#/logout"
+  /v1/api/profile:
+    $ref: "./paths/api.yaml#/profile"
+  /v1/api/interest/{interest_id}:
+    $ref: "./paths/api.yaml#/interest"
+  /v1/api/contact:
+    $ref: "./paths/api.yaml#/create_contact"
+  /v1/api/contact/{contact_id}:
+    $ref: "./paths/api.yaml#/contact"
 
 components:
   securitySchemes:

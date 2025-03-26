@@ -5,9 +5,23 @@ SignIn:
       schema:
         $ref: "schemas.yaml#/SignIn"
 
-SignUp:
+ProfileCreate:
   required: true
   content:
     application/json:
       schema:
-        $ref: "schemas.yaml#/SignUp"
+        $ref: "schemas.yaml#/ProfileCreate"
+
+ProfileUpdate:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "schemas.yaml#/ProfileUpdate"
+
+Contact:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "schemas.yaml#/Contact"

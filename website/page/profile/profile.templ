@@ -170,7 +170,6 @@ templ EditContactsButton(contacts []Contact) {
 
 templ UpdateProfileForm() {
 	<form class="space-y-6 max-w-2xl mx-auto">
-		<!-- Location Input -->
 		<div>
 			<label class="block text-sm font-medium text-black mb-2">Location 🌍</label>
 			<input
@@ -179,7 +178,6 @@ templ UpdateProfileForm() {
 				class="w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red focus:ring-2 focus:ring-red/20 transition-all placeholder:text-red/50"
 			/>
 		</div>
-		<!-- Date of Birth Picker -->
 		<div>
 			<label class="block text-sm font-medium text-black mb-2">Birthday 🎂</label>
 			<div class="relative">
@@ -192,7 +190,6 @@ templ UpdateProfileForm() {
 				</svg>
 			</div>
 		</div>
-		<!-- Email Update -->
 		<div x-data="{ emailOpen: false }" class="bg-white rounded-xl p-5 shadow-sm">
 			<button
 				type="button"
@@ -217,7 +214,6 @@ templ UpdateProfileForm() {
 				/>
 			</div>
 		</div>
-		<!-- Password Update -->
 		<div x-data="{ passwordOpen: false }" class="bg-white rounded-xl p-5 shadow-sm">
 			<button
 				type="button"
@@ -247,7 +243,6 @@ templ UpdateProfileForm() {
 				/>
 			</div>
 		</div>
-		<!-- Submit Button -->
 		<button
 			type="submit"
 			class="w-full bg-red text-white py-3 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2"
@@ -263,7 +258,7 @@ templ UpdateProfileForm() {
 templ UpdateProfileImage() {
 	<div
 		class="max-w-2xl mx-auto"
-		x-data="{ 
+		x-data="{
     isDragging: false,
     previewImage: null,
     errorMessage: null,

@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/page/"
+		case '/': // Prefix: "/v1/"
 
-			if l := len("/v1/page/"); len(elem) >= l && elem[0:l] == "/v1/page/" {
+			if l := len("/v1/"); len(elem) >= l && elem[0:l] == "/v1/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -61,71 +61,29 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'g': // Prefix: "group/"
+			case 'a': // Prefix: "api/signin"
 
-				if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
+				if l := len("api/signin"); len(elem) >= l && elem[0:l] == "api/signin" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "group_name"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
 				if len(elem) == 0 {
 					// Leaf node.
 					switch r.Method {
-					case "GET":
-						s.handleV1PageGroupGroupNameGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET")
+						s.notAllowed(w, r, "POST")
 					}
 
 					return
 				}
 
-			case 'p': // Prefix: "profile/"
+			case 'p': // Prefix: "page/"
 
-				if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "username"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleV1PageProfileUsernameGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
-			case 's': // Prefix: "s"
-
-				if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+				if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -135,19 +93,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'e': // Prefix: "earch"
+				case 'g': // Prefix: "group/"
 
-					if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
+					if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "group_name"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1PageSearchGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleV1PageGroupGroupNameGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -155,9 +124,40 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 
-				case 'i': // Prefix: "ign"
+				case 'p': // Prefix: "profile/"
 
-					if l := len("ign"); len(elem) >= l && elem[0:l] == "ign" {
+					if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "username"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1PageProfileUsernameGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+				case 's': // Prefix: "s"
+
+					if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
 						elem = elem[l:]
 					} else {
 						break
@@ -167,9 +167,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'i': // Prefix: "in"
+					case 'e': // Prefix: "earch"
 
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
 							elem = elem[l:]
 						} else {
 							break
@@ -179,7 +179,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "GET":
-								s.handleV1PageSigninGetRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleV1PageSearchGetRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "GET")
 							}
@@ -187,24 +187,58 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 
-					case 'u': // Prefix: "up"
+					case 'i': // Prefix: "ign"
 
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						if l := len("ign"); len(elem) >= l && elem[0:l] == "ign" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1PageSignupGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
+							break
+						}
+						switch elem[0] {
+						case 'i': // Prefix: "in"
+
+							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1PageSigninGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+						case 'u': // Prefix: "up"
+
+							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1PageSignupGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
 						}
 
 					}
@@ -293,9 +327,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/page/"
+		case '/': // Prefix: "/v1/"
 
-			if l := len("/v1/page/"); len(elem) >= l && elem[0:l] == "/v1/page/" {
+			if l := len("/v1/"); len(elem) >= l && elem[0:l] == "/v1/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -305,75 +339,33 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'g': // Prefix: "group/"
+			case 'a': // Prefix: "api/signin"
 
-				if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
+				if l := len("api/signin"); len(elem) >= l && elem[0:l] == "api/signin" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "group_name"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
 				if len(elem) == 0 {
 					// Leaf node.
 					switch method {
-					case "GET":
-						r.name = V1PageGroupGroupNameGetOperation
-						r.summary = "Get group page"
+					case "POST":
+						r.name = V1APISigninPostOperation
+						r.summary = "Sign-in into accout"
 						r.operationID = ""
-						r.pathPattern = "/v1/page/group/{group_name}"
+						r.pathPattern = "/v1/api/signin"
 						r.args = args
-						r.count = 1
+						r.count = 0
 						return r, true
 					default:
 						return
 					}
 				}
 
-			case 'p': // Prefix: "profile/"
+			case 'p': // Prefix: "page/"
 
-				if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "username"
-				// Leaf parameter, slashes are prohibited
-				idx := strings.IndexByte(elem, '/')
-				if idx >= 0 {
-					break
-				}
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = V1PageProfileUsernameGetOperation
-						r.summary = "Get user profile page"
-						r.operationID = ""
-						r.pathPattern = "/v1/page/profile/{username}"
-						r.args = args
-						r.count = 1
-						return r, true
-					default:
-						return
-					}
-				}
-
-			case 's': // Prefix: "s"
-
-				if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
+				if l := len("page/"); len(elem) >= l && elem[0:l] == "page/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -383,33 +375,75 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'e': // Prefix: "earch"
+				case 'g': // Prefix: "group/"
 
-					if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
+					if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "group_name"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = V1PageSearchGetOperation
-							r.summary = "Get search page"
+							r.name = V1PageGroupGroupNameGetOperation
+							r.summary = "Get group page"
 							r.operationID = ""
-							r.pathPattern = "/v1/page/search"
+							r.pathPattern = "/v1/page/group/{group_name}"
 							r.args = args
-							r.count = 0
+							r.count = 1
 							return r, true
 						default:
 							return
 						}
 					}
 
-				case 'i': // Prefix: "ign"
+				case 'p': // Prefix: "profile/"
 
-					if l := len("ign"); len(elem) >= l && elem[0:l] == "ign" {
+					if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "username"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = V1PageProfileUsernameGetOperation
+							r.summary = "Get user profile page"
+							r.operationID = ""
+							r.pathPattern = "/v1/page/profile/{username}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 's': // Prefix: "s"
+
+					if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
 						elem = elem[l:]
 					} else {
 						break
@@ -419,9 +453,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'i': // Prefix: "in"
+					case 'e': // Prefix: "earch"
 
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
 							elem = elem[l:]
 						} else {
 							break
@@ -431,10 +465,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "GET":
-								r.name = V1PageSigninGetOperation
-								r.summary = "Get sign-in page"
+								r.name = V1PageSearchGetOperation
+								r.summary = "Get search page"
 								r.operationID = ""
-								r.pathPattern = "/v1/page/signin"
+								r.pathPattern = "/v1/page/search"
 								r.args = args
 								r.count = 0
 								return r, true
@@ -443,28 +477,66 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 
-					case 'u': // Prefix: "up"
+					case 'i': // Prefix: "ign"
 
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						if l := len("ign"); len(elem) >= l && elem[0:l] == "ign" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = V1PageSignupGetOperation
-								r.summary = "Get sign-up page"
-								r.operationID = ""
-								r.pathPattern = "/v1/page/signup"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'i': // Prefix: "in"
+
+							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = V1PageSigninGetOperation
+									r.summary = "Get sign-in page"
+									r.operationID = ""
+									r.pathPattern = "/v1/page/signin"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'u': // Prefix: "up"
+
+							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = V1PageSignupGetOperation
+									r.summary = "Get sign-up page"
+									r.operationID = ""
+									r.pathPattern = "/v1/page/signup"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
 						}
 
 					}

@@ -3,7 +3,7 @@ package model
 import "time"
 
 const (
-	TableCredentials    = "credentials"
+	TableSessions       = "sessions"
 	TableUser           = "user"
 	TableContact        = "contact"
 	TableProfilePicture = "profile_picture"
@@ -14,21 +14,17 @@ const (
 )
 
 const (
-	CredentialsID        = "id"
-	CredentialsPassword  = "password"
-	CredentialsLogin     = "login"
-	CredentialsUserID    = "user_id"
-	CredentialsCreatedAt = "created_at"
-	CredentialsUpdatedAt = "updated_at"
+	CredentialsToken      = "token"
+	CredentialsUserID     = "user_id"
+	CredentialsCreatedAt  = "created_at"
+	CredentialsExpectedAt = "expected_at"
 )
 
-type Credentials struct {
-	ID        string    `db:"id"`
+type Session struct {
 	UserID    int64     `db:"user_id"`
-	Password  []byte    `db:"password"`
-	Login     string    `db:"login"`
+	Token     string    `db:"token"`
 	CreatedAt time.Time `db:"created_at"`
-	UpdatedAt time.Time `db:"updated_at"`
+	ExpiresAt time.Time `db:"expires_at"`
 }
 
 const (
@@ -37,6 +33,8 @@ const (
 	UserName      = "name"
 	UserSurname   = "surname"
 	UserAbout     = "about"
+	UserPassword  = "password"
+	UserEmail     = "email"
 	UserCreatedAt = "created_at"
 	UserUpdatedAt = "updated_at"
 )
@@ -47,6 +45,8 @@ type User struct {
 	Name      string    `db:"name"`
 	Surname   string    `db:"surname"`
 	About     string    `db:"abuot"`
+	Email     string    `db:"email"`
+	Password  []byte    `db:"password"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }

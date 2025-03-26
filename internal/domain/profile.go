@@ -1,7 +1,9 @@
 package domain
 
-import (
-	"likemind/internal/common/validate"
+type (
+	UserID   int64
+	Password string
+	Email    string
 )
 
 type Profile struct {
@@ -17,29 +19,12 @@ type Contact struct {
 }
 
 type User struct {
-	ID       int64
-	Nickname string
-	Name     Name
-	Surname  Surname
-	About    string
-}
-
-type Name string
-
-func (n Name) Validate() error {
-	return validate.String("name").
-		NotEmpty().
-		IsUTF8().
-		LenMax(50).
-		Build(string(n))
-}
-
-type Surname string
-
-func (s Surname) Validate() error {
-	return validate.String("surname").
-		NotEmpty().
-		IsUTF8().
-		LenMax(50).
-		Build(string(s))
+	ID             UserID
+	Nickname       string
+	Name           string
+	Surname        string
+	About          string
+	Login          Email
+	HashedPassword []byte
+	RawPassword    Password
 }

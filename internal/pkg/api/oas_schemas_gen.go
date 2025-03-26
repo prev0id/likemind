@@ -4,6 +4,7 @@ package desc
 
 import (
 	"io"
+	"net/url"
 )
 
 // HTML page content.
@@ -44,6 +45,7 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
+func (*InternalError) v1APISigninPostRes()          {}
 func (*InternalError) v1PageGroupGroupNameGetRes()  {}
 func (*InternalError) v1PageProfileUsernameGetRes() {}
 func (*InternalError) v1PageSearchGetRes()          {}
@@ -66,6 +68,7 @@ func (s NotAuthorized) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
+func (*NotAuthorized) v1APISigninPostRes()          {}
 func (*NotAuthorized) v1PageGroupGroupNameGetRes()  {}
 func (*NotAuthorized) v1PageProfileUsernameGetRes() {}
 
@@ -87,3 +90,148 @@ func (s NotFound) Read(p []byte) (n int, err error) {
 
 func (*NotFound) v1PageGroupGroupNameGetRes()  {}
 func (*NotFound) v1PageProfileUsernameGetRes() {}
+
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptURI returns new OptURI with value set to v.
+func NewOptURI(v url.URL) OptURI {
+	return OptURI{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptURI is optional url.URL.
+type OptURI struct {
+	Value url.URL
+	Set   bool
+}
+
+// IsSet returns true if OptURI was set.
+func (o OptURI) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptURI) Reset() {
+	var v url.URL
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptURI) SetTo(v url.URL) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptURI) Get() (v url.URL, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptURI) Or(d url.URL) url.URL {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Ref: #/Redirect302
+type Redirect302 struct {
+	Location  OptURI
+	SetCookie OptString
+}
+
+// GetLocation returns the value of Location.
+func (s *Redirect302) GetLocation() OptURI {
+	return s.Location
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *Redirect302) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// SetLocation sets the value of Location.
+func (s *Redirect302) SetLocation(val OptURI) {
+	s.Location = val
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *Redirect302) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+func (*Redirect302) v1APISigninPostRes() {}
+
+type V1APISigninPostReq struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1APISigninPostReq) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *V1APISigninPostReq) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *V1APISigninPostReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *V1APISigninPostReq) SetPassword(val string) {
+	s.Password = val
+}

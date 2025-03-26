@@ -8,8 +8,8 @@ import (
 	"likemind/internal/config"
 	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
-	"likemind/internal/service/auth"
 	"likemind/internal/service/profile"
+	"likemind/internal/service/session"
 	"likemind/website"
 
 	"github.com/go-chi/chi/v5"
@@ -17,8 +17,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Server(cfg config.App, authService auth.Service, profileService profile.Service) error {
-	server := api.NewServer(authService, profileService)
+func Server(cfg config.App, sessionService session.Service, profileService profile.Service) error {
+	server := api.NewServer(sessionService, profileService)
 
 	router := chi.NewRouter()
 

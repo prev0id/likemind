@@ -13,3 +13,10 @@ username:
   description: The nickname of the user.
   schema:
     type: string
+
+session:
+  in: cookie
+  name: SESSION
+  required: true
+  schema:
+    type: string

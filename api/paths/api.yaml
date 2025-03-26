@@ -1,0 +1,15 @@
+signin:
+  post:
+    summary: Sign-in into accout
+    description: Redirects to profile page if ok.
+    tags:
+      - user
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/signin"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"

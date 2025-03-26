@@ -25,9 +25,9 @@ type DB struct {
 }
 
 type Auth struct {
-	SessionKey   string `toml:"session_key"`
-	CookieMaxAge int    `toml:"cookie_max_age"`
-	UseHTTPOnly  bool   `toml:"use_http_only"`
+	Exparation   time.Duration `toml:"exparation"`
+	CookieMaxAge int           `toml:"cookie_max_age"`
+	UseHTTPOnly  bool          `toml:"use_http_only"`
 }
 
 var configPath = flag.String("config", "./config.toml", "path to application config")

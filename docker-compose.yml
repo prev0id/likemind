@@ -1,9 +1,7 @@
-version: "3.8"
-
 services:
-  # PostgreSQL database
   db:
     image: postgres:15-alpine
+    container_name: postgres
     environment:
       POSTGRES_DB: likemind
       POSTGRES_USER: user
@@ -12,11 +10,15 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    networks:
-      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio
+    container_name: minio
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -24,14 +26,26 @@ services:
     volumes:
       - minio_data:/data
     ports:
-      - "9000:9000" # API
-      - "9001:9001" # Web UI
-    networks:
-      - test-network
+      - "9000:9000"
+      - "9001:9001"
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    network_mode: host
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
   minio_data:
-
-networks:
-  test-network:
+  caddy_data:
+  caddy_config:

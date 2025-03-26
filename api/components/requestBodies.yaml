@@ -1,0 +1,46 @@
+signin:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required: [email, password]
+        properties:
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+            minLength: 8
+            maxLength: 20
+
+signup:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+          - password_repeat
+          - username
+          - date_of_birth
+        properties:
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+            minLength: 8
+            maxLength: 20
+          password_repeat:
+            type: string
+            minLength: 8
+            maxLength: 20
+          username:
+            type: string
+            pattern: "^[a-zA-Z0-9_]+$"
+          date_of_birth:
+            type: string
+            format: date

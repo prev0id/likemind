@@ -15,21 +15,25 @@ func convert[T, V any](data []T, converter func(T) V) []V {
 
 func domainUserToModel(u domain.User) model.User {
 	return model.User{
-		ID:       u.ID,
+		ID:       int64(u.ID),
 		Nickname: u.Nickname,
 		Name:     string(u.Name),
 		Surname:  string(u.Surname),
 		About:    u.About,
+		Password: u.HashedPassword,
+		Email:    string(u.Login),
 	}
 }
 
 func modelUserToDomain(u model.User) domain.User {
 	return domain.User{
-		ID:       u.ID,
-		Nickname: u.Nickname,
-		Name:     domain.Name(u.Name),
-		Surname:  domain.Surname(u.Surname),
-		About:    u.About,
+		ID:             domain.UserID(u.ID),
+		Nickname:       u.Nickname,
+		Name:           u.Name,
+		Surname:        u.Surname,
+		About:          u.About,
+		HashedPassword: u.Password,
+		Login:          domain.Email(u.About),
 	}
 }
 

@@ -3,17 +3,17 @@ package main
 import (
 	"context"
 
-	"likemind/cmd/bootstrap"
+	"likemind/cmd/likemind/bootstrap"
 	"likemind/internal/config"
 	"likemind/internal/database"
-	"likemind/internal/database/adapter/credentials_adapter"
 	"likemind/internal/database/adapter/profile_adapter"
+	"likemind/internal/database/adapter/session_adapter"
 	"likemind/internal/database/repo/contact_repo"
-	"likemind/internal/database/repo/credentials_repo"
 	profile_picture_repo "likemind/internal/database/repo/picture_repo"
+	"likemind/internal/database/repo/session_repo"
 	"likemind/internal/database/repo/user_repo"
-	"likemind/internal/service/auth"
 	"likemind/internal/service/profile"
+	"likemind/internal/service/session"
 
 	"github.com/rs/zerolog/log"
 )
@@ -32,21 +32,18 @@ func main() {
 
 	database.InitDB(ctx, cfg.DB)
 
-	credsRepo := &credentials_repo.Repo{}
+	sessionRepo := &session_repo.Repo{}
 	userRepo := &user_repo.Repo{}
 	contactRepo := &contact_repo.Repo{}
 	profilePictureRepo := &profile_picture_repo.Repo{}
 
-	credsAdapter := credentials_adapter.NewAdapter(credsRepo)
+	sessionAdapter := session_adapter.NewAdapter(sessionRepo)
 	profileAdapter := profile_adapter.NewAdapter(userRepo, contactRepo, profilePictureRepo)
 
 	profileService := profile.New(profileAdapter)
-	authService, err := auth.New(credsAdapter, cfg.Auth)
-	if err != nil {
-		log.Fatal().Err(err).Msg("auth.New")
-	}
+	sessionService := session.New(sessionAdapter, cfg.Auth)
 
-	if err := bootstrap.Server(cfg.App, authService, profileService); err != nil {
+	if err := bootstrap.Server(cfg.App, sessionService, profileService); err != nil {
 		log.Fatal().Err(err).Msg("bootstrap.Server")
 	}
 }

@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1APISigninPost implements POST /v1/api/signin operation.
+	//
+	// Redirects to profile page if ok.
+	//
+	// POST /v1/api/signin
+	V1APISigninPost(ctx context.Context, req *V1APISigninPostReq) (V1APISigninPostRes, error)
 	// V1PageGroupGroupNameGet implements GET /v1/page/group/{group_name} operation.
 	//
 	// Returns an HTML page displaying details of a specific user group. Requires authentication.

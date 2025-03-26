@@ -25,3 +25,11 @@ NotFound:
     text/plain:
       schema:
         $ref: "schemas.yaml#/ErrorResponse"
+
+Redirect302:
+  description: 302 Found - Redirect response with session cookie.
+  headers:
+    Location:
+      $ref: "../components/headers.yaml#/Location"
+    Set-Cookie:
+      $ref: "../components/headers.yaml#/SessionCookie"

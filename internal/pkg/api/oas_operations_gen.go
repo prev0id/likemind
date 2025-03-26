@@ -6,6 +6,7 @@ package desc
 type OperationName = string
 
 const (
+	V1APISigninPostOperation          OperationName = "V1APISigninPost"
 	V1PageGroupGroupNameGetOperation  OperationName = "V1PageGroupGroupNameGet"
 	V1PageProfileUsernameGetOperation OperationName = "V1PageProfileUsernameGet"
 	V1PageSearchGetOperation          OperationName = "V1PageSearchGet"

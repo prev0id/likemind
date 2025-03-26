@@ -19,6 +19,8 @@ paths:
     $ref: "./paths/pages.yaml#/group"
   /v1/page/search:
     $ref: "./paths/pages.yaml#/search"
+  /v1/api/signin:
+    $ref: "./paths/api.yaml#/signin"
 
 tags:
   - name: page

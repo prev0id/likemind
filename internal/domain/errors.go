@@ -13,4 +13,6 @@ var (
 	ErrUnsupportedImageFormat   = errors.New("unsupported image format (only JPEG and PNG allowed)")
 	ErrWrongResolution          = errors.New("image resolution exceeds 2K")
 	ErrWrongAspectRation        = errors.New("image aspect ratio not allowed")
+	ErrNilRequest               = errors.New("nil request")
+	ErrNotFound                 = errors.New("not found")
 )

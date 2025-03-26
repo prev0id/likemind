@@ -5,11 +5,3 @@ ErrorResponse:
 HTMLPage:
   type: string
   description: HTML page content.
-
-Redirect302:
-  description: 302 Found - Redirect response with session cookie.
-  headers:
-    Location:
-      $ref: "../components/headers.yaml#/Location"
-    Set-Cookie:
-      $ref: "../components/headers.yaml#/SessionCookie"

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/a-h/templ"
@@ -50,4 +51,39 @@ func PrettyTime(t time.Time) string {
 		}
 		return fmt.Sprintf("%d days ago", days)
 	}
+}
+
+const (
+	paramStart = '{'
+	paramEnd   = '}'
+)
+
+// Example: FillPath("/user/{username}", map[string]string{"username": "john"}) returns "/user/john"
+func FillPath(path string, params map[string]string) string {
+	result := &strings.Builder{}
+
+	var (
+		isParam  bool
+		paramIdx int
+	)
+
+	for idx, char := range path {
+		switch char {
+		case paramStart:
+			isParam = true
+			paramIdx = idx + 1
+		case paramEnd:
+			isParam = false
+			paramName := path[paramIdx:idx]
+			if param, ok := params[paramName]; ok {
+				result.WriteString(param)
+			}
+		default:
+			if isParam {
+				continue
+			}
+			result.WriteRune(char)
+		}
+	}
+	return result.String()
 }

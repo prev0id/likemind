@@ -1,33 +1,39 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE interest (
-    id bigint PRIMARY KEY NOT NULL,
-    name text NOT NULL UNIQUE,
-    description text NOT NULL,
-    created_at timestamptz NOT NULL,
-    updated_at timestamptz NOT NULL
+CREATE TABLE interests (
+    id          BIGINT          PRIMARY KEY NOT NULL,
+    name        TEXT            NOT NULL UNIQUE,
+    description TEXT            NOT NULL DEFAULT '',
+    group_id    BIGINT          NOT NULL
 );
 
-CREATE TABLE user_interest (
-    user_id bigint NOT NULL,
-    interest_id bigint NOT NULL,
-    created_at timestamptz NOT NULL,
+CREATE TABLE interest_groups (
+    id          BIGINT          PRIMARY KEY NOT NULL,
+    name        TEXT            NOT NULL UNIQUE
+);
+
+CREATE TABLE user_interests (
+    user_id     BIGINT          NOT NULL,
+    interest_id BIGINT          NOT NULL,
+    created_at  TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
     PRIMARY KEY (user_id, interest_id)
 );
 
-CREATE TABLE group_interest (
-    group_id bigint NOT NULL,
-    interest_id bigint NOT NULL,
-    created_at timestamptz NOT NULL,
+CREATE TABLE group_interests (
+    group_id    BIGINT          NOT NULL,
+    interest_id BIGINT          NOT NULL,
+    created_at  TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
     PRIMARY KEY (group_id, interest_id)
 );
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE IF EXISTS group_interest;
+DROP TABLE IF EXISTS group_interests;
 
-DROP TABLE IF EXISTS user_interest;
+DROP TABLE IF EXISTS user_interests;
 
-DROP TABLE IF EXISTS interest;
+DROP TABLE IF EXISTS interests;
+
+DROP TABLE IF EXISTS interest_groups;
 -- +goose StatementEnd

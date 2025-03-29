@@ -1,0 +1,57 @@
+package widget
+
+import (
+	"likemind/internal/domain"
+	"likemind/website/view"
+	common_widget "likemind/website/widget/common"
+)
+
+templ FormSignin() {
+	@authFormWrapper() {
+		@common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPISignin}}) {
+			<h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+				Log in to your an account
+			</h1>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Email",
+					For:  "email",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "email",
+					Type:        "email",
+					Placeholder: "mail@example.com",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Password",
+					For:  "password",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "password",
+					Type:        "password",
+					Placeholder: "********",
+				})
+			</div>
+			@common_widget.Button(view.Button{Type: "submit"}) {
+				Login
+			}
+			@common_widget.TextSM() {
+				Don't have an account?
+				@common_widget.Link(view.Link{
+					Href: domain.PathPageSignUp,
+					Text: " Create here",
+				})
+			}
+		}
+	}
+}
+
+templ authFormWrapper() {
+	<div class="text-black flex flex-col items-center justify-center px-6 py-8 mx-auto">
+		<div class="w-full bg-yellow-400 rounded-lg shadow sm:max-w-md p-8">
+			{ children... }
+		</div>
+	</div>
+}

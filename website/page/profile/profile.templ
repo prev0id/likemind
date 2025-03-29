@@ -1,57 +1,65 @@
 package profile_page
 
 import (
+	"likemind/internal/common"
+	"likemind/internal/domain"
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/contacts"
 	"likemind/website/widget/header"
+	tag "likemind/website/widget/interest"
 	"likemind/website/widget/modal"
-	"likemind/website/widget/tag"
+	"strconv"
 )
 
-type Profile struct {
-	Picture  string
-	Name     string
-	Nickname string
-	Location string
-	About    string
-	Contacts []Contact
-	Tags     []string
-}
-
-type Contact struct {
-	Platform string
-	Link     string
-	ID       string
-}
-
-var state = Profile{
-	Picture: "/static/test_image1.jpg",
-	// Picture: "https://images.squarespace-cdn.com/content/v1/5ee52f7d9edc8a7ee635591a/8df50655-6b68-460e-ad6c-5230001b9d5a/240404+-+063944+-+001.jpg?format=2500w",
-	Name:     "Semyon Deev",
-	Nickname: "@Prevoid",
-	Location: "Moscow, Russia",
-	About:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
-	Contacts: []Contact{
+var State = view.Profile{
+	PictureID: "/static/test_image1.jpg",
+	Name:      "Semyon Deev",
+	Nickname:  "prevoid",
+	Location:  "Moscow, Russia",
+	About:     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
+	Contacts: []view.Contact{
 		{
 			Platform: "Telegram",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 		{
 			Platform: "VK",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 		{
 			Platform: "LinkedIn",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 	},
-	Tags: []string{"Programming", "Video games", "Reading classified military documents"},
+	Interests: []view.Interest{
+		{
+			Name:        "Programming",
+			ID:          1,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Coding",
+			ID:          4,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Reading classified military documents",
+			ID:          2,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Video games",
+			ID:          3,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+	},
 }
 
-templ Page() {
+templ Page(state view.Profile) {
 	@page.StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
 		@VSplit() {
-			@ProfilePicture(state.Picture)
+			@ProfilePicture(state.PictureID)
 			@GridRow() {
 				@HeaderWithIcon() {
 					@GridRow() {
@@ -64,8 +72,8 @@ templ Page() {
 				@Semibold("About")
 				<div>{ state.About }</div>
 				@tag.Container() {
-					for _, tagValue := range state.Tags {
-						@tag.Tag(tagValue)
+					for _, interest := range state.Interests {
+						@tag.Interest(interest)
 					}
 				}
 				@LineBreak()
@@ -75,7 +83,7 @@ templ Page() {
 				}
 				@contacts.Container() {
 					for _, contact := range state.Contacts {
-						@contacts.Link(contact.Platform, contact.Link)
+						@contacts.Link(contact.Platform, contact.Value)
 					}
 				}
 			}
@@ -89,7 +97,7 @@ templ VSplit() {
 	</div>
 }
 
-templ ProfilePicture(link string) {
+templ ProfilePicture(pictureID string) {
 	<div
 		x-data="{ hover: false }"
 		@mouseenter="hover = true"
@@ -99,7 +107,7 @@ templ ProfilePicture(link string) {
 		<img
 			:class="hover ? 'filter blur-sm transition duration-300' : 'transition duration-300'"
 			class="max-w-full max-h-[100rem] overflow-hidden rounded-3xl"
-			src={ link }
+			src={ pictureID }
 			alt="Profile Avatar"
 		/>
 		<div
@@ -159,7 +167,7 @@ templ EditProfileButton() {
 	}
 }
 
-templ EditContactsButton(contacts []Contact) {
+templ EditContactsButton(contacts []view.Contact) {
 	@modal.Wrapper() {
 		@modal.ToggleSettings("Update contacts")
 		@modal.Content("Update your contacs") {
@@ -346,7 +354,7 @@ templ UpdateProfileImage() {
 	</div>
 }
 
-templ UpdateContacts(contacts []Contact) {
+templ UpdateContacts(contacts []view.Contact) {
 	<div id="contacts-container" class="space-y-3">
 		for _, contact := range contacts {
 			<div class="p-4 flex items-center gap-4">
@@ -361,11 +369,16 @@ templ UpdateContacts(contacts []Contact) {
 					type="url"
 					name="link"
 					disabled="true"
-					value={ contact.Link }
+					value={ contact.Value }
 					class="flex-1 px-3 py-2 rounded-lg text-black/90 bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20"
 				/>
 				<button
-					hx-delete={ "/contacts/1" + contact.ID }
+					hx-delete={ common.FillPath(
+						domain.PathAPIContactID,
+					 	map[string]string{
+							domain.PathParamContactID: strconv.FormatInt(contact.ID, 10),
+						},
+					) }
 					hx-target="#contacts-container"
 					hx-swap="outerHTML"
 					class="text-red hover:text-orange p-2 rounded-full hover:bg-pink transition-colors"

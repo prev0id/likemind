@@ -1,0 +1,66 @@
+package common_widget
+
+import (
+	"likemind/internal/domain"
+	"likemind/website/view"
+)
+
+templ Header() {
+	<header class="bg-white">
+		{ children... }
+	</header>
+}
+
+templ HeaderTopRow() {
+	<div class="mx-auto max-w-7xl flex items-center justify-center h-14 p-1 md:px-8">
+		{ children... }
+	</div>
+}
+
+templ HeaderNavRow() {
+	<nav class="bg-pink h-14 flex items-center justify-center p-1 lg:px-8">
+		<div class="flex gap-x-4 lg:gap-x-12">
+			{ children... }
+		</div>
+	</nav>
+}
+
+templ HeaderLogo(logo string) {
+	<div class="w-60 col-start-2 text-2xl text-red font-semibold text-center">
+		{ logo }
+	</div>
+}
+
+templ HeaderLogout() {
+	<a
+		href={ domain.PathAPILogout }
+		class="group w-24 justify-self-end lg:mx-8"
+		data-state={ domain.PathPageSignIn }
+	>
+		<span class="block group-hover:hidden place-self-center text-md text-black">
+			Log out &rarr;
+		</span>
+		<span class="hidden group-hover:block place-self-center text-sm text-orange font-semibold">
+			┬┴┬┴┤･ω･)ﾉ
+		</span>
+	</a>
+}
+
+templ HeaderTab(tab view.Tab, selected view.Tab) {
+	<a
+		class="group w-24"
+		href={ templ.URL(tab.URL) }
+	>
+		<span
+			class="block group-hover:hidden data-[state=selected]:font-semibold place-self-center text-lg text-black text-center"
+			if tab.Name == selected.Name {
+				data-state="selected"
+			}
+		>
+			{ tab.Name }
+		</span>
+		<span class="hidden place-self-center group-hover:block text-sm text-orange font-semibold text-center">
+			{ tab.Kaomoji }
+		</span>
+	</a>
+}

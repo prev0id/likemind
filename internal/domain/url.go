@@ -8,8 +8,7 @@ const (
 	PathPageCurrentUser = "/user"
 	PathPageUser        = "/user/{username}"
 	PathPageGroup       = "/group/{groupname}"
-	PathPageSearchUser  = "/search/user"
-	PathPageSearchGroup = "/search/group"
+	PathPageSearch      = "/search"
 
 	PathAPIPing        = prefixAPI + "/ping"
 	PathAPISearchUser  = prefixAPI + "/search/user"
@@ -19,15 +18,13 @@ const (
 	PathAPISignin = prefixAPI + "/signin"
 	PathAPILogout = prefixAPI + "/logout"
 
-	PathAPIUserDesc      = prefixAPI + "/user/desc"
-	PathAPIUserEmail     = prefixAPI + "/user/email"
-	PathAPIUserPassword  = prefixAPI + "/user/password"
-	PathAPIUserPicture   = prefixAPI + "/user/picture"
-	PathAPIUserInterests = prefixAPI + "/user/interests"
+	PathAPIProfile    = prefixAPI + "/profile"
+	PathAPIContact    = prefixAPI + "/contact"
+	PathAPIContactID  = prefixAPI + "/contact/{contact_id}"
+	PathAPIInterestID = prefixAPI + "/interest/{interest_id}"
 
-	PathAPIGroup          = prefixAPI + "/group"
-	PathAPIGroupDesc      = prefixAPI + "/group/desc"
-	PathAPIGroupInterests = prefixAPI + "/group/interests"
+	PathAPIGroup           = prefixAPI + "/group"
+	PathAPIGroupInterestID = prefixAPI + "/group/interest/{interest_id}"
 
 	PathStaticHTMX         = prefixStatic + "/js/htmx.min.js"
 	PathStaticAlpine       = prefixStatic + "/js/alpine.js"
@@ -35,10 +32,13 @@ const (
 	PathStaticFavicon      = prefixStatic + "/img/favicon.png"
 	PathStaticStyles       = prefixStatic + "/css/styles.css"
 
-	PathParamUsername  = "username"
-	PathParamGroupname = "groupname"
-	PathParamFilePath  = "filepath"
+	PathParamUsername   = "username"
+	PathParamGroupname  = "groupname"
+	PathParamFilePath   = "filepath"
+	PathParamContactID  = "contact_id"
+	PathParamInterestID = "interest_id"
 
-	prefixAPI    = "/v1/api"
-	prefixStatic = "/static"
+	prefixAPI     = "/v1/api"
+	prefixStatic  = "/static"
+	prefixProfiel = "/static"
 )

@@ -10,10 +10,11 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/button"
 	"likemind/website/widget/card"
 	"likemind/website/widget/header"
-	"likemind/website/widget/tag"
+	tag "likemind/website/widget/interest"
 )
 
 type SearchResults struct {
@@ -24,7 +25,7 @@ type User struct {
 	Username string
 	Link     string
 	About    string
-	Tags     []string
+	Tags     []view.Interest
 	Picture  string
 }
 
@@ -35,7 +36,28 @@ var state = []User{
 		Link:     "/user/prevoid",
 		About:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
 		Picture:  "/static/test_image1.jpg",
-		Tags:     []string{"Programming", "Video games", "Reading classified military documents"},
+		Tags: []view.Interest{
+			{
+				Name:        "Programming",
+				ID:          1,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Coding",
+				ID:          4,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Reading classified military documents",
+				ID:          2,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Video games",
+				ID:          3,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+		},
 	},
 }
 
@@ -196,7 +218,7 @@ func UserCard(user User) templ.Component {
 					}
 					ctx = templ.InitializeContext(ctx)
 					for _, tagValue := range user.Tags {
-						templ_7745c5c3_Err = tag.Tag(tagValue).Render(ctx, templ_7745c5c3_Buffer)
+						templ_7745c5c3_Err = tag.Interest(tagValue).Render(ctx, templ_7745c5c3_Buffer)
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -269,7 +291,7 @@ func HeaderWrapper(user User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = card.Author(user.Username, user.Link).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = card.Author(user.Username).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -365,7 +387,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 106, Col: 9}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 128, Col: 9}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -383,7 +405,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 			var templ_7745c5c3_Var13 string
 			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(group.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 125, Col: 19}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 147, Col: 19}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 			if templ_7745c5c3_Err != nil {
@@ -401,7 +423,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 				var templ_7745c5c3_Var14 string
 				templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs("search === '' || '" + interest.Name + "'.toLowerCase().includes(search.toLowerCase())")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 130, Col: 105}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 152, Col: 105}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 				if templ_7745c5c3_Err != nil {
@@ -414,7 +436,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 				var templ_7745c5c3_Var15 string
 				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(interest.Id)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 135, Col: 26}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 157, Col: 26}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
@@ -427,7 +449,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(interest.Value)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 136, Col: 32}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 158, Col: 32}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -440,7 +462,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(interest.Id)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 139, Col: 33}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 161, Col: 33}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -453,7 +475,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 				var templ_7745c5c3_Var18 string
 				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(interest.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 139, Col: 51}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/user_search/search.templ`, Line: 161, Col: 51}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {

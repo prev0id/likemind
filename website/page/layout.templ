@@ -10,16 +10,10 @@ import (
 templ StandardLayout(headerState ...header.State) {
 	<!DOCTYPE html>
 	<html class="h-full">
-		<head>
-			@metaViewPort()
-			@linkCSS()
-			@linkIcon()
-		</head>
+		@Head()
 		<body class="min-h-screen flex flex-col">
-			@scriptHTMX()
-			@scriptAlpine()
+			@Scripts()
 			<script src={ domain.PathStaticErrorHandler }></script>
-			@notification.Container()
 			// TODO: move header into children
 			if len(headerState) > 0 {
 				@header.Component(headerState[0])
@@ -34,26 +28,42 @@ templ StandardLayout(headerState ...header.State) {
 	</html>
 }
 
-templ scriptHTMX() {
-	<script src={ domain.PathStaticHTMX }></script>
+templ HTML() {
+	<!DOCTYPE html>
+	<html>
+		{ children... }
+	</html>
 }
 
-templ scriptAlpine() {
+templ Head() {
+	<head>
+		<link rel="stylesheet" href={ domain.PathStaticStyles }/>
+		<link rel="icon" href={ domain.PathStaticFavicon }/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	</head>
+}
+
+templ Body() {
+	<body class="min-h-screen flex flex-col">
+		@Scripts()
+		@notification.Container()
+		{ children... }
+	</body>
+}
+
+templ Main() {
+	<main class="flex-grow flex bg-white text-black">
+		<div class="min-h-full min-w-full">
+			{ children... }
+		</div>
+	</main>
+}
+
+templ Scripts() {
+	<script src={ domain.PathStaticHTMX }></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
 	// should be last
 	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 	// <script src={ domain.PathStaticAlpine }></script>
-}
-
-templ linkCSS() {
-	<link rel="stylesheet" href={ domain.PathStaticStyles }/>
-}
-
-templ linkIcon() {
-	<link rel="icon" href={ domain.PathStaticFavicon }/>
-}
-
-templ metaViewPort() {
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 }

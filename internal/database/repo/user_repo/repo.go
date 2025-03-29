@@ -36,6 +36,7 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 		model.UserAbout,
 		model.UserEmail,
 		model.UserPassword,
+		model.UserLocation,
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
@@ -46,6 +47,7 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 		user.About,
 		user.Email,
 		user.Password,
+		user.Location,
 		user.CreatedAt,
 		user.UpdatedAt,
 	)
@@ -70,6 +72,7 @@ func (r *Repo) UpdateUser(ctx context.Context, user model.User) error {
 		q.Assign(model.UserAbout, user.About),
 		q.Assign(model.UserEmail, user.Email),
 		q.Assign(model.UserPassword, user.Password),
+		q.Assign(model.UserLocation, user.Location),
 		q.Assign(model.UserUpdatedAt, user.UpdatedAt),
 	)
 	q.Where(q.Equal(model.UserID, user.ID))
@@ -90,6 +93,7 @@ func (r *Repo) GetUserByID(ctx context.Context, id int64) (model.User, error) {
 		model.UserAbout,
 		model.UserEmail,
 		model.UserPassword,
+		model.UserLocation,
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
@@ -113,6 +117,7 @@ func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
 		model.UserAbout,
 		model.UserEmail,
 		model.UserPassword,
+		model.UserLocation,
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
@@ -146,6 +151,7 @@ func (r *Repo) GetUserByEmail(ctx context.Context, email string) (model.User, er
 		model.UserAbout,
 		model.UserEmail,
 		model.UserPassword,
+		model.UserLocation,
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)

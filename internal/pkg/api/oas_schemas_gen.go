@@ -373,6 +373,7 @@ type ProfileUpdate struct {
 	Username    OptString `json:"username"`
 	DateOfBirth OptDate   `json:"date_of_birth"`
 	About       OptString `json:"about"`
+	Location    OptString `json:"location"`
 }
 
 // GetEmail returns the value of Email.
@@ -405,6 +406,11 @@ func (s *ProfileUpdate) GetAbout() OptString {
 	return s.About
 }
 
+// GetLocation returns the value of Location.
+func (s *ProfileUpdate) GetLocation() OptString {
+	return s.Location
+}
+
 // SetEmail sets the value of Email.
 func (s *ProfileUpdate) SetEmail(val OptString) {
 	s.Email = val
@@ -433,6 +439,11 @@ func (s *ProfileUpdate) SetDateOfBirth(val OptDate) {
 // SetAbout sets the value of About.
 func (s *ProfileUpdate) SetAbout(val OptString) {
 	s.About = val
+}
+
+// SetLocation sets the value of Location.
+func (s *ProfileUpdate) SetLocation(val OptString) {
+	s.Location = val
 }
 
 // Ref: #/Redirect302

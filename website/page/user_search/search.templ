@@ -2,10 +2,11 @@ package user_search_page
 
 import (
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/button"
 	"likemind/website/widget/card"
 	"likemind/website/widget/header"
-	"likemind/website/widget/tag"
+	tag "likemind/website/widget/interest"
 )
 
 type SearchResults struct {
@@ -16,7 +17,7 @@ type User struct {
 	Username string
 	Link     string
 	About    string
-	Tags     []string
+	Tags     []view.Interest
 	Picture  string
 }
 
@@ -27,7 +28,28 @@ var state = []User{
 		Link:     "/user/prevoid",
 		About:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
 		Picture:  "/static/test_image1.jpg",
-		Tags:     []string{"Programming", "Video games", "Reading classified military documents"},
+		Tags: []view.Interest{
+			{
+				Name:        "Programming",
+				ID:          1,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Coding",
+				ID:          4,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Reading classified military documents",
+				ID:          2,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+			{
+				Name:        "Video games",
+				ID:          3,
+				Description: "bla bla bla bla bla bla bla bla",
+			},
+		},
 	},
 }
 
@@ -53,7 +75,7 @@ templ UserCard(user User) {
 		@card.Footer() {
 			@tag.Container() {
 				for _, tagValue := range user.Tags {
-					@tag.Tag(tagValue)
+					@tag.Interest(tagValue)
 				}
 			}
 		}
@@ -67,7 +89,7 @@ templ HeaderWrapper(user User) {
 		</a>
 		<div>
 			@card.Title(user.Name)
-			@card.Author(user.Username, user.Link)
+			@card.Author(user.Username)
 		</div>
 	</div>
 }

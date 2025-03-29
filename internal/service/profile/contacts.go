@@ -25,6 +25,7 @@ func (s *implementation) UpdateContact(ctx context.Context, id domain.UserID, co
 	if err := s.db.UpdateContact(ctx, id, contact); err != nil {
 		return fmt.Errorf("s.db.UpdateContact: %w", err)
 	}
+
 	return nil
 }
 
@@ -36,6 +37,7 @@ func (s *implementation) RemoveContact(ctx context.Context, id domain.UserID, co
 	if err := s.db.RemoveContactByID(ctx, contactID); err != nil {
 		return fmt.Errorf("s.db.RemoveContactByID: %w", err)
 	}
+
 	return nil
 }
 

@@ -80,6 +80,9 @@ ProfileUpdate:
     about:
       type: string
       maxLength: 500
+    location:
+      type: string
+      maxLength: 50
 
 Contact:
   type: object

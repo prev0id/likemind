@@ -6,23 +6,23 @@ import (
 
 	"likemind/internal/common"
 	desc "likemind/internal/pkg/api"
+	"likemind/website/page"
 	error_page "likemind/website/page/error"
 	group_page "likemind/website/page/group"
 	profile_page "likemind/website/page/profile"
-	signin_page "likemind/website/page/signin"
 	signup_page "likemind/website/page/signup"
 	user_search_page "likemind/website/page/user_search"
 )
 
 func (s *Server) V1PageGroupGroupNameGet(ctx context.Context, params desc.V1PageGroupGroupNameGetParams) (desc.V1PageGroupGroupNameGetRes, error) {
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, group_page.Page()),
+		Data: common.RenderComponent(ctx, group_page.Page(group_page.State)),
 	}, nil
 }
 
 func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, profile_page.Page()),
+		Data: common.RenderComponent(ctx, profile_page.Page(profile_page.State)),
 	}, nil
 }
 
@@ -34,7 +34,7 @@ func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, 
 
 func (s *Server) V1PageSigninGet(ctx context.Context, params desc.V1PageSigninGetParams) (desc.V1PageSigninGetRes, error) {
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, signin_page.Page()),
+		Data: common.RenderComponent(ctx, page.SignIn()),
 	}, nil
 }
 

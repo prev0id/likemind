@@ -35,6 +35,7 @@ const (
 	UserAbout     = "about"
 	UserPassword  = "password"
 	UserEmail     = "email"
+	UserLocation  = "location"
 	UserCreatedAt = "created_at"
 	UserUpdatedAt = "updated_at"
 )
@@ -46,6 +47,7 @@ type User struct {
 	Surname   string    `db:"surname"`
 	About     string    `db:"abuot"`
 	Email     string    `db:"email"`
+	Location  string    `db:"location"`
 	Password  []byte    `db:"password"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`

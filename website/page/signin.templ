@@ -1,0 +1,19 @@
+package page
+
+import (
+	"likemind/website/view"
+	"likemind/website/widget"
+)
+
+templ SignIn() {
+	@HTML() {
+		@Head()
+		@Body() {
+			@widget.UnauthorizedHeader(view.SignInTab)
+			@Main() {
+				@widget.FormSignin()
+			}
+			@widget.Footer()
+		}
+	}
+}

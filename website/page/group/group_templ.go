@@ -10,84 +10,80 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
+	"time"
+
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/card"
 	"likemind/website/widget/header"
-	"likemind/website/widget/tag"
+	tag "likemind/website/widget/interest"
 	"likemind/website/widget/textarea"
 )
 
-type PageState struct {
-	Group GroupInfo
-	Posts []Post
-}
-
-type GroupInfo struct {
-	Name        string
-	Description string
-	Tags        []string
-}
-
-type Post struct {
-	Author     string
-	AuthorLink string
-	Text       string
-	Created    string
-	Comments   []Comment
-}
-
-type Comment struct {
-	Author     string
-	AuthorLink string
-	Text       string
-	Created    string
-}
-
-var state = PageState{
-	Group: GroupInfo{
-		Name:        "Cozy Baking Enthusiasts 🧁",
-		Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec diam lacus, condimentum in maximus sed, varius id libero. Aenean venenatis, ante at aliquam fringilla, nunc augue dignissim ante, sit amet lobortis elit magna eu lorem. Nam quis lorem augue. Vestibulum sollicitudin lacinia facilisis. Pellentesque congue condimentum ornare. Sed mauris sem, tempus vel ornare non, blandit eu orci. Integer ipsum leo, molestie at fermentum eget, tempor eu enim.",
-		Tags:        []string{"Home Baking", "Cozy", "Bread"},
-	},
-	Posts: []Post{
+var State = view.Group{
+	Name:        "Cozy Baking Enthusiasts 🧁",
+	Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec diam lacus, condimentum in maximus sed, varius id libero. Aenean venenatis, ante at aliquam fringilla, nunc augue dignissim ante, sit amet lobortis elit magna eu lorem. Nam quis lorem augue. Vestibulum sollicitudin lacinia facilisis. Pellentesque congue condimentum ornare. Sed mauris sem, tempus vel ornare non, blandit eu orci. Integer ipsum leo, molestie at fermentum eget, tempor eu enim.",
+	Posts: []view.Post{
 		{
-			Author:  "@prevoid",
-			Text:    "Just perfected my cinnamon swirl recipe! 🎉 The secret is using freshly ground cinnamon and letting the dough rest overnight. Who else loves the smell of freshly baked cinnamon rolls in the morning?",
-			Created: "2 hours ago",
-			Comments: []Comment{
+			AuthorNickname: "prevoid",
+			Content:        "Just perfected my cinnamon swirl recipe! 🎉 The secret is using freshly ground cinnamon and letting the dough rest overnight. Who else loves the smell of freshly baked cinnamon rolls in the morning?",
+			CreatedAt:      time.Now(),
+			Comments: []view.Comment{
 				{
-					Author:  "@MuffinMaster",
-					Created: "2 hour ago",
-					Text:    "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-3 * time.Hour),
+					Content:        "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
 				},
 				{
-					Author:  "@MuffinMaster",
-					Created: "1 hour ago",
-					Text:    "This sounds amazing! Could you share the recipe ratios you used?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-2 * time.Hour),
+					Content:        "This sounds amazing! Could you share the recipe ratios you used?",
 				},
 				{
-					Author:  "@MuffinMaster",
-					Created: "1 hour ago",
-					Text:    "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-1 * time.Hour),
+					Content:        "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
 				},
 			},
 		},
 		{
-			Author:  "@SourdoughSam",
-			Text:    "Help! My sourdough starter isn't as active after vacation. Any tips for reviving a neglected starter? I've tried feeding it twice daily but it's still sluggish 😔",
-			Created: "5 hours ago",
-			Comments: []Comment{
+			AuthorNickname: "@SourdoughSam",
+			Content:        "Help! My sourdough starter isn't as active after vacation. Any tips for reviving a neglected starter? I've tried feeding it twice daily but it's still sluggish 😔",
+			CreatedAt:      time.Now(),
+			Comments: []view.Comment{
 				{
-					Author:  "@MuffinMaster",
-					Created: "2 hour ago",
-					Text:    "Try using rye flour for a few feedings! The extra nutrients can help boost activity",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-30 * time.Minute),
+					Content:        "Try using rye flour for a few feedings! The extra nutrients can help boost activity",
 				},
 			},
 		},
 	},
+	Interests: []view.Interest{
+		{
+			Name:        "Programming",
+			ID:          1,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Coding",
+			ID:          4,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Reading classified military documents",
+			ID:          2,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Video games",
+			ID:          3,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+	},
 }
 
-func Page() templ.Component {
+func Page(state view.Group) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -156,7 +152,7 @@ func Page() templ.Component {
 							}()
 						}
 						ctx = templ.InitializeContext(ctx)
-						templ_7745c5c3_Err = card.Title(state.Group.Name).Render(ctx, templ_7745c5c3_Buffer)
+						templ_7745c5c3_Err = card.Title(state.Name).Render(ctx, templ_7745c5c3_Buffer)
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -170,7 +166,7 @@ func Page() templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = card.Text(state.Group.Description).Render(ctx, templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = card.Text(state.Description).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -190,8 +186,8 @@ func Page() templ.Component {
 							}()
 						}
 						ctx = templ.InitializeContext(ctx)
-						for _, tagValue := range state.Group.Tags {
-							templ_7745c5c3_Err = tag.Tag(tagValue).Render(ctx, templ_7745c5c3_Buffer)
+						for _, interest := range state.Interests {
+							templ_7745c5c3_Err = tag.Interest(interest).Render(ctx, templ_7745c5c3_Buffer)
 							if templ_7745c5c3_Err != nil {
 								return templ_7745c5c3_Err
 							}
@@ -230,7 +226,7 @@ func Page() templ.Component {
 	})
 }
 
-func PostComponent(post Post) templ.Component {
+func PostComponent(post view.Post) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -275,7 +271,7 @@ func PostComponent(post Post) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = card.Author(post.Author, post.AuthorLink).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = card.Author(post.AuthorNickname).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -283,7 +279,7 @@ func PostComponent(post Post) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = card.Date(post.Created).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = card.Date(post.CreatedAt).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -297,7 +293,7 @@ func PostComponent(post Post) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = card.Text(post.Text).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = card.Text(post.Content).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -337,7 +333,7 @@ func PostComponent(post Post) templ.Component {
 	})
 }
 
-func CommentDropdownComponent(comments []Comment) templ.Component {
+func CommentDropdownComponent(comments []view.Comment) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -365,7 +361,7 @@ func CommentDropdownComponent(comments []Comment) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(numberOfComments(len(comments)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/group/group.templ`, Line: 118, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/group/group.templ`, Line: 114, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -393,7 +389,7 @@ func CommentDropdownComponent(comments []Comment) templ.Component {
 	})
 }
 
-func CommentComponent(comment Comment) templ.Component {
+func CommentComponent(comment view.Comment) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -438,7 +434,7 @@ func CommentComponent(comment Comment) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = card.AuthorSM(comment.Author, comment.AuthorLink).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = card.AuthorSM(comment.AuthorNickname).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -446,7 +442,7 @@ func CommentComponent(comment Comment) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = card.Date(comment.Created).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = card.Date(comment.CreatedAt).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -460,7 +456,7 @@ func CommentComponent(comment Comment) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = card.TextSM(comment.Text).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = card.TextSM(comment.Content).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

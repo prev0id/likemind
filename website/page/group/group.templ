@@ -2,94 +2,90 @@ package group_page
 
 import (
 	"fmt"
+	"time"
+
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/card"
 	"likemind/website/widget/header"
-	"likemind/website/widget/tag"
+	tag "likemind/website/widget/interest"
 	"likemind/website/widget/textarea"
 )
 
-type PageState struct {
-	Group GroupInfo
-	Posts []Post
-}
-
-type GroupInfo struct {
-	Name        string
-	Description string
-	Tags        []string
-}
-
-type Post struct {
-	Author     string
-	AuthorLink string
-	Text       string
-	Created    string
-	Comments   []Comment
-}
-
-type Comment struct {
-	Author     string
-	AuthorLink string
-	Text       string
-	Created    string
-}
-
-var state = PageState{
-	Group: GroupInfo{
-		Name:        "Cozy Baking Enthusiasts 🧁",
-		Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec diam lacus, condimentum in maximus sed, varius id libero. Aenean venenatis, ante at aliquam fringilla, nunc augue dignissim ante, sit amet lobortis elit magna eu lorem. Nam quis lorem augue. Vestibulum sollicitudin lacinia facilisis. Pellentesque congue condimentum ornare. Sed mauris sem, tempus vel ornare non, blandit eu orci. Integer ipsum leo, molestie at fermentum eget, tempor eu enim.",
-		Tags:        []string{"Home Baking", "Cozy", "Bread"},
-	},
-	Posts: []Post{
+var State = view.Group{
+	Name:        "Cozy Baking Enthusiasts 🧁",
+	Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec diam lacus, condimentum in maximus sed, varius id libero. Aenean venenatis, ante at aliquam fringilla, nunc augue dignissim ante, sit amet lobortis elit magna eu lorem. Nam quis lorem augue. Vestibulum sollicitudin lacinia facilisis. Pellentesque congue condimentum ornare. Sed mauris sem, tempus vel ornare non, blandit eu orci. Integer ipsum leo, molestie at fermentum eget, tempor eu enim.",
+	Posts: []view.Post{
 		{
-			Author:  "@prevoid",
-			Text:    "Just perfected my cinnamon swirl recipe! 🎉 The secret is using freshly ground cinnamon and letting the dough rest overnight. Who else loves the smell of freshly baked cinnamon rolls in the morning?",
-			Created: "2 hours ago",
-			Comments: []Comment{
+			AuthorNickname: "prevoid",
+			Content:        "Just perfected my cinnamon swirl recipe! 🎉 The secret is using freshly ground cinnamon and letting the dough rest overnight. Who else loves the smell of freshly baked cinnamon rolls in the morning?",
+			CreatedAt:      time.Now(),
+			Comments: []view.Comment{
 				{
-					Author:  "@MuffinMaster",
-					Created: "2 hour ago",
-					Text:    "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-3 * time.Hour),
+					Content:        "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
 				},
 				{
-					Author:  "@MuffinMaster",
-					Created: "1 hour ago",
-					Text:    "This sounds amazing! Could you share the recipe ratios you used?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-2 * time.Hour),
+					Content:        "This sounds amazing! Could you share the recipe ratios you used?",
 				},
 				{
-					Author:  "@MuffinMaster",
-					Created: "1 hour ago",
-					Text:    "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-1 * time.Hour),
+					Content:        "Nothing beats that cinnamon aroma! Do you use any special type of flour?",
 				},
 			},
 		},
 		{
-			Author:  "@SourdoughSam",
-			Text:    "Help! My sourdough starter isn't as active after vacation. Any tips for reviving a neglected starter? I've tried feeding it twice daily but it's still sluggish 😔",
-			Created: "5 hours ago",
-			Comments: []Comment{
+			AuthorNickname: "@SourdoughSam",
+			Content:        "Help! My sourdough starter isn't as active after vacation. Any tips for reviving a neglected starter? I've tried feeding it twice daily but it's still sluggish 😔",
+			CreatedAt:      time.Now(),
+			Comments: []view.Comment{
 				{
-					Author:  "@MuffinMaster",
-					Created: "2 hour ago",
-					Text:    "Try using rye flour for a few feedings! The extra nutrients can help boost activity",
+					AuthorNickname: "@MuffinMaster",
+					CreatedAt:      time.Now().Add(-30 * time.Minute),
+					Content:        "Try using rye flour for a few feedings! The extra nutrients can help boost activity",
 				},
 			},
 		},
 	},
+	Interests: []view.Interest{
+		{
+			Name:        "Programming",
+			ID:          1,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Coding",
+			ID:          4,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Reading classified military documents",
+			ID:          2,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Video games",
+			ID:          3,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+	},
 }
 
-templ Page() {
+templ Page(state view.Group) {
 	@page.StandardLayout(header.AuthorizedTabs.Select(header.GroupTab)) {
 		@card.Container() {
 			@card.Card(nil) {
 				@card.Header() {
-					@card.Title(state.Group.Name)
+					@card.Title(state.Name)
 				}
-				@card.Text(state.Group.Description)
+				@card.Text(state.Description)
 				@tag.Container() {
-					for _, tagValue := range state.Group.Tags {
-						@tag.Tag(tagValue)
+					for _, interest := range state.Interests {
+						@tag.Interest(interest)
 					}
 				}
 			}
@@ -100,20 +96,20 @@ templ Page() {
 	}
 }
 
-templ PostComponent(post Post) {
+templ PostComponent(post view.Post) {
 	@card.Card(templ.Attributes{"x-data": "{ showComments: false }"}) {
 		@card.Header() {
-			@card.Author(post.Author, post.AuthorLink)
-			@card.Date(post.Created)
+			@card.Author(post.AuthorNickname)
+			@card.Date(post.CreatedAt)
 		}
-		@card.Text(post.Text)
+		@card.Text(post.Content)
 		@card.Footer() {
 			@CommentDropdownComponent(post.Comments)
 		}
 	}
 }
 
-templ CommentDropdownComponent(comments []Comment) {
+templ CommentDropdownComponent(comments []view.Comment) {
 	<button @click="showComments = !showComments" class="flex items-center text-red hover:text-orange">
 		<span class="mr-2">{ numberOfComments(len(comments)) } </span>
 		<svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showComments }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,13 +124,13 @@ templ CommentDropdownComponent(comments []Comment) {
 	</div>
 }
 
-templ CommentComponent(comment Comment) {
+templ CommentComponent(comment view.Comment) {
 	@card.PinkCard() {
 		@card.Header() {
-			@card.AuthorSM(comment.Author, comment.AuthorLink)
-			@card.Date(comment.Created)
+			@card.AuthorSM(comment.AuthorNickname)
+			@card.Date(comment.CreatedAt)
 		}
-		@card.TextSM(comment.Text)
+		@card.TextSM(comment.Content)
 	}
 }
 

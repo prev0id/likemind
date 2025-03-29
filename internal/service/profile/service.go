@@ -18,7 +18,6 @@ const (
 
 type Service interface {
 	DeleteProfile(ctx context.Context, id domain.UserID) error
-	GetProfile(ctx context.Context, id domain.UserID) (domain.Profile, error)
 
 	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
 	UpdateUser(ctx context.Context, user domain.User) error
@@ -90,14 +89,14 @@ func (s *implementation) DeleteProfile(ctx context.Context, id domain.UserID) er
 	return nil
 }
 
-func (s *implementation) GetProfile(ctx context.Context, id domain.UserID) (domain.Profile, error) {
-	profile, err := s.db.GetProfileByUserID(ctx, id)
-	if err != nil {
-		return domain.Profile{}, fmt.Errorf("s.db.GetProfileByUserID: %w", err)
-	}
+// func (s *implementation) GetProfile(ctx context.Context, id domain.UserID) (domain.Profile, error) {
+// 	profile, err := s.db.GetProfileByUserID(ctx, id)
+// 	if err != nil {
+// 		return domain.Profile{}, fmt.Errorf("s.db.GetProfileByUserID: %w", err)
+// 	}
 
-	return profile, nil
-}
+// 	return profile, nil
+// }
 
 func (s *implementation) GetUser(ctx context.Context, id domain.UserID) (domain.User, error) {
 	user, err := s.db.GetUserByID(ctx, id)

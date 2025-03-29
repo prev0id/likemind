@@ -12,8 +12,8 @@ import (
 )
 
 type Adapter interface {
-	GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error)
-	ListProfiles(ctx context.Context) ([]domain.Profile, error)
+	// GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error)
+	// ListProfiles(ctx context.Context) ([]domain.Profile, error)
 
 	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
 	UpdateUser(ctx context.Context, user domain.User) error
@@ -45,45 +45,51 @@ func NewAdapter(userDB user_repo.DB, contactDB contact_repo.DB, pictureDB profil
 	}
 }
 
-func (i *implementation) GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error) {
-	user, err := i.userDB.GetUserByID(ctx, int64(id))
-	if err != nil {
-		return domain.Profile{}, fmt.Errorf("i.userDB.GetUserByID: %w", err)
-	}
+// func (i *implementation) GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error) {
+// 	user, err := i.userDB.GetUserByID(ctx, int64(id))
+// 	if err != nil {
+// 		return domain.Profile{}, fmt.Errorf("i.userDB.GetUserByID: %w", err)
+// 	}
 
-	contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
-	if err != nil {
-		return domain.Profile{}, fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
-	}
+// 	contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
+// 	if err != nil {
+// 		return domain.Profile{}, fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
+// 	}
 
-	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
-	if err != nil {
-		return domain.Profile{}, fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
-	}
+// 	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
+// 	if err != nil {
+// 		return domain.Profile{}, fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
+// 	}
 
-	return domain.Profile{
-		User:            modelUserToDomain(user),
-		Contacts:        convert(contacts, modelContactToDomain),
-		ProfilePictures: convert(pictures, modelProfilePictureToDomain),
-	}, nil
-}
+// 	// TODO: multiple pictures
+// 	var picture string
+// 	if len(pictures) > 0 {
+// 		picture = pictures[0].ID
+// 	}
 
-func (i *implementation) ListProfiles(ctx context.Context) ([]domain.Profile, error) {
-	users, err := i.userDB.ListUsers(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("i.userDB.ListUsers: %w", err)
-	}
+// 	return domain.Profile{
+// 		User:     modelUserToDomain(user),
+// 		Contacts: convert(contacts, modelContactToDomain),
+// 		Picture:  picture,
+// 	}, nil
+// }
 
-	profiles := make([]domain.Profile, 0, len(users))
-	for _, user := range users {
-		profile, err := i.GetProfileByUserID(ctx, domain.UserID(user.ID))
-		if err != nil {
-			return nil, fmt.Errorf("i.GetProfileByUserID: %w", err)
-		}
-		profiles = append(profiles, profile)
-	}
-	return profiles, nil
-}
+// func (i *implementation) ListProfiles(ctx context.Context) ([]domain.Profile, error) {
+// 	users, err := i.userDB.ListUsers(ctx)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("i.userDB.ListUsers: %w", err)
+// 	}
+
+// 	profiles := make([]domain.Profile, 0, len(users))
+// 	for _, user := range users {
+// 		profile, err := i.GetProfileByUserID(ctx, domain.UserID(user.ID))
+// 		if err != nil {
+// 			return nil, fmt.Errorf("i.GetProfileByUserID: %w", err)
+// 		}
+// 		profiles = append(profiles, profile)
+// 	}
+// 	return profiles, nil
+// }
 
 func (i *implementation) CreateUser(ctx context.Context, user domain.User) (domain.UserID, error) {
 	id, err := i.userDB.CreateUser(ctx, domainUserToModel(user))
@@ -107,8 +113,8 @@ func (i *implementation) RemoveUser(ctx context.Context, id domain.UserID) error
 			return fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
 		}
 		for _, picture := range pictures {
-			if err := i.pictureDB.RemovePictureByID(ctx, picture.ID); err != nil {
-				return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", err)
+			if pictureErr := i.pictureDB.RemovePictureByID(ctx, picture.ID); pictureErr != nil {
+				return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", pictureErr)
 			}
 		}
 

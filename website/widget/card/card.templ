@@ -1,5 +1,11 @@
 package card
 
+import (
+	"likemind/internal/common"
+	"likemind/internal/domain"
+	"time"
+)
+
 templ Container() {
 	<div class="max-w-3xl mx-auto my-8 space-y-8">
 		{ children... }
@@ -51,27 +57,27 @@ templ Header() {
 	</div>
 }
 
-templ Author(author, link string) {
+templ Author(author string) {
 	<a
-		href={ templ.SafeURL(link) }
+		href={ templ.SafeURL(common.FillPath(domain.PathPageUser, map[string]string{domain.PathParamUsername: author})) }
 		class="text-orange font-medium hover:text-red"
 	>
 		{ author }
 	</a>
 }
 
-templ AuthorSM(author, link string) {
+templ AuthorSM(author string) {
 	<a
-		href={ templ.SafeURL(link) }
+		href={ templ.SafeURL(common.FillPath(domain.PathPageUser, map[string]string{domain.PathParamUsername: author})) }
 		class="text-orange/90 text-sm hover:text-red"
 	>
 		{ author }
 	</a>
 }
 
-templ Date(date string) {
+templ Date(date time.Time) {
 	<span class="text-black/60 text-sm ml-2">
-		{ date }
+		{ common.PrettyTime(date) }
 	</span>
 }
 

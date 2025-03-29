@@ -104,5 +104,8 @@ func updateUserFields(user domain.User, req *desc.ProfileUpdate) domain.User {
 	if about := req.GetAbout(); about.IsSet() {
 		user.About = about.Value
 	}
+	if location := req.GetLocation(); location.IsSet() {
+		user.Location = location.Value
+	}
 	return user
 }

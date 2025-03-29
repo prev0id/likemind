@@ -9,54 +9,62 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"likemind/internal/common"
+	"likemind/internal/domain"
 	"likemind/website/page"
+	"likemind/website/view"
 	"likemind/website/widget/contacts"
 	"likemind/website/widget/header"
+	tag "likemind/website/widget/interest"
 	"likemind/website/widget/modal"
-	"likemind/website/widget/tag"
+	"strconv"
 )
 
-type Profile struct {
-	Picture  string
-	Name     string
-	Nickname string
-	Location string
-	About    string
-	Contacts []Contact
-	Tags     []string
-}
-
-type Contact struct {
-	Platform string
-	Link     string
-	ID       string
-}
-
-var state = Profile{
-	Picture: "/static/test_image1.jpg",
-	// Picture: "https://images.squarespace-cdn.com/content/v1/5ee52f7d9edc8a7ee635591a/8df50655-6b68-460e-ad6c-5230001b9d5a/240404+-+063944+-+001.jpg?format=2500w",
-	Name:     "Semyon Deev",
-	Nickname: "@Prevoid",
-	Location: "Moscow, Russia",
-	About:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
-	Contacts: []Contact{
+var State = view.Profile{
+	PictureID: "/static/test_image1.jpg",
+	Name:      "Semyon Deev",
+	Nickname:  "prevoid",
+	Location:  "Moscow, Russia",
+	About:     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pharetra finibus libero in mattis. Etiam vulputate dolor urna, in lobortis metus finibus non. Vivamus fermentum in risus eu vestibulum. Cras et ultricies felis. Proin eu dui eget turpis egestas rhoncus. Duis laoreet orci cursus, ultrices massa eu, tempor est. Quisque.",
+	Contacts: []view.Contact{
 		{
 			Platform: "Telegram",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 		{
 			Platform: "VK",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 		{
 			Platform: "LinkedIn",
-			Link:     "https://t.me/prevoid",
+			Value:    "https://t.me/prevoid",
 		},
 	},
-	Tags: []string{"Programming", "Video games", "Reading classified military documents"},
+	Interests: []view.Interest{
+		{
+			Name:        "Programming",
+			ID:          1,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Coding",
+			ID:          4,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Reading classified military documents",
+			ID:          2,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+		{
+			Name:        "Video games",
+			ID:          3,
+			Description: "bla bla bla bla bla bla bla bla",
+		},
+	},
 }
 
-func Page() templ.Component {
+func Page(state view.Profile) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -101,7 +109,7 @@ func Page() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = ProfilePicture(state.Picture).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = ProfilePicture(state.PictureID).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -200,7 +208,7 @@ func Page() templ.Component {
 					var templ_7745c5c3_Var7 string
 					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(state.About)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 65, Col: 22}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 73, Col: 22}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 					if templ_7745c5c3_Err != nil {
@@ -222,8 +230,8 @@ func Page() templ.Component {
 							}()
 						}
 						ctx = templ.InitializeContext(ctx)
-						for _, tagValue := range state.Tags {
-							templ_7745c5c3_Err = tag.Tag(tagValue).Render(ctx, templ_7745c5c3_Buffer)
+						for _, interest := range state.Interests {
+							templ_7745c5c3_Err = tag.Interest(interest).Render(ctx, templ_7745c5c3_Buffer)
 							if templ_7745c5c3_Err != nil {
 								return templ_7745c5c3_Err
 							}
@@ -293,7 +301,7 @@ func Page() templ.Component {
 						}
 						ctx = templ.InitializeContext(ctx)
 						for _, contact := range state.Contacts {
-							templ_7745c5c3_Err = contacts.Link(contact.Platform, contact.Link).Render(ctx, templ_7745c5c3_Buffer)
+							templ_7745c5c3_Err = contacts.Link(contact.Platform, contact.Value).Render(ctx, templ_7745c5c3_Buffer)
 							if templ_7745c5c3_Err != nil {
 								return templ_7745c5c3_Err
 							}
@@ -363,7 +371,7 @@ func VSplit() templ.Component {
 	})
 }
 
-func ProfilePicture(link string) templ.Component {
+func ProfilePicture(pictureID string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -389,9 +397,9 @@ func ProfilePicture(link string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(link)
+		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(pictureID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 102, Col: 13}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 110, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -485,7 +493,7 @@ func Name(name, nickname string) templ.Component {
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(name + " (" + nickname + ")")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 121, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 129, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
@@ -527,7 +535,7 @@ func Location(location string) templ.Component {
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(location)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 127, Col: 12}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 135, Col: 12}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -598,7 +606,7 @@ func Semibold(text string) templ.Component {
 		var templ_7745c5c3_Var22 string
 		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 137, Col: 8}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 145, Col: 8}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
@@ -759,7 +767,7 @@ func EditProfileButton() templ.Component {
 	})
 }
 
-func EditContactsButton(contacts []Contact) templ.Component {
+func EditContactsButton(contacts []view.Contact) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -890,7 +898,7 @@ func UpdateProfileImage() templ.Component {
 	})
 }
 
-func UpdateContacts(contacts []Contact) templ.Component {
+func UpdateContacts(contacts []view.Contact) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -923,7 +931,7 @@ func UpdateContacts(contacts []Contact) templ.Component {
 			var templ_7745c5c3_Var34 string
 			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Platform)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 357, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 365, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 			if templ_7745c5c3_Err != nil {
@@ -934,9 +942,9 @@ func UpdateContacts(contacts []Contact) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var35 string
-			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Link)
+			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Value)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 364, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 372, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 			if templ_7745c5c3_Err != nil {
@@ -947,9 +955,14 @@ func UpdateContacts(contacts []Contact) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var36 string
-			templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs("/contacts/1" + contact.ID)
+			templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(common.FillPath(
+				domain.PathAPIContactID,
+				map[string]string{
+					domain.PathParamContactID: strconv.FormatInt(contact.ID, 10),
+				},
+			))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 368, Col: 43}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 381, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 			if templ_7745c5c3_Err != nil {

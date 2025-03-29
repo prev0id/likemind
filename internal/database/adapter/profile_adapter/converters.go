@@ -22,6 +22,7 @@ func domainUserToModel(u domain.User) model.User {
 		About:    u.About,
 		Password: u.HashedPassword,
 		Email:    string(u.Login),
+		Location: u.Location,
 	}
 }
 
@@ -34,6 +35,7 @@ func modelUserToDomain(u model.User) domain.User {
 		About:          u.About,
 		HashedPassword: u.Password,
 		Login:          domain.Email(u.About),
+		Location:       u.Location,
 	}
 }
 

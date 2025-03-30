@@ -13,7 +13,7 @@ import (
 	"likemind/website/widget"
 )
 
-func SignIn() templ.Component {
+func SignUp() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -66,7 +66,7 @@ func SignIn() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = widget.UnauthorizedHeader(view.SignInTab).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = widget.UnauthorizedHeader(view.SignUpTab).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -86,7 +86,7 @@ func SignIn() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = widget.FormSignIn().Render(ctx, templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = widget.FormSignUp().Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

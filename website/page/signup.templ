@@ -5,13 +5,13 @@ import (
 	"likemind/website/widget"
 )
 
-templ SignIn() {
+templ SignUp() {
 	@HTML() {
 		@Head()
 		@Body() {
-			@widget.UnauthorizedHeader(view.SignInTab)
+			@widget.UnauthorizedHeader(view.SignUpTab)
 			@Main() {
-				@widget.FormSignIn()
+				@widget.FormSignUp()
 			}
 			@widget.Footer()
 		}

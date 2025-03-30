@@ -6,7 +6,7 @@ import (
 	common_widget "likemind/website/widget/common"
 )
 
-templ FormSignin() {
+templ FormSignIn() {
 	@authFormWrapper() {
 		@common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPISignin}}) {
 			<h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl">
@@ -42,6 +42,91 @@ templ FormSignin() {
 				@common_widget.Link(view.Link{
 					Href: domain.PathPageSignUp,
 					Text: " Create here",
+				})
+			}
+		}
+	}
+}
+
+templ FormSignUp() {
+	@authFormWrapper() {
+		@common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPISignin}}) {
+			<h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl">
+				Create your an account
+			</h1>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Email",
+					For:  "email",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "email",
+					Type:        "email",
+					Placeholder: "mail@example.com",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Password",
+					For:  "password",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "password",
+					Type:        "password",
+					Placeholder: "********",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Username",
+					For:  "username",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "username",
+					Type:        "string",
+					Placeholder: "prevoid",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Name",
+					For:  "name",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "name",
+					Type:        "text",
+					Placeholder: "Semyon",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Surname",
+					For:  "surname",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "surname",
+					Type:        "text",
+					Placeholder: "Deev",
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Date of birth",
+					For:  "date_of_birth",
+				})
+				@common_widget.Input(view.Input{
+					Name: "date_of_birth",
+					Type: "date",
+				})
+			</div>
+			@common_widget.Button(view.Button{Type: "submit"}) {
+				Login
+			}
+			@common_widget.TextSM() {
+				Already have an account?
+				@common_widget.Link(view.Link{
+					Href: domain.PathPageSignUp,
+					Text: " log in here",
 				})
 			}
 		}

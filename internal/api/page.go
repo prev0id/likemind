@@ -10,7 +10,6 @@ import (
 	error_page "likemind/website/page/error"
 	group_page "likemind/website/page/group"
 	profile_page "likemind/website/page/profile"
-	signup_page "likemind/website/page/signup"
 	user_search_page "likemind/website/page/user_search"
 )
 
@@ -40,7 +39,7 @@ func (s *Server) V1PageSigninGet(ctx context.Context, params desc.V1PageSigninGe
 
 func (s *Server) V1PageSignupGet(ctx context.Context, params desc.V1PageSignupGetParams) (desc.V1PageSignupGetRes, error) {
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, signup_page.Page()),
+		Data: common.RenderComponent(ctx, page.SignUp()),
 	}, nil
 }
 

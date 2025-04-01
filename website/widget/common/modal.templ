@@ -1,0 +1,29 @@
+package common_widget
+
+import "likemind/website/view"
+
+templ Modal(modal view.Modal) {
+	<div
+		id={ modal.ID }
+		class="py-6 w-full bg-white px-7 max-w-3xl rounded-lg max-h-[90%] overflow-auto"
+		popover="auto"
+	>
+		<div class="flex items-center justify-between pb-2">
+			<h3 class="text-lg font-semibold">{ modal.Title }</h3>
+			@ModalCloseButton(modal)
+		</div>
+		{ children... }
+	</div>
+}
+
+templ ModalCloseButton(modal view.Modal) {
+	<button
+		popovertarget={ modal.ID }
+		popovertargetaction="hide"
+		class="absolute top-0 right-0 flex items-center justify-center w-8 h-8 mt-5 mr-5 text-black rounded-full hover:text-red hover:bg-pink"
+	>
+		<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+		</svg>
+	</button>
+}

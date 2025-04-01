@@ -5,6 +5,7 @@ import (
 	"likemind/internal/domain"
 	"likemind/website/page"
 	"likemind/website/view"
+	common_widget "likemind/website/widget/common"
 	"likemind/website/widget/contacts"
 	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
@@ -114,11 +115,13 @@ templ ProfilePicture(pictureID string) {
 			x-show="hover"
 			class="absolute inset-0 cursor-pointer flex items-center justify-center transition duration-300"
 		>
-			@modal.Wrapper() {
-				@modal.ToggleButton("Upload your new avatar")
-				@modal.Content("Upload your new avatar") {
-					@UpdateProfileImage()
+			<div>
+				@common_widget.Button(view.Button{PopoverTarget: "modal-upload-pfp", PopoverAction: "show"}) {
+					Upload your new avatar
 				}
+			</div>
+			@common_widget.Modal(view.Modal{ID: "modal-upload-pfp", Title: "Upload your new avatar"}) {
+				@UpdateProfileImage()
 			}
 		</div>
 	</div>

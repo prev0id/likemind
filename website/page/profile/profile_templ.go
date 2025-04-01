@@ -13,6 +13,7 @@ import (
 	"likemind/internal/domain"
 	"likemind/website/page"
 	"likemind/website/view"
+	common_widget "likemind/website/widget/common"
 	"likemind/website/widget/contacts"
 	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
@@ -208,7 +209,7 @@ func Page(state view.Profile) templ.Component {
 					var templ_7745c5c3_Var7 string
 					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(state.About)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 73, Col: 22}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 74, Col: 22}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 					if templ_7745c5c3_Err != nil {
@@ -399,13 +400,13 @@ func ProfilePicture(pictureID string) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(pictureID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 110, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 111, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" alt=\"Profile Avatar\"><div x-show=\"hover\" class=\"absolute inset-0 cursor-pointer flex items-center justify-center transition duration-300\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\" alt=\"Profile Avatar\"><div x-show=\"hover\" class=\"absolute inset-0 cursor-pointer flex items-center justify-center transition duration-300\"><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -421,43 +422,43 @@ func ProfilePicture(pictureID string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = modal.ToggleButton("Upload your new avatar").Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, " ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Var15 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-				if !templ_7745c5c3_IsBuffer {
-					defer func() {
-						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-						if templ_7745c5c3_Err == nil {
-							templ_7745c5c3_Err = templ_7745c5c3_BufErr
-						}
-					}()
-				}
-				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = UpdateProfileImage().Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				return nil
-			})
-			templ_7745c5c3_Err = modal.Content("Upload your new avatar").Render(templ.WithChildren(ctx, templ_7745c5c3_Var15), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "Upload your new avatar")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = modal.Wrapper().Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = common_widget.Button(view.Button{PopoverTarget: "modal-upload-pfp", PopoverAction: "show"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var15 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = UpdateProfileImage().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = common_widget.Modal(view.Modal{ID: "modal-upload-pfp", Title: "Upload your new avatar"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var15), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -486,20 +487,20 @@ func Name(name, nickname string) templ.Component {
 			templ_7745c5c3_Var16 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<h2 class=\"text-xl font-semibold\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<h2 class=\"text-xl font-semibold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(name + " (" + nickname + ")")
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 129, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 132, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -528,20 +529,20 @@ func Location(location string) templ.Component {
 			templ_7745c5c3_Var18 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(location)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 135, Col: 12}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 138, Col: 12}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -570,7 +571,7 @@ func LineBreak() templ.Component {
 			templ_7745c5c3_Var20 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<hr class=\"my-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<hr class=\"my-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -599,20 +600,20 @@ func Semibold(text string) templ.Component {
 			templ_7745c5c3_Var21 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<h3 class=\"font-semibold\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<h3 class=\"font-semibold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var22 string
 		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(text)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 145, Col: 8}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 148, Col: 8}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "</h3>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "</h3>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -641,7 +642,7 @@ func GridRow() templ.Component {
 			templ_7745c5c3_Var23 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "<div class=\"grid grid-flow-row gap-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "<div class=\"grid grid-flow-row gap-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -649,7 +650,7 @@ func GridRow() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -678,7 +679,7 @@ func HeaderWithIcon() templ.Component {
 			templ_7745c5c3_Var24 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<div class=\"flex justify-between items-center\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"flex justify-between items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -686,7 +687,7 @@ func HeaderWithIcon() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -731,7 +732,7 @@ func EditProfileButton() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -804,7 +805,7 @@ func EditContactsButton(contacts []view.Contact) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -861,7 +862,7 @@ func UpdateProfileForm() templ.Component {
 			templ_7745c5c3_Var31 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<form class=\"space-y-6 max-w-2xl mx-auto\"><div><label class=\"block text-sm font-medium text-black mb-2\">Location 🌍</label> <input type=\"text\" placeholder=\"City, Country\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red focus:ring-2 focus:ring-red/20 transition-all placeholder:text-red/50\"></div><div><label class=\"block text-sm font-medium text-black mb-2\">Birthday 🎂</label><div class=\"relative\"><input type=\"date\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red focus:ring-2 focus:ring-red/20 appearance-none pr-10\"> <svg class=\"w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-red\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg></div></div><div x-data=\"{ emailOpen: false }\" class=\"bg-white rounded-xl p-5 shadow-sm\"><button type=\"button\" @click=\"emailOpen = !emailOpen\" class=\"w-full flex justify-between items-center text-red hover:text-orange\"><span class=\"font-medium\">Update Email ✉️</span> <svg class=\"w-5 h-5 transition-transform\" :class=\"{ &#39;rotate-180&#39;: emailOpen }\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path></svg></button><div x-show=\"emailOpen\" x-collapse class=\"mt-4 space-y-4\"><input type=\"password\" placeholder=\"Current Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"email\" placeholder=\"New Email Address\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"></div></div><div x-data=\"{ passwordOpen: false }\" class=\"bg-white rounded-xl p-5 shadow-sm\"><button type=\"button\" @click=\"passwordOpen = !passwordOpen\" class=\"w-full flex justify-between items-center text-red hover:text-orange\"><span class=\"font-medium\">Change Password 🔒</span> <svg class=\"w-5 h-5 transition-transform\" :class=\"{ &#39;rotate-180&#39;: passwordOpen }\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path></svg></button><div x-show=\"passwordOpen\" x-collapse class=\"mt-4 space-y-4\"><input type=\"password\" placeholder=\"Current Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"password\" placeholder=\"New Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"password\" placeholder=\"Confirm New Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"></div></div><button type=\"submit\" class=\"w-full bg-red text-white py-3 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15\"></path></svg> Save Changes</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<form class=\"space-y-6 max-w-2xl mx-auto\"><div><label class=\"block text-sm font-medium text-black mb-2\">Location 🌍</label> <input type=\"text\" placeholder=\"City, Country\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red focus:ring-2 focus:ring-red/20 transition-all placeholder:text-red/50\"></div><div><label class=\"block text-sm font-medium text-black mb-2\">Birthday 🎂</label><div class=\"relative\"><input type=\"date\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red focus:ring-2 focus:ring-red/20 appearance-none pr-10\"> <svg class=\"w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-red\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg></div></div><div x-data=\"{ emailOpen: false }\" class=\"bg-white rounded-xl p-5 shadow-sm\"><button type=\"button\" @click=\"emailOpen = !emailOpen\" class=\"w-full flex justify-between items-center text-red hover:text-orange\"><span class=\"font-medium\">Update Email ✉️</span> <svg class=\"w-5 h-5 transition-transform\" :class=\"{ &#39;rotate-180&#39;: emailOpen }\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path></svg></button><div x-show=\"emailOpen\" x-collapse class=\"mt-4 space-y-4\"><input type=\"password\" placeholder=\"Current Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"email\" placeholder=\"New Email Address\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"></div></div><div x-data=\"{ passwordOpen: false }\" class=\"bg-white rounded-xl p-5 shadow-sm\"><button type=\"button\" @click=\"passwordOpen = !passwordOpen\" class=\"w-full flex justify-between items-center text-red hover:text-orange\"><span class=\"font-medium\">Change Password 🔒</span> <svg class=\"w-5 h-5 transition-transform\" :class=\"{ &#39;rotate-180&#39;: passwordOpen }\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path></svg></button><div x-show=\"passwordOpen\" x-collapse class=\"mt-4 space-y-4\"><input type=\"password\" placeholder=\"Current Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"password\" placeholder=\"New Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"> <input type=\"password\" placeholder=\"Confirm New Password\" class=\"w-full px-4 py-3 rounded-lg bg-pink/30 border-2 border-pink focus:border-red\"></div></div><button type=\"submit\" class=\"w-full bg-red text-white py-3 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15\"></path></svg> Save Changes</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -890,7 +891,7 @@ func UpdateProfileImage() templ.Component {
 			templ_7745c5c3_Var32 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<div class=\"max-w-2xl mx-auto\" x-data=\"{\n    isDragging: false,\n    previewImage: null,\n    errorMessage: null,\n    fileInput: null\n }\" @drop.prevent=\"isDragging = false;\n    const file = $event.dataTransfer.files[0];\n    if (file &amp;&amp; (file.type === &#39;image/jpeg&#39; || file.type === &#39;image/png&#39;)) {\n        previewImage = URL.createObjectURL(file);\n        fileInput = file;\n        errorMessage = null;\n    } else {\n        errorMessage = &#39;Only JPG/PNG files allowed&#39;;\n    }\" @dragover.prevent=\"isDragging = true\" @dragleave.prevent=\"isDragging = false\"><!-- Upload Container --><div class=\"relative group\"><div :class=\"{\n        &#39;border-red bg-pink/30&#39;: isDragging,\n        &#39;border-pink bg-pink/20&#39;: !isDragging\n      }\" class=\"border-2 border-dashed rounded-xl w-48 h-48 mx-auto flex items-center justify-center transition-all cursor-pointer\" @click=\"$refs.fileInput.click()\"><!-- Preview Image --><template x-if=\"previewImage\"><img :src=\"previewImage\" class=\"w-full h-full rounded-lg object-cover absolute inset-0 shadow-sm\"></template><!-- Upload Content --><div class=\"text-center p-4\" x-show=\"!previewImage\"><svg class=\"w-8 h-8 mx-auto text-red mb-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-red text-sm font-medium block\">Click or drag to upload</span> <span class=\"text-red/70 text-xs mt-1 block\">JPG/PNG only</span></div></div><!-- Remove Button --><button x-show=\"previewImage\" @click=\"previewImage = null; fileInput = null\" class=\"absolute -top-2 -right-2 bg-red text-white p-1.5 rounded-full hover:bg-orange transition-colors shadow-sm\"><svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Error Message --><p x-show=\"errorMessage\" class=\"text-red text-sm text-center mt-2\" x-text=\"errorMessage\"></p><!-- Hidden File Input --><input type=\"file\" x-ref=\"fileInput\" @change=\"\n           const file = $event.target.files[0];\n           if (file &amp;&amp; (file.type === &#39;image/jpeg&#39; || file.type === &#39;image/png&#39;)) {\n             previewImage = URL.createObjectURL(file);\n             fileInput = file;\n             errorMessage = null;\n           } else {\n             errorMessage = &#39;Only JPG/PNG files allowed&#39;;\n           }\n         \" class=\"hidden\" accept=\"image/jpeg, image/png\"><!-- Upload Button --><button x-show=\"previewImage\" type=\"button\" class=\"mt-4 mx-auto bg-red text-white px-6 py-2 rounded-lg hover:bg-orange transition-colors flex items-center gap-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"></path></svg> Save New Avatar</button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"max-w-2xl mx-auto\" x-data=\"{\n    isDragging: false,\n    previewImage: null,\n    errorMessage: null,\n    fileInput: null\n }\" @drop.prevent=\"isDragging = false;\n    const file = $event.dataTransfer.files[0];\n    if (file &amp;&amp; (file.type === &#39;image/jpeg&#39; || file.type === &#39;image/png&#39;)) {\n        previewImage = URL.createObjectURL(file);\n        fileInput = file;\n        errorMessage = null;\n    } else {\n        errorMessage = &#39;Only JPG/PNG files allowed&#39;;\n    }\" @dragover.prevent=\"isDragging = true\" @dragleave.prevent=\"isDragging = false\"><!-- Upload Container --><div class=\"relative group\"><div :class=\"{\n        &#39;border-red bg-pink/30&#39;: isDragging,\n        &#39;border-pink bg-pink/20&#39;: !isDragging\n      }\" class=\"border-2 border-dashed rounded-xl w-48 h-48 mx-auto flex items-center justify-center transition-all cursor-pointer\" @click=\"$refs.fileInput.click()\"><!-- Preview Image --><template x-if=\"previewImage\"><img :src=\"previewImage\" class=\"w-full h-full rounded-lg object-cover absolute inset-0 shadow-sm\"></template><!-- Upload Content --><div class=\"text-center p-4\" x-show=\"!previewImage\"><svg class=\"w-8 h-8 mx-auto text-red mb-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg> <span class=\"text-red text-sm font-medium block\">Click or drag to upload</span> <span class=\"text-red/70 text-xs mt-1 block\">JPG/PNG only</span></div></div><!-- Remove Button --><button x-show=\"previewImage\" @click=\"previewImage = null; fileInput = null\" class=\"absolute -top-2 -right-2 bg-red text-white p-1.5 rounded-full hover:bg-orange transition-colors shadow-sm\"><svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><!-- Error Message --><p x-show=\"errorMessage\" class=\"text-red text-sm text-center mt-2\" x-text=\"errorMessage\"></p><!-- Hidden File Input --><input type=\"file\" x-ref=\"fileInput\" @change=\"\n           const file = $event.target.files[0];\n           if (file &amp;&amp; (file.type === &#39;image/jpeg&#39; || file.type === &#39;image/png&#39;)) {\n             previewImage = URL.createObjectURL(file);\n             fileInput = file;\n             errorMessage = null;\n           } else {\n             errorMessage = &#39;Only JPG/PNG files allowed&#39;;\n           }\n         \" class=\"hidden\" accept=\"image/jpeg, image/png\"><!-- Upload Button --><button x-show=\"previewImage\" type=\"button\" class=\"mt-4 mx-auto bg-red text-white px-6 py-2 rounded-lg hover:bg-orange transition-colors flex items-center gap-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12\"></path></svg> Save New Avatar</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -919,38 +920,38 @@ func UpdateContacts(contacts []view.Contact) templ.Component {
 			templ_7745c5c3_Var33 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div id=\"contacts-container\" class=\"space-y-3\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div id=\"contacts-container\" class=\"space-y-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, contact := range contacts {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"p-4 flex items-center gap-4\"><input type=\"text\" name=\"platform\" disabled=\"true\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<div class=\"p-4 flex items-center gap-4\"><input type=\"text\" name=\"platform\" disabled=\"true\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var34 string
 			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Platform)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 365, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 368, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\" class=\"flex-1 px-3 py-2 rounded-lg text-black/90 bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <input type=\"url\" name=\"link\" disabled=\"true\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\" class=\"flex-1 px-3 py-2 rounded-lg text-black/90 bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <input type=\"url\" name=\"link\" disabled=\"true\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var35 string
 			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Value)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 372, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 375, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\" class=\"flex-1 px-3 py-2 rounded-lg text-black/90 bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <button hx-delete=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" class=\"flex-1 px-3 py-2 rounded-lg text-black/90 bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <button hx-delete=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -962,18 +963,18 @@ func UpdateContacts(contacts []view.Contact) templ.Component {
 				},
 			))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 381, Col: 6}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile/profile.templ`, Line: 384, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\" hx-target=\"#contacts-container\" hx-swap=\"outerHTML\" class=\"text-red hover:text-orange p-2 rounded-full hover:bg-pink transition-colors\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "\" hx-target=\"#contacts-container\" hx-swap=\"outerHTML\" class=\"text-red hover:text-orange p-2 rounded-full hover:bg-pink transition-colors\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<form hx-post=\"/contacts\" hx-target=\"#contacts-container\" hx-swap=\"outerHTML\" class=\"bg-white rounded-lg p-4 shadow-sm flex items-center gap-4\"><input type=\"text\" name=\"platform\" placeholder=\"New Platform\" required class=\"flex-1 px-3 py-2 rounded-lg bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <input type=\"url\" name=\"link\" placeholder=\"https://example.com\" required class=\"flex-1 px-3 py-2 rounded-lg bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <button type=\"submit\" class=\"bg-red text-white px-4 py-2 rounded-lg hover:bg-orange transition-colors\">Add</button></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<form hx-post=\"/contacts\" hx-target=\"#contacts-container\" hx-swap=\"outerHTML\" class=\"bg-white rounded-lg p-4 shadow-sm flex items-center gap-4\"><input type=\"text\" name=\"platform\" placeholder=\"New Platform\" required class=\"flex-1 px-3 py-2 rounded-lg bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <input type=\"url\" name=\"link\" placeholder=\"https://example.com\" required class=\"flex-1 px-3 py-2 rounded-lg bg-pink/30 border border-pink focus:border-red focus:ring-2 focus:ring-red/20\"> <button type=\"submit\" class=\"bg-red text-white px-4 py-2 rounded-lg hover:bg-orange transition-colors\">Add</button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

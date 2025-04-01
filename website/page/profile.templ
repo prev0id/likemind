@@ -1,0 +1,38 @@
+package page
+
+import "likemind/website/view"
+
+templ Profile(state view.Profile) {
+	// @page.StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
+	// 	@VSplit() {
+	// 		@ProfilePicture(state.PictureID)
+	// 		@GridRow() {
+	// 			@HeaderWithIcon() {
+	// 				@GridRow() {
+	// 					@Name(state.Name, state.Nickname)
+	// 					@Location(state.Location)
+	// 				}
+	// 				@EditProfileButton()
+	// 			}
+	// 			@LineBreak()
+	// 			@Semibold("About")
+	// 			<div>{ state.About }</div>
+	// 			@tag.Container() {
+	// 				for _, interest := range state.Interests {
+	// 					@tag.Interest(interest)
+	// 				}
+	// 			}
+	// 			@LineBreak()
+	// 			@HeaderWithIcon() {
+	// 				@Semibold("Contact me at:")
+	// 				@EditContactsButton(state.Contacts)
+	// 			}
+	// 			@contacts.Container() {
+	// 				for _, contact := range state.Contacts {
+	// 					@contacts.Link(contact.Platform, contact.Value)
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+}

@@ -18,8 +18,10 @@ type InputLabel struct {
 }
 
 type Button struct {
-	Type       string
-	Attributes templ.Attributes
+	Type          string
+	Attributes    templ.Attributes
+	PopoverTarget string
+	PopoverAction string
 }
 
 type Form struct {

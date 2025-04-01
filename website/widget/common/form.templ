@@ -46,8 +46,16 @@ templ InputLabel(label view.InputLabel) {
 
 templ Button(button view.Button) {
 	<button
-		type={ button.Type }
-		class="w-full bg-red text-white py-3 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2"
+		if button.Type != "" {
+			type={ button.Type }
+		}
+		if button.PopoverTarget != "" {
+			popovertarget={ button.PopoverTarget }
+		}
+		if button.PopoverAction != "" {
+			popovertargetaction={ button.PopoverAction }
+		}
+		class="w-full bg-red text-white py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2"
 		{ button.Attributes... }
 	>
 		{ children... }

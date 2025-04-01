@@ -77,7 +77,7 @@ func Link(link view.Link) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"font-medium hover:text-orange focus:ring-2 focus:outline-hidden focus:ring-orange focus:border-orange\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

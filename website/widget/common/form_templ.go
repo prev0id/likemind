@@ -185,7 +185,7 @@ func Input(input view.Input) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"w-full px-4 py-3 rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 font-semibold focus:outline-none focus:ring-orange focus:border-orange\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" class=\"w-full px-4 py-3 rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 font-semibold focus:outline-hidden focus:ring-orange focus:border-orange\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

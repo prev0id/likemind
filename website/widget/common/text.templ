@@ -11,7 +11,7 @@ templ TextSM() {
 templ Link(link view.Link) {
 	<a
 		href={ templ.SafeURL(link.Href) }
-		class="font-medium hover:text-orange focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange"
+		class="font-medium hover:text-orange focus:ring-2 focus:outline-hidden focus:ring-orange focus:border-orange"
 		{ link.Attributes... }
 	>
 		{ link.Text }

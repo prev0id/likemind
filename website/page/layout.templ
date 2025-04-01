@@ -18,7 +18,7 @@ templ StandardLayout(headerState ...header.State) {
 			if len(headerState) > 0 {
 				@header.Component(headerState[0])
 			}
-			<main class="flex-grow flex bg-white text-black">
+			<main class="grow flex bg-white text-black">
 				<div class="min-h-full min-w-full">
 					{ children... }
 				</div>
@@ -52,7 +52,7 @@ templ Body() {
 }
 
 templ Main() {
-	<main class="flex-grow flex bg-white text-black">
+	<main class="grow flex bg-white text-black">
 		<div class="min-h-full min-w-full">
 			{ children... }
 		</div>

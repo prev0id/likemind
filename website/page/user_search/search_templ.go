@@ -380,7 +380,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<div x-data=\"{ open: false, search: &#39;&#39; }\" class=\"relative col-span-2\"><button type=\"button\" @click=\"open = !open\" class=\"w-full px-4 py-2 border border-black rounded-full bg-white text-left focus:outline-none\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<div x-data=\"{ open: false, search: &#39;&#39; }\" class=\"relative col-span-2\"><button type=\"button\" @click=\"open = !open\" class=\"w-full px-4 py-2 border border-black rounded-full bg-white text-left focus:outline-hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -393,7 +393,7 @@ func DropdownSearch(name string, groups []InterestGroup) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</button><div x-show=\"open\" @click.away=\"open = false\" class=\"absolute z-10 mt-2 w-full bg-white shadow-lg rounded border\"><div class=\"p-2 border-b border-black\"><input type=\"text\" x-model=\"search\" placeholder=\"Search interests...\" class=\"w-full px-2 py-1 border border-black rounded-full focus:outline-none\"></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</button><div x-show=\"open\" @click.away=\"open = false\" class=\"absolute z-10 mt-2 w-full bg-white shadow-lg rounded-sm border\"><div class=\"p-2 border-b border-black\"><input type=\"text\" x-model=\"search\" placeholder=\"Search interests...\" class=\"w-full px-2 py-1 border border-black rounded-full focus:outline-hidden\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

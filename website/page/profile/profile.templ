@@ -106,7 +106,7 @@ templ ProfilePicture(pictureID string) {
 		class="relative bg-yellow w-full h-full rounded-3xl flex items-center justify-center"
 	>
 		<img
-			:class="hover ? 'filter blur-sm transition duration-300' : 'transition duration-300'"
+			:class="hover ? 'filter blur-xs transition duration-300' : 'transition duration-300'"
 			class="max-w-full max-h-[100rem] overflow-hidden rounded-3xl"
 			src={ pictureID }
 			alt="Profile Avatar"
@@ -201,7 +201,7 @@ templ UpdateProfileForm() {
 				</svg>
 			</div>
 		</div>
-		<div x-data="{ emailOpen: false }" class="bg-white rounded-xl p-5 shadow-sm">
+		<div x-data="{ emailOpen: false }" class="bg-white rounded-xl p-5 shadow-xs">
 			<button
 				type="button"
 				@click="emailOpen = !emailOpen"
@@ -225,7 +225,7 @@ templ UpdateProfileForm() {
 				/>
 			</div>
 		</div>
-		<div x-data="{ passwordOpen: false }" class="bg-white rounded-xl p-5 shadow-sm">
+		<div x-data="{ passwordOpen: false }" class="bg-white rounded-xl p-5 shadow-xs">
 			<button
 				type="button"
 				@click="passwordOpen = !passwordOpen"
@@ -301,7 +301,7 @@ templ UpdateProfileImage() {
 				<template x-if="previewImage">
 					<img
 						:src="previewImage"
-						class="w-full h-full rounded-lg object-cover absolute inset-0 shadow-sm"
+						class="w-full h-full rounded-lg object-cover absolute inset-0 shadow-xs"
 					/>
 				</template>
 				<!-- Upload Content -->
@@ -317,7 +317,7 @@ templ UpdateProfileImage() {
 			<button
 				x-show="previewImage"
 				@click="previewImage = null; fileInput = null"
-				class="absolute -top-2 -right-2 bg-red text-white p-1.5 rounded-full hover:bg-orange transition-colors shadow-sm"
+				class="absolute -top-2 -right-2 bg-red text-white p-1.5 rounded-full hover:bg-orange transition-colors shadow-xs"
 			>
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -396,7 +396,7 @@ templ UpdateContacts(contacts []view.Contact) {
 			hx-post="/contacts"
 			hx-target="#contacts-container"
 			hx-swap="outerHTML"
-			class="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4"
+			class="bg-white rounded-lg p-4 shadow-xs flex items-center gap-4"
 		>
 			<input
 				type="text"

@@ -426,7 +426,7 @@ func authFormWrapper() templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"text-black flex flex-col items-center justify-center px-6 py-8 mx-auto\"><div class=\"w-full bg-yellow-400 rounded-lg shadow sm:max-w-md p-8\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"text-black flex flex-col items-center justify-center px-6 py-8 mx-auto\"><div class=\"w-full bg-yellow-400 rounded-lg shadow-sm sm:max-w-md p-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

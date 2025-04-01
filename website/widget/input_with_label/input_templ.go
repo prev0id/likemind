@@ -64,7 +64,7 @@ func Component(state State) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</label> <input class=\"bg-white text-sm rounded-lg block w-full p-2.5 border border-dark focus:ring-2 focus:outline-none focus:ring-orange focus:border-orange\" type=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</label> <input class=\"bg-white text-sm rounded-lg block w-full p-2.5 border border-dark focus:ring-2 focus:outline-hidden focus:ring-orange focus:border-orange\" type=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

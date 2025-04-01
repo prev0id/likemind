@@ -34,7 +34,7 @@ build-templ:
 
 .PHONY: build-tailwind
 build-tailwind:
-	npx tailwindcss -i ./website/static/css/src.css -o ./website/static/css/styles.css --minify
+	npx @tailwindcss/cli -i ./website/static/css/src.css -o ./website/static/css/styles.css --minify
 
 .PHONY: generate
 generate:

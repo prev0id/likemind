@@ -72,7 +72,7 @@ func Card(attributes templ.Attributes) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"bg-white rounded-2xl p-6 shadow-lg ring ring-pink grid grid-flow-row gap-4\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"bg-white rounded-2xl p-6 shadow-lg ring-3 ring-pink grid grid-flow-row gap-4\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

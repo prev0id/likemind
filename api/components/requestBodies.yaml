@@ -8,20 +8,20 @@ SignIn:
 ProfileCreate:
   required: true
   content:
-    application/json:
+    application/x-www-form-urlencoded:
       schema:
         $ref: "schemas.yaml#/ProfileCreate"
 
 ProfileUpdate:
   required: true
   content:
-    application/json:
+    application/x-www-form-urlencoded:
       schema:
         $ref: "schemas.yaml#/ProfileUpdate"
 
 Contact:
   required: true
   content:
-    application/json:
+    application/x-www-form-urlencoded:
       schema:
         $ref: "schemas.yaml#/Contact"

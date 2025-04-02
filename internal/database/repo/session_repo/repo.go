@@ -27,7 +27,7 @@ func (r *Repo) GetByToken(ctx context.Context, token string) (model.Session, err
 		model.CredentialsToken,
 		model.CredentialsUserID,
 		model.CredentialsCreatedAt,
-		model.CredentialsExpectedAt,
+		model.CredentialsExpiresAt,
 	)
 	q.From(model.TableSessions)
 	q.Where(q.Equal(model.CredentialsToken, token))
@@ -48,7 +48,7 @@ func (r *Repo) Create(ctx context.Context, session model.Session) error {
 		model.CredentialsToken,
 		model.CredentialsUserID,
 		model.CredentialsCreatedAt,
-		model.CredentialsExpectedAt,
+		model.CredentialsExpiresAt,
 	)
 	q.Values(
 		session.Token,
@@ -56,6 +56,8 @@ func (r *Repo) Create(ctx context.Context, session model.Session) error {
 		now,
 		session.ExpiresAt,
 	)
+
+	fmt.Println(q.Build())
 
 	if _, err := database.Exec(ctx, q); err != nil {
 		return fmt.Errorf("database.Exec: %w", err)
@@ -66,7 +68,7 @@ func (r *Repo) Create(ctx context.Context, session model.Session) error {
 
 func (r *Repo) ClearOld(ctx context.Context) error {
 	q := sql.DeleteFrom(model.TableSessions)
-	q.Where(q.LessThan(model.CredentialsExpectedAt, time.Now()))
+	q.Where(q.LessThan(model.CredentialsExpiresAt, time.Now()))
 
 	if _, err := database.Exec(ctx, q); err != nil {
 		return fmt.Errorf("database.Exec: %w", err)

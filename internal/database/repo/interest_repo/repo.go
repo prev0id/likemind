@@ -35,7 +35,7 @@ func (r *Repo) ListInterests(ctx context.Context) ([]model.Interest, error) {
 		model.InterestCreatedAt,
 		model.InterestUpdatedAt,
 	)
-	q.From(model.TableInterest)
+	q.From(model.TableInterests)
 
 	return database.Select[model.Interest](ctx, q)
 }
@@ -48,7 +48,7 @@ func (r *Repo) ListInterestsByIDs(ctx context.Context, ids []int64) ([]model.Int
 		model.InterestCreatedAt,
 		model.InterestUpdatedAt,
 	)
-	q.From(model.TableInterest)
+	q.From(model.TableInterests)
 	q.Where(q.In(model.InterestID, toInterfaceSlice(ids)...))
 
 	return database.Select[model.Interest](ctx, q)
@@ -60,7 +60,7 @@ func (r *Repo) GetUserInterestsByID(ctx context.Context, userID int64) ([]model.
 		model.UserInterestInterestID,
 		model.UserInterestCreatedAt,
 	)
-	q.From(model.TableUserInterest)
+	q.From(model.TableUserInterests)
 	q.Where(q.Equal(model.UserInterestUserID, userID))
 
 	return database.Select[model.UserInterest](ctx, q)
@@ -70,7 +70,7 @@ func (r *Repo) AddInterestToUser(ctx context.Context, interest model.UserInteres
 	now := time.Now()
 	interest.CreatedAt = now
 
-	q := sql.InsertInto(model.TableUserInterest)
+	q := sql.InsertInto(model.TableUserInterests)
 	q.Cols(
 		model.UserInterestUserID,
 		model.UserInterestInterestID,
@@ -90,7 +90,7 @@ func (r *Repo) AddInterestToUser(ctx context.Context, interest model.UserInteres
 }
 
 func (r *Repo) RemoveInterestFromUser(ctx context.Context, userID, interestID int64) error {
-	q := sql.DeleteFrom(model.TableUserInterest)
+	q := sql.DeleteFrom(model.TableUserInterests)
 	q.Where(
 		q.Equal(model.UserInterestUserID, userID),
 		q.Equal(model.UserInterestInterestID, interestID),
@@ -108,7 +108,7 @@ func (r *Repo) GetGroupInterestsByID(ctx context.Context, groupID int64) ([]mode
 		model.GroupInterestInterestID,
 		model.GroupInterestCreatedAt,
 	)
-	q.From(model.TableGroupInterest)
+	q.From(model.TableGroupInterests)
 	q.Where(q.Equal(model.GroupInterestGroupID, groupID))
 
 	return database.Select[model.GroupInterest](ctx, q)
@@ -118,7 +118,7 @@ func (r *Repo) AddInterestToGroup(ctx context.Context, interest model.GroupInter
 	now := time.Now()
 	interest.CreatedAt = now
 
-	q := sql.InsertInto(model.TableGroupInterest)
+	q := sql.InsertInto(model.TableGroupInterests)
 	q.Cols(
 		model.GroupInterestGroupID,
 		model.GroupInterestInterestID,
@@ -138,7 +138,7 @@ func (r *Repo) AddInterestToGroup(ctx context.Context, interest model.GroupInter
 }
 
 func (r *Repo) RemoveInterestFromGroup(ctx context.Context, groupID, interestID int64) error {
-	q := sql.DeleteFrom(model.TableGroupInterest)
+	q := sql.DeleteFrom(model.TableGroupInterests)
 	q.Where(
 		q.Equal(model.GroupInterestGroupID, groupID),
 		q.Equal(model.GroupInterestInterestID, interestID),

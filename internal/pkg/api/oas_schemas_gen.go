@@ -448,13 +448,13 @@ func (s *ProfileUpdate) SetLocation(val OptString) {
 
 // Ref: #/Redirect302
 type Redirect302 struct {
-	Location  OptURI
-	SetCookie OptString
+	HxRedirect OptURI
+	SetCookie  OptString
 }
 
-// GetLocation returns the value of Location.
-func (s *Redirect302) GetLocation() OptURI {
-	return s.Location
+// GetHxRedirect returns the value of HxRedirect.
+func (s *Redirect302) GetHxRedirect() OptURI {
+	return s.HxRedirect
 }
 
 // GetSetCookie returns the value of SetCookie.
@@ -462,9 +462,9 @@ func (s *Redirect302) GetSetCookie() OptString {
 	return s.SetCookie
 }
 
-// SetLocation sets the value of Location.
-func (s *Redirect302) SetLocation(val OptURI) {
-	s.Location = val
+// SetHxRedirect sets the value of HxRedirect.
+func (s *Redirect302) SetHxRedirect(val OptURI) {
+	s.HxRedirect = val
 }
 
 // SetSetCookie sets the value of SetCookie.

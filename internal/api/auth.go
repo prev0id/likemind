@@ -18,8 +18,8 @@ func (s *Server) V1APILogoutPost(ctx context.Context) (desc.V1APILogoutPostRes, 
 	}
 
 	return &desc.Redirect302{
-		Location:  desc.NewOptURI(url.URL{Path: domain.PathPageSignIn}),
-		SetCookie: desc.NewOptString(cookie.String()),
+		HxRedirect: desc.NewOptURI(url.URL{Path: domain.PathPageSignIn}),
+		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }
 
@@ -47,7 +47,7 @@ func (s *Server) V1APISigninPost(ctx context.Context, req *desc.SignIn) (desc.V1
 	}
 
 	return &desc.Redirect302{
-		Location:  desc.NewOptURI(getProfilePage(user)),
-		SetCookie: desc.NewOptString(cookie.String()),
+		HxRedirect: desc.NewOptURI(getProfilePage(user)),
+		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }

@@ -36,7 +36,7 @@ BadRequest:
 Redirect302:
   description: 302 Found - Redirect response with session cookie.
   headers:
-    Location:
-      $ref: "../components/headers.yaml#/Location"
+    Hx-Redirect:
+      $ref: "../components/headers.yaml#/Hx-Redirect"
     Set-Cookie:
       $ref: "../components/headers.yaml#/SessionCookie"

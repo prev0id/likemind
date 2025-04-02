@@ -235,19 +235,19 @@ func encodeV1APILogoutPostResponse(response V1APILogoutPostRes, w http.ResponseW
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -294,19 +294,19 @@ func encodeV1APIProfileDeleteResponse(response V1APIProfileDeleteRes, w http.Res
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -353,19 +353,19 @@ func encodeV1APIProfilePostResponse(response V1APIProfilePostRes, w http.Respons
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -467,19 +467,19 @@ func encodeV1APISigninPostResponse(response V1APISigninPostRes, w http.ResponseW
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -691,19 +691,19 @@ func encodeV1PageSigninGetResponse(response V1PageSigninGetRes, w http.ResponseW
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -762,19 +762,19 @@ func encodeV1PageSignupGetResponse(response V1PageSignupGetRes, w http.ResponseW
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())
-			// Encode "Location" header.
+			// Encode "Hx-Redirect" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
-					Name:    "Location",
+					Name:    "Hx-Redirect",
 					Explode: false,
 				}
 				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
-					if val, ok := response.Location.Get(); ok {
+					if val, ok := response.HxRedirect.Get(); ok {
 						return e.EncodeValue(conv.URLToString(val))
 					}
 					return nil
 				}); err != nil {
-					return errors.Wrap(err, "encode Location header")
+					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
 			// Encode "Set-Cookie" header.

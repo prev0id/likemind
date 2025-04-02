@@ -346,7 +346,7 @@ func FormSignUp() templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "Login")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "Signup")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -391,7 +391,7 @@ func FormSignUp() templ.Component {
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPISignin}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPIProfile}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

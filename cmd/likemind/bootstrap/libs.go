@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/huandu/go-sqlbuilder"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -19,4 +20,6 @@ func Libs() {
 		TimeLocation: msk,
 		TimeFormat:   time.DateTime,
 	})
+
+	sqlbuilder.DefaultFlavor = sqlbuilder.PostgreSQL
 }

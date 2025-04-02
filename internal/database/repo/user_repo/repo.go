@@ -2,6 +2,7 @@ package user_repo
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"likemind/internal/database"
@@ -28,7 +29,7 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	user.CreatedAt = now
 	user.UpdatedAt = now
 
-	q := sql.InsertInto(model.TableUser)
+	q := sql.InsertInto(model.TableUsers)
 	q.Cols(
 		model.UserNickname,
 		model.UserName,
@@ -53,6 +54,8 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	)
 	q.SQL("RETURNING " + model.UserID)
 
+	fmt.Println(q.Build())
+
 	id, err := database.Get[int64](ctx, q)
 	if err != nil {
 		return 0, err
@@ -64,7 +67,7 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 func (r *Repo) UpdateUser(ctx context.Context, user model.User) error {
 	user.UpdatedAt = time.Now()
 
-	q := sql.Update(model.TableUser)
+	q := sql.Update(model.TableUsers)
 	q.Set(
 		q.Assign(model.UserNickname, user.Nickname),
 		q.Assign(model.UserName, user.Name),
@@ -97,7 +100,7 @@ func (r *Repo) GetUserByID(ctx context.Context, id int64) (model.User, error) {
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
-	q.From(model.TableUser)
+	q.From(model.TableUsers)
 	q.Where(q.Equal(model.UserID, id))
 
 	result, err := database.Get[model.User](ctx, q)
@@ -121,7 +124,7 @@ func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
-	q.From(model.TableUser)
+	q.From(model.TableUsers)
 
 	result, err := database.Select[model.User](ctx, q)
 	if err != nil {
@@ -132,7 +135,7 @@ func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
 }
 
 func (r *Repo) RemoveUser(ctx context.Context, userID int64) error {
-	q := sql.DeleteFrom(model.TableUser)
+	q := sql.DeleteFrom(model.TableUsers)
 	q.Where(q.Equal(model.UserID, userID))
 
 	if _, err := database.Exec(ctx, q); err != nil {
@@ -155,7 +158,7 @@ func (r *Repo) GetUserByEmail(ctx context.Context, email string) (model.User, er
 		model.UserCreatedAt,
 		model.UserUpdatedAt,
 	)
-	q.From(model.TableUser)
+	q.From(model.TableUsers)
 	q.Where(q.Equal(model.UserEmail, email))
 
 	result, err := database.Get[model.User](ctx, q)

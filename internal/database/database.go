@@ -36,7 +36,7 @@ type SQL interface {
 func Exec(ctx context.Context, sql SQL) (int64, error) {
 	query, args := sql.Build()
 
-	cmd, err := txOrPool(ctx).Exec(ctx, query, args)
+	cmd, err := txOrPool(ctx).Exec(ctx, query, args...)
 	if err != nil {
 		return 0, err
 	}

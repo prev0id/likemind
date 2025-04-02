@@ -35,7 +35,7 @@ INSERT INTO interests (id, name, description, group_id) VALUES
   (19, 'Mosaic Art', 'Piece together small fragments to form images.', 1),
   (20, 'Weaving', 'Interlace threads to form fabric or decorative items.', 1);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (21, 'Playing Guitar', 'Strum acoustic or electric guitars.', 2),
   (22, 'Playing Piano', 'Perform and compose on a keyboard instrument.', 2),
   (23, 'Singing', 'Use your voice for performance and expression.', 2),
@@ -52,7 +52,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (34, 'Playing Bass', 'Support music with deep, rhythmic bass lines.', 2),
   (35, 'Flute Playing', 'Produce light, melodic tunes with a flute.', 2);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (36, 'Running', 'Improve fitness with jogging or sprints.', 3),
   (37, 'Cycling', 'Enjoy road or mountain biking for exercise.', 3),
   (38, 'Swimming', 'Engage in a full-body water workout.', 3),
@@ -79,7 +79,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (59, 'Martial Arts (Advanced)', 'Explore advanced combat techniques.', 3),
   (60, 'Fencing', 'Compete in swordplay with agility and precision.', 3);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (61, 'Gardening', 'Cultivate plants and design landscapes.', 4),
   (62, 'Bird Watching', 'Observe and identify various bird species.', 4),
   (63, 'Fishing', 'Enjoy leisure or sport fishing in different settings.', 4),
@@ -97,7 +97,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (75, 'Outdoor Fitness', 'Exercise using natural surroundings.', 4),
   (76, 'Trail Running', 'Run on off-road natural paths.', 4);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (77, 'Video Gaming', 'Play digital games across platforms.', 5),
   (78, 'Board Gaming', 'Enjoy strategic and cooperative tabletop games.', 5),
   (79, 'Puzzle Solving', 'Challenge your mind with puzzles.', 5),
@@ -113,7 +113,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (89, 'Puzzle Video Games', 'Enjoy games focused on mental challenges.', 5),
   (90, 'Retro Gaming', 'Play classic games from past decades.', 5);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (91, 'Backpacking', 'Travel light on extended journeys.', 6),
   (92, 'Road Trips', 'Explore new places by car.', 6),
   (93, 'Cultural Tourism', 'Immerse in the traditions of different cultures.', 6),
@@ -130,7 +130,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (104, 'City Exploration', 'Experience the charm of urban life.', 6),
   (105, 'Nature Trekking', 'Hike through rugged and wild terrains.', 6);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (106, 'Cooking', 'Experiment with recipes and ingredients.', 7),
   (107, 'Baking', 'Create breads, pastries, and desserts.', 7),
   (108, 'Grilling', 'Enjoy outdoor cooking on a grill.', 7),
@@ -145,7 +145,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (117, 'International Cuisine', 'Explore cooking styles from around the world.', 7),
   (118, 'Home Brewing', 'Brew beer or other beverages at home.', 7);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (119, 'Reading', 'Enjoy literature, fiction, and non-fiction works.', 8),
   (120, 'Creative Writing', 'Craft stories, poems, or essays.', 8),
   (121, 'Blogging', 'Write online posts on various topics.', 8),
@@ -158,7 +158,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (128, 'Short Story Writing', 'Craft concise fictional narratives.', 8),
   (129, 'Comic Writing', 'Develop stories in a graphic format.', 8);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (130, 'Volunteering', 'Donate time to community projects.', 9),
   (131, 'Mentoring', 'Guide and support others in personal growth.', 9),
   (132, 'Networking', 'Build professional and personal connections.', 9),
@@ -169,7 +169,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (137, 'Public Speaking', 'Engage and inform an audience.', 9),
   (138, 'Meetup Organizing', 'Create local groups for shared interests.', 9);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (139, 'Chess', 'Engage in a classic game of strategy.', 10),
   (140, 'Sudoku', 'Solve number-based puzzles for mental exercise.', 10),
   (141, 'Crosswords', 'Challenge yourself with word puzzles.', 10),
@@ -179,7 +179,7 @@ INSERT INTO interest (id, name, description, group_id) VALUES
   (145, 'Strategy Games', 'Play games that require careful planning.', 10),
   (146, 'Card Games', 'Enjoy various card games for fun and challenge.', 10);
 
-INSERT INTO interest (id, name, description, group_id) VALUES
+INSERT INTO interests (id, name, description, group_id) VALUES
   (147, 'Pet Care', 'Spend time nurturing and caring for pets.', 11),
   (148, 'DIY Home Improvement', 'Tackle small renovation or craft projects.', 11),
   (149, 'Collecting', 'Gather stamps, coins, or other unique items.', 11),

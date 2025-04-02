@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE groups (
-    id          BIGINT          PRIMARY KEY NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY,
     picture_id  TEXT            NOT NULL DEFAULT '',
     name        TEXT            NOT NULL DEFAULT '',
     alias       TEXT            NOT NULL UNIQUE DEFAULT '',
@@ -14,7 +14,7 @@ CREATE TABLE groups (
 CREATE INDEX idx_groups_author_id ON groups (author_id);
 
 CREATE TABLE group_posts (
-    id          BIGINT          PRIMARY KEY NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY NOT NULL,
     group_id    BIGINT          NOT NULL,
     author_id   BIGINT          NOT NULL,
     title       TEXT            NOT NULL DEFAULT '',
@@ -27,7 +27,7 @@ CREATE INDEX idx_group_posts_group_id ON group_posts (group_id);
 CREATE INDEX idx_group_posts_author_id ON group_posts (author_id);
 
 CREATE TABLE group_post_comments (
-    id          BIGINT          PRIMARY KEY NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY NOT NULL,
     post_id     BIGINT          NOT NULL,
     author_id   BIGINT          NOT NULL,
     content     TEXT            NOT NULL DEFAULT '',

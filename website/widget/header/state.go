@@ -24,7 +24,7 @@ var (
 				Kaomoji: `⊂(￣▽￣)⊃`,
 			},
 			{
-				URL:     domain.PathPageUser,
+				URL:     domain.PathPageProfile,
 				Name:    ProfileTab,
 				Kaomoji: `(„• ᴗ •„)`,
 			},

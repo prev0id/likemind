@@ -1,13 +1,14 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE users (
-    id          BIGINT          PRIMARY KEY NOT NULL,
+    id          BIGSERIAL       PRIMARY KEY,
     nickname    TEXT            NOT NULL UNIQUE,
     name        TEXT            NOT NULL,
     surname     TEXT            NOT NULL,
     about       TEXT            NOT NULL,
     password    BYTEA           NOT NULL,
     email       TEXT            NOT NULL UNIQUE,
+    location    TEXT            NOT NULL,
     created_at  TIMESTAMPTZ     NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMPTZ     NOT NULL DEFAULT NOW()
 );
@@ -35,7 +36,7 @@ CREATE TABLE profile_pictures (
 CREATE INDEX idx_profile_picture_user_id ON profile_pictures (user_id);
 
 CREATE TABLE contacts (
-    id          BIGINT      PRIMARY KEY NOT NULL,
+    id          BIGSERIAL   PRIMARY KEY NOT NULL,
     user_id     BIGINT      NOT NULL,
     platform    TEXT        NOT NULL,
     contact     TEXT        NOT NULL,

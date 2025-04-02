@@ -104,7 +104,7 @@ func (s *ProfileCreate) Validate() error {
 	}
 	if err := func() error {
 		if err := (validate.String{
-			MinLength:    8,
+			MinLength:    5,
 			MinLengthSet: true,
 			MaxLength:    25,
 			MaxLengthSet: true,
@@ -253,7 +253,7 @@ func (s *ProfileUpdate) Validate() error {
 		if value, ok := s.Username.Get(); ok {
 			if err := func() error {
 				if err := (validate.String{
-					MinLength:    8,
+					MinLength:    5,
 					MinLengthSet: true,
 					MaxLength:    25,
 					MaxLengthSet: true,

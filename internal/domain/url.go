@@ -6,7 +6,7 @@ const (
 	PathPageSignIn      = "/signin"
 	PathPageSignUp      = "/signup"
 	PathPageCurrentUser = "/user"
-	PathPageUser        = "/user/{username}"
+	PathPageProfile     = "/profile/{username}"
 	PathPageGroup       = "/group/{groupname}"
 	PathPageSearch      = "/search"
 
@@ -14,7 +14,6 @@ const (
 	PathAPISearchUser  = prefixAPI + "/search/user"
 	PathAPISearchGroup = prefixAPI + "/search/group"
 
-	PathAPISignup = prefixAPI + "/signup"
 	PathAPISignin = prefixAPI + "/signin"
 	PathAPILogout = prefixAPI + "/logout"
 

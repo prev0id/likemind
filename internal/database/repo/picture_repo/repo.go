@@ -25,7 +25,7 @@ func (r *Repo) AddProfilePicture(ctx context.Context, picture model.ProfilePictu
 	picture.CreatedAt = now
 	picture.UpdatedAt = now
 
-	q := sql.InsertInto(model.TableProfilePicture)
+	q := sql.InsertInto(model.TableProfilePictures)
 	q.Cols(
 		model.ProfilePictureID,
 		model.ProfilePictureUserID,
@@ -53,7 +53,7 @@ func (r *Repo) GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]
 		model.ProfilePictureCreatedAt,
 		model.ProfilePictureUpdatedAt,
 	)
-	q.From(model.TableProfilePicture)
+	q.From(model.TableProfilePictures)
 	q.Where(q.Equal(model.ProfilePictureUserID, userID))
 
 	results, err := database.Select[model.ProfilePicture](ctx, q)
@@ -65,7 +65,7 @@ func (r *Repo) GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]
 }
 
 func (r *Repo) RemovePictureByID(ctx context.Context, id string) error {
-	q := sql.DeleteFrom(model.TableProfilePicture)
+	q := sql.DeleteFrom(model.TableProfilePictures)
 	q.Where(q.Equal(model.ProfilePictureID, id))
 
 	if _, err := database.Exec(ctx, q); err != nil {

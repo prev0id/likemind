@@ -33,8 +33,8 @@ func (s *Server) V1APIProfilePost(ctx context.Context, req *desc.ProfileCreate) 
 	}
 
 	return &desc.Redirect302{
-		Location:  desc.NewOptURI(getProfilePage(user)),
-		SetCookie: desc.NewOptString(cookie.String()),
+		HxRedirect: desc.NewOptURI(getProfilePage(user)),
+		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }
 
@@ -51,8 +51,8 @@ func (s *Server) V1APIProfileDelete(ctx context.Context) (desc.V1APIProfileDelet
 	}
 
 	return &desc.Redirect302{
-		Location:  desc.NewOptURI(url.URL{Path: domain.PathPageSignUp}),
-		SetCookie: desc.NewOptString(cookie.String()),
+		HxRedirect: desc.NewOptURI(url.URL{Path: domain.PathPageSignUp}),
+		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }
 
@@ -78,7 +78,7 @@ func getProfilePage(user domain.User) url.URL {
 		domain.PathParamUsername: user.Nickname,
 	}
 
-	path := common.FillPath(domain.PathPageUser, params)
+	path := common.FillPath(domain.PathPageProfile, params)
 
 	return url.URL{
 		Path: path,

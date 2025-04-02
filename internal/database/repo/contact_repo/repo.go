@@ -26,7 +26,7 @@ func (r *Repo) AddContact(ctx context.Context, contact model.Contact) error {
 	contact.CreatedAt = now
 	contact.UpdatedAt = now
 
-	q := sql.InsertInto(model.TableContact)
+	q := sql.InsertInto(model.TableContacts)
 	q.Cols(
 		model.ContactID,
 		model.ContactUserID,
@@ -60,7 +60,7 @@ func (r *Repo) GetContactsByUserID(ctx context.Context, userID int64) ([]model.C
 		model.ContactCreatedAt,
 		model.ContactUpdatedAt,
 	)
-	q.From(model.TableContact)
+	q.From(model.TableContacts)
 	q.Where(q.Equal(model.ContactUserID, userID))
 
 	results, err := database.Select[model.Contact](ctx, q)
@@ -74,7 +74,7 @@ func (r *Repo) GetContactsByUserID(ctx context.Context, userID int64) ([]model.C
 func (r *Repo) UpdateContact(ctx context.Context, contact model.Contact) error {
 	contact.UpdatedAt = time.Now()
 
-	q := sql.Update(model.TableContact)
+	q := sql.Update(model.TableContacts)
 	q.Set(
 		q.Assign(model.ContactPlatform, contact.Platform),
 		q.Assign(model.ContactValue, contact.Value),
@@ -90,7 +90,7 @@ func (r *Repo) UpdateContact(ctx context.Context, contact model.Contact) error {
 }
 
 func (r *Repo) RemoveContactByID(ctx context.Context, id int64) error {
-	q := sql.DeleteFrom(model.TableContact)
+	q := sql.DeleteFrom(model.TableContacts)
 	q.Where(q.Equal(model.ContactID, id))
 
 	if _, err := database.Exec(ctx, q); err != nil {

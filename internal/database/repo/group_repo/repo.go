@@ -27,7 +27,7 @@ func (r *Repo) CreateGroup(ctx context.Context, group model.Group) error {
 	group.CreatedAt = now
 	group.UpdatedAt = now
 
-	q := sql.InsertInto(model.TableGroup)
+	q := sql.InsertInto(model.TableGroups)
 	q.Cols(
 		model.GroupID,
 		model.GroupPictureID,
@@ -58,7 +58,7 @@ func (r *Repo) CreateGroup(ctx context.Context, group model.Group) error {
 func (r *Repo) UpdateGroup(ctx context.Context, group model.Group) error {
 	group.UpdatedAt = time.Now()
 
-	q := sql.Update(model.TableGroup)
+	q := sql.Update(model.TableGroups)
 	q.Set(
 		q.Assign(model.GroupPictureID, group.PictureID),
 		q.Assign(model.GroupName, group.Name),
@@ -86,7 +86,7 @@ func (r *Repo) GetGroupByAlias(ctx context.Context, alias string) (model.Group, 
 		model.GroupCreatedAt,
 		model.GroupUpdatedAt,
 	)
-	q.From(model.TableGroup)
+	q.From(model.TableGroups)
 	q.Where(q.Equal(model.GroupAlias, alias))
 
 	result, err := database.Get[model.Group](ctx, q)
@@ -108,7 +108,7 @@ func (r *Repo) GetGroupByID(ctx context.Context, id int64) (model.Group, error) 
 		model.GroupCreatedAt,
 		model.GroupUpdatedAt,
 	)
-	q.From(model.TableGroup)
+	q.From(model.TableGroups)
 	q.Where(q.Equal(model.GroupID, id))
 
 	result, err := database.Get[model.Group](ctx, q)
@@ -130,7 +130,7 @@ func (r *Repo) ListGroups(ctx context.Context) ([]model.Group, error) {
 		model.GroupCreatedAt,
 		model.GroupUpdatedAt,
 	)
-	q.From(model.TableGroup)
+	q.From(model.TableGroups)
 
 	results, err := database.Select[model.Group](ctx, q)
 	if err != nil {

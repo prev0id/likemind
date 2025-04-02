@@ -59,7 +59,7 @@ templ Header() {
 
 templ Author(author string) {
 	<a
-		href={ templ.SafeURL(common.FillPath(domain.PathPageUser, map[string]string{domain.PathParamUsername: author})) }
+		href={ templ.SafeURL(common.FillPath(domain.PathPageProfile, map[string]string{domain.PathParamUsername: author})) }
 		class="text-orange font-medium hover:text-red"
 	>
 		{ author }
@@ -68,7 +68,7 @@ templ Author(author string) {
 
 templ AuthorSM(author string) {
 	<a
-		href={ templ.SafeURL(common.FillPath(domain.PathPageUser, map[string]string{domain.PathParamUsername: author})) }
+		href={ templ.SafeURL(common.FillPath(domain.PathPageProfile, map[string]string{domain.PathParamUsername: author})) }
 		class="text-orange/90 text-sm hover:text-red"
 	>
 		{ author }

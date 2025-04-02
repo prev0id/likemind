@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"likemind/internal/database"
 	"likemind/internal/database/adapter/profile_adapter"
 	"likemind/internal/domain"
 
@@ -12,7 +11,7 @@ import (
 )
 
 const (
-	saltPattern = "%d$%s"
+	saltPattern = "%s$%s"
 	cost        = bcrypt.DefaultCost
 )
 
@@ -50,24 +49,11 @@ func (s *implementation) CreateUser(ctx context.Context, user domain.User) (doma
 		err error
 	)
 
-	txErr := database.InTransaction(ctx, func(ctx context.Context) error {
-		id, err = s.db.CreateUser(ctx, user)
-		if err != nil {
-			return fmt.Errorf("s.db.CreateUser: %w", err)
-		}
+	user.HashedPassword = hash(user.RawPassword, user.Login)
 
-		user.HashedPassword = hash(user.RawPassword, id)
-		user.ID = id
-
-		if err := s.db.UpdateUser(ctx, user); err != nil {
-			return fmt.Errorf("s.db.UpdateUser: %w", err)
-		}
-
-		return nil
-	})
-
-	if txErr != nil {
-		return 0, fmt.Errorf("database.InTransaction: %w", txErr)
+	id, err = s.db.CreateUser(ctx, user)
+	if err != nil {
+		return 0, fmt.Errorf("s.db.CreateUser: %w", err)
 	}
 
 	return id, nil
@@ -113,11 +99,11 @@ func (s *implementation) UpdatePassword(ctx context.Context, id domain.UserID, o
 		return fmt.Errorf("s.db.GetUserByID: %w", err)
 	}
 
-	if !passwordsEqual(user.HashedPassword, oldPassword, user.ID) {
+	if !passwordsEqual(user.HashedPassword, oldPassword, user.Login) {
 		return domain.ErrNotAuthenticated
 	}
 
-	user.HashedPassword = hash(newPassword, id)
+	user.HashedPassword = hash(newPassword, user.Login)
 
 	if err := s.db.UpdateUser(ctx, user); err != nil {
 		return fmt.Errorf("s.db.UpdateUser: %w", err)
@@ -132,25 +118,25 @@ func (s *implementation) SignIn(ctx context.Context, login domain.Email, passwor
 		return domain.User{}, fmt.Errorf("s.db.GetUserByLogin: %w", err)
 	}
 
-	if !passwordsEqual(user.HashedPassword, password, user.ID) {
+	if !passwordsEqual(user.HashedPassword, password, login) {
 		return domain.User{}, domain.ErrNotAuthenticated
 	}
 
 	return user, nil
 }
 
-func hash(password domain.Password, id domain.UserID) []byte {
-	withSalt := addSalt(password, id)
+func hash(password domain.Password, email domain.Email) []byte {
+	withSalt := addSalt(password, email)
 	encrypted, _ := bcrypt.GenerateFromPassword(withSalt, cost)
 	return encrypted
 }
 
-func passwordsEqual(hash []byte, password domain.Password, id domain.UserID) bool {
-	withSalt := addSalt(password, id)
+func passwordsEqual(hash []byte, password domain.Password, email domain.Email) bool {
+	withSalt := addSalt(password, email)
 	err := bcrypt.CompareHashAndPassword(hash, withSalt)
 	return err == nil
 }
 
-func addSalt(password domain.Password, id domain.UserID) []byte {
-	return []byte(fmt.Sprintf(saltPattern, id, password))
+func addSalt(password domain.Password, email domain.Email) []byte {
+	return fmt.Appendf(nil, saltPattern, email, password)
 }

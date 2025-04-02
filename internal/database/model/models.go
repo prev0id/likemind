@@ -3,21 +3,21 @@ package model
 import "time"
 
 const (
-	TableSessions       = "sessions"
-	TableUser           = "user"
-	TableContact        = "contact"
-	TableProfilePicture = "profile_picture"
-	TableGroup          = "group"
-	TableInterest       = "interest"
-	TableUserInterest   = "user_interest"
-	TableGroupInterest  = "group_interest"
+	TableSessions        = "sessions"
+	TableUsers           = "users"
+	TableContacts        = "contacts"
+	TableProfilePictures = "profile_pictures"
+	TableGroups          = "groups"
+	TableInterests       = "interests"
+	TableUserInterests   = "user_interests"
+	TableGroupInterests  = "group_interests"
 )
 
 const (
-	CredentialsToken      = "token"
-	CredentialsUserID     = "user_id"
-	CredentialsCreatedAt  = "created_at"
-	CredentialsExpectedAt = "expected_at"
+	CredentialsToken     = "token"
+	CredentialsUserID    = "user_id"
+	CredentialsCreatedAt = "created_at"
+	CredentialsExpiresAt = "expires_at"
 )
 
 type Session struct {
@@ -45,7 +45,7 @@ type User struct {
 	Nickname  string    `db:"nickname"`
 	Name      string    `db:"name"`
 	Surname   string    `db:"surname"`
-	About     string    `db:"abuot"`
+	About     string    `db:"about"`
 	Email     string    `db:"email"`
 	Location  string    `db:"location"`
 	Password  []byte    `db:"password"`

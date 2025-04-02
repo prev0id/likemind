@@ -8,7 +8,6 @@ require (
 	github.com/georgysavva/scany/v2 v2.1.3
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-faster/errors v0.7.1
-	github.com/go-faster/jx v1.1.0
 	github.com/google/uuid v1.6.0
 	github.com/huandu/go-sqlbuilder v1.33.1
 	github.com/jackc/pgx/v5 v5.7.2
@@ -29,6 +28,7 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
+	github.com/go-faster/jx v1.1.0 // indirect
 	github.com/go-faster/yaml v0.4.6 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect

@@ -216,7 +216,7 @@ func AuthorizedHeader(selected view.Tab, nickname string) templ.Component {
 			templ_7745c5c3_Err = common_widget.HeaderTab(
 				view.Tab{
 					Name:    view.ProfileTab.Name,
-					URL:     common.FillPath(domain.PathPageUser, map[string]string{domain.PathParamUsername: nickname}),
+					URL:     common.FillPath(domain.PathPageProfile, map[string]string{domain.PathParamUsername: nickname}),
 					Kaomoji: view.ProfileTab.Kaomoji,
 				},
 				selected,

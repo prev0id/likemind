@@ -50,7 +50,7 @@ templ FormSignIn() {
 
 templ FormSignUp() {
 	@authFormWrapper() {
-		@common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPISignin}}) {
+		@common_widget.Form(view.Form{Htmx: view.HTMX{Post: domain.PathAPIProfile}}) {
 			<h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl">
 				Create your an account
 			</h1>
@@ -120,7 +120,7 @@ templ FormSignUp() {
 				})
 			</div>
 			@common_widget.Button(view.Button{Type: "submit"}) {
-				Login
+				Signup
 			}
 			@common_widget.TextSM() {
 				Already have an account?

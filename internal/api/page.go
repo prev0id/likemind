@@ -9,7 +9,6 @@ import (
 	"likemind/website/page"
 	error_page "likemind/website/page/error"
 	group_page "likemind/website/page/group"
-	profile_page "likemind/website/page/profile"
 	user_search_page "likemind/website/page/user_search"
 )
 
@@ -20,8 +19,31 @@ func (s *Server) V1PageGroupGroupNameGet(ctx context.Context, params desc.V1Page
 }
 
 func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	profile, err := s.profile.GetUser(ctx, userID)
+	if err != nil {
+		if common.ErrorIs(err, common.NotFoundErrorType) {
+			return &desc.NotFound{Data: common.ErrorMsg(err)}, nil
+		}
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	pictures, err := s.profile.GetProfilePictures(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	contacts, err := s.profile.GetContacts(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	state := convertProfile(profile, contacts, pictures)
+	pageComponent := page.Profile(state)
+
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, profile_page.Page(profile_page.State)),
+		Data: common.RenderComponent(ctx, pageComponent),
 	}, nil
 }
 

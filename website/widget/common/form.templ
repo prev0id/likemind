@@ -14,6 +14,9 @@ templ Form(form view.Form) {
 		if form.Htmx.Swap != "" {
 			hx-post={ form.Htmx.Swap }
 		}
+		if form.Htmx.Encoding != "" {
+			hx-encoding={ form.Htmx.Encoding }
+		}
 		{ form.Attributes... }
 	>
 		{ children... }

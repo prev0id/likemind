@@ -1,38 +1,97 @@
 package page
 
-import "likemind/website/view"
+import (
+	"likemind/website/view"
+	common_widget "likemind/website/widget/common"
+	"likemind/website/widget/header"
+)
 
 templ Profile(state view.Profile) {
-	// @page.StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
-	// 	@VSplit() {
-	// 		@ProfilePicture(state.PictureID)
-	// 		@GridRow() {
-	// 			@HeaderWithIcon() {
-	// 				@GridRow() {
-	// 					@Name(state.Name, state.Nickname)
-	// 					@Location(state.Location)
-	// 				}
-	// 				@EditProfileButton()
-	// 			}
-	// 			@LineBreak()
-	// 			@Semibold("About")
-	// 			<div>{ state.About }</div>
-	// 			@tag.Container() {
-	// 				for _, interest := range state.Interests {
-	// 					@tag.Interest(interest)
-	// 				}
-	// 			}
-	// 			@LineBreak()
-	// 			@HeaderWithIcon() {
-	// 				@Semibold("Contact me at:")
-	// 				@EditContactsButton(state.Contacts)
-	// 			}
-	// 			@contacts.Container() {
-	// 				for _, contact := range state.Contacts {
-	// 					@contacts.Link(contact.Platform, contact.Value)
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
+	@StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
+		<div
+			class="mx-auto max-w-7xl md:grid md:grid-cols-2 md:gap-20 md:place-items-center px-8 py-12"
+		>
+			<div>
+				@profileImagePreview(state)
+			</div>
+			<div>
+				@common_widget.Form(view.Form{
+					Htmx: view.HTMX{
+						Post:     "/upload/view",
+						Encoding: "multipart/form-data",
+					},
+				}) {
+					@uploadImage()
+				}
+			</div>
+		</div>
+	}
+}
+
+templ profileImagePreview(state view.Profile) {
+	<div class="relative group bg-yellow w-full h-full rounded-3xl flex items-center justify-center">
+		<img
+			src="/static/img/img1.jpg"
+			alt="Profile picture"
+			class="max-w-full min-h-50 max-h-150 overflow-hidden rounded-3xl transition duration-300 ease-in-out group-hover:blur-sm"
+		/>
+		<div
+			class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out flex items-center justify-center mx-auto"
+		>
+			<div>
+				@common_widget.Button(view.Button{
+					PopoverTarget: "modal-upload-pfp",
+					PopoverAction: "show",
+				}) {
+					Upload your new avatar
+				}
+				@common_widget.Modal(view.Modal{
+					ID:    "modal-upload-pfp",
+					Title: "Upload your new avatar",
+				}) {
+					test
+				}
+			</div>
+		</div>
+	</div>
+}
+
+templ uploadImage() {
+	<div class="max-w-md mx-auto">
+		<label
+			for="file-upload"
+			class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+		>
+			<div class="flex flex-col items-center justify-center pt-5 pb-6">
+				<svg class="w-12 h-12 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m10 12V4M5 20h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z"></path>
+				</svg>
+				<p class="mb-2 text-sm text-gray-500">
+					Drag and drop your image here or click to select
+				</p>
+				<p class="text-xs text-gray-400">
+					JPG or PNG (max. 5MB)
+				</p>
+			</div>
+			<input
+				id="file-upload"
+				type="file"
+				accept="image/png, image/jpeg"
+				class="hidden"
+			/>
+		</label>
+	</div>
+}
+
+templ uploadScript(id string) {
+	<script>
+      document.getElementById("file-upload").addEventListener("change", function(event) {
+        const fileNameElement = document.getElementById("fileName");
+        if (this.files && this.files.length > 0) {
+          fileNameElement.textContent = this.files[0].name;
+        } else {
+          fileNameElement.textContent = "No file selected";
+        }
+      });
+    </script>
 }

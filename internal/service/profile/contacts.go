@@ -10,6 +10,14 @@ import (
 
 const idxNotFound = -1
 
+func (s *implementation) GetContacts(ctx context.Context, id domain.UserID) ([]domain.Contact, error) {
+	contacts, err := s.db.GetContactsByUserID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("s.db.GetContactsByUserID: %w", err)
+	}
+	return contacts, nil
+}
+
 func (s *implementation) AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error {
 	if err := s.db.AddContact(ctx, id, contact); err != nil {
 		return fmt.Errorf("s.db.AddContact: %w", err)

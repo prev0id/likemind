@@ -30,7 +30,8 @@ type Form struct {
 }
 
 type HTMX struct {
-	Post   string
-	Target string
-	Swap   string
+	Post     string
+	Target   string
+	Swap     string
+	Encoding string
 }

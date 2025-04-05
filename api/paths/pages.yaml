@@ -38,6 +38,8 @@ profile:
       - page
     parameters:
       - $ref: "../components/parameters.yaml#/username"
+    security:
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"

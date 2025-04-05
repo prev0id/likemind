@@ -54,8 +54,6 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	)
 	q.SQL("RETURNING " + model.UserID)
 
-	fmt.Println(q.Build())
-
 	id, err := database.Get[int64](ctx, q)
 	if err != nil {
 		return 0, err
@@ -102,6 +100,8 @@ func (r *Repo) GetUserByID(ctx context.Context, id int64) (model.User, error) {
 	)
 	q.From(model.TableUsers)
 	q.Where(q.Equal(model.UserID, id))
+
+	fmt.Println(q.Build())
 
 	result, err := database.Get[model.User](ctx, q)
 	if err != nil {

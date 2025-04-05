@@ -32,10 +32,14 @@ func (r *Repo) GetByToken(ctx context.Context, token string) (model.Session, err
 	q.From(model.TableSessions)
 	q.Where(q.Equal(model.CredentialsToken, token))
 
+	fmt.Println(q.Build())
+
 	result, err := database.Get[model.Session](ctx, q)
 	if err != nil {
 		return model.Session{}, fmt.Errorf("database.Get: %w", err)
 	}
+
+	fmt.Println(result)
 
 	return result, nil
 }
@@ -56,8 +60,6 @@ func (r *Repo) Create(ctx context.Context, session model.Session) error {
 		now,
 		session.ExpiresAt,
 	)
-
-	fmt.Println(q.Build())
 
 	if _, err := database.Exec(ctx, q); err != nil {
 		return fmt.Errorf("database.Exec: %w", err)

@@ -44,7 +44,7 @@ func Modal(modal view.Modal) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"py-6 w-full bg-white px-7 max-w-3xl rounded-lg max-h-[90%] overflow-auto\" popover=\"auto\"><div class=\"flex items-center justify-between pb-2\"><h3 class=\"text-lg font-semibold\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"m-auto py-6 w-full bg-white px-7 max-w-2xl rounded-lg max-h-[90%] overflow-auto\" popover=\"auto\"><div class=\"flex items-center justify-between pb-2\"><h3 class=\"text-lg font-semibold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

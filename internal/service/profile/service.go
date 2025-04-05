@@ -24,13 +24,14 @@ type Service interface {
 	UpdatePassword(ctx context.Context, id domain.UserID, oldPassword, newPassword domain.Password) error
 	SignIn(ctx context.Context, login domain.Email, password domain.Password) (domain.User, error)
 
+	GetContacts(ctx context.Context, id domain.UserID) ([]domain.Contact, error)
 	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	RemoveContact(ctx context.Context, id domain.UserID, contactID int64) error
 
-	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID string) error
-	GetProfilePictures(ctx context.Context, id domain.UserID) ([]string, error)
-	RemovePicture(ctx context.Context, pictureID string) error
+	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error
+	GetProfilePictures(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
+	RemovePicture(ctx context.Context, pictureID domain.PictureID) error
 }
 
 type implementation struct {

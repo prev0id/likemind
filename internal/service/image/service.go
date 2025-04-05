@@ -100,7 +100,7 @@ func (s *ImageService) UploadImage(ctx context.Context, file io.Reader, fileSize
 	return uniqueFilename, nil
 }
 
-func (s *ImageService) DeleteImage(ctx context.Context, image string, userID domain.UserID) error {
+func (s *ImageService) DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error {
 	if image == "" {
 		return fmt.Errorf("image name is required")
 	}
@@ -121,14 +121,14 @@ func (s *ImageService) DeleteImage(ctx context.Context, image string, userID dom
 		return fmt.Errorf("failed to remove picture from DB: %w", err)
 	}
 
-	if err := s.s3.DeleteImage(ctx, image); err != nil {
+	if err := s.s3.DeleteImage(ctx, string(image)); err != nil {
 		return fmt.Errorf("failed to delete image from S3: %w", err)
 	}
 
 	return nil
 }
 
-func (s *ImageService) GetImage(ctx context.Context, image string, userID domain.UserID) (io.ReadCloser, error) {
+func (s *ImageService) GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error) {
 	if ctx == nil {
 		return nil, fmt.Errorf("context is required")
 	}
@@ -148,7 +148,7 @@ func (s *ImageService) GetImage(ctx context.Context, image string, userID domain
 		return nil, domain.ErrInvalidImageNameProvided
 	}
 
-	data, err := s.s3.GetImage(ctx, image)
+	data, err := s.s3.GetImage(ctx, string(image))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get image from S3: %w", err)
 	}

@@ -26,9 +26,9 @@ type Adapter interface {
 	RemoveContactByID(ctx context.Context, contactID int64) error
 	GetContactsByUserID(ctx context.Context, id domain.UserID) ([]domain.Contact, error)
 
-	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID string) error
-	GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]string, error)
-	RemovePictureByID(ctx context.Context, pictureID string) error
+	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error
+	GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
+	RemovePictureByID(ctx context.Context, pictureID domain.PictureID) error
 }
 
 type implementation struct {
@@ -176,14 +176,14 @@ func (i *implementation) RemoveContactByID(ctx context.Context, contactID int64)
 	return nil
 }
 
-func (i *implementation) AddProfilePicture(ctx context.Context, id domain.UserID, pictureID string) error {
+func (i *implementation) AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error {
 	if err := i.pictureDB.AddProfilePicture(ctx, domainProfilePictureToModel(pictureID, int64(id))); err != nil {
 		return fmt.Errorf("i.pictureDB.AddProfilePicture: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]string, error) {
+func (i *implementation) GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]domain.PictureID, error) {
 	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
 	if err != nil {
 		return nil, fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
@@ -191,8 +191,8 @@ func (i *implementation) GetProfilePicturesByUserID(ctx context.Context, id doma
 	return convert(pictures, modelProfilePictureToDomain), nil
 }
 
-func (i *implementation) RemovePictureByID(ctx context.Context, pictureID string) error {
-	if err := i.pictureDB.RemovePictureByID(ctx, pictureID); err != nil {
+func (i *implementation) RemovePictureByID(ctx context.Context, pictureID domain.PictureID) error {
+	if err := i.pictureDB.RemovePictureByID(ctx, string(pictureID)); err != nil {
 		return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", err)
 	}
 	return nil

@@ -56,13 +56,13 @@ func modelContactToDomain(c model.Contact) domain.Contact {
 	}
 }
 
-func modelProfilePictureToDomain(pp model.ProfilePicture) string {
-	return pp.ID
+func modelProfilePictureToDomain(pp model.ProfilePicture) domain.PictureID {
+	return domain.PictureID(pp.ID)
 }
 
-func domainProfilePictureToModel(pictureID string, userID int64) model.ProfilePicture {
+func domainProfilePictureToModel(pictureID domain.PictureID, userID int64) model.ProfilePicture {
 	return model.ProfilePicture{
-		ID:     pictureID,
+		ID:     string(pictureID),
 		UserID: userID,
 	}
 }

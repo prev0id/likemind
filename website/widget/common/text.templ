@@ -2,6 +2,18 @@ package common_widget
 
 import "likemind/website/view"
 
+templ H2() {
+	<h2 class="text-xl font-semibold">
+		{ children... }
+	</h2>
+}
+
+templ H3() {
+	<h3 class="font-semibold">
+		{ children... }
+	</h3>
+}
+
 templ TextSM() {
 	<p class="text-sm font-light">
 		{ children... }

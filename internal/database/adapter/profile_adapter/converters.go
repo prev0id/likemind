@@ -5,14 +5,6 @@ import (
 	"likemind/internal/domain"
 )
 
-func convert[T, V any](data []T, converter func(T) V) []V {
-	result := make([]V, 0, len(data))
-	for _, element := range data {
-		result = append(result, converter(element))
-	}
-	return result
-}
-
 func domainUserToModel(u domain.User) model.User {
 	return model.User{
 		ID:       int64(u.ID),

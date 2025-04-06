@@ -24,8 +24,17 @@ func (s BadRequest) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*BadRequest) v1APIProfilePostRes() {}
-func (*BadRequest) v1APIProfilePutRes()  {}
+func (*BadRequest) v1APIGroupGroupIDDeleteRes()                           {}
+func (*BadRequest) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
+func (*BadRequest) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
+func (*BadRequest) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
+func (*BadRequest) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
+func (*BadRequest) v1APIGroupGroupIDPostPostIDPutRes()                    {}
+func (*BadRequest) v1APIGroupGroupIDPostPostRes()                         {}
+func (*BadRequest) v1APIGroupGroupIDPutRes()                              {}
+func (*BadRequest) v1APIGroupPostRes()                                    {}
+func (*BadRequest) v1APIProfilePostRes()                                  {}
+func (*BadRequest) v1APIProfilePutRes()                                   {}
 
 // Ref: #/Contact
 type Contact struct {
@@ -53,6 +62,32 @@ func (s *Contact) SetLink(val string) {
 	s.Link = val
 }
 
+// Ref: #/Group
+type Group struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+// GetName returns the value of Name.
+func (s *Group) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *Group) GetDescription() string {
+	return s.Description
+}
+
+// SetName sets the value of Name.
+func (s *Group) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Group) SetDescription(val string) {
+	s.Description = val
+}
+
 // HTML page content.
 // Ref: #/HTMLPage
 type HTMLResponse struct {
@@ -69,17 +104,24 @@ func (s HTMLResponse) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*HTMLResponse) v1APIContactContactIDDeleteRes()   {}
-func (*HTMLResponse) v1APIContactContactIDPutRes()      {}
-func (*HTMLResponse) v1APIContactPostRes()              {}
-func (*HTMLResponse) v1APIInterestInterestIDDeleteRes() {}
-func (*HTMLResponse) v1APIInterestInterestIDPostRes()   {}
-func (*HTMLResponse) v1APIProfilePutRes()               {}
-func (*HTMLResponse) v1PageGroupGroupNameGetRes()       {}
-func (*HTMLResponse) v1PageProfileUsernameGetRes()      {}
-func (*HTMLResponse) v1PageSearchGetRes()               {}
-func (*HTMLResponse) v1PageSigninGetRes()               {}
-func (*HTMLResponse) v1PageSignupGetRes()               {}
+func (*HTMLResponse) v1APIContactContactIDDeleteRes()                       {}
+func (*HTMLResponse) v1APIContactContactIDPutRes()                          {}
+func (*HTMLResponse) v1APIContactPostRes()                                  {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostIDPutRes()                    {}
+func (*HTMLResponse) v1APIGroupGroupIDPostPostRes()                         {}
+func (*HTMLResponse) v1APIGroupGroupIDPutRes()                              {}
+func (*HTMLResponse) v1APIInterestInterestIDDeleteRes()                     {}
+func (*HTMLResponse) v1APIInterestInterestIDPostRes()                       {}
+func (*HTMLResponse) v1APIProfilePutRes()                                   {}
+func (*HTMLResponse) v1PageGroupGroupIDGetRes()                             {}
+func (*HTMLResponse) v1PageProfileUsernameGetRes()                          {}
+func (*HTMLResponse) v1PageSearchGetRes()                                   {}
+func (*HTMLResponse) v1PageSigninGetRes()                                   {}
+func (*HTMLResponse) v1PageSignupGetRes()                                   {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -97,21 +139,30 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*InternalError) v1APIContactContactIDDeleteRes()   {}
-func (*InternalError) v1APIContactContactIDPutRes()      {}
-func (*InternalError) v1APIContactPostRes()              {}
-func (*InternalError) v1APIInterestInterestIDDeleteRes() {}
-func (*InternalError) v1APIInterestInterestIDPostRes()   {}
-func (*InternalError) v1APILogoutPostRes()               {}
-func (*InternalError) v1APIProfileDeleteRes()            {}
-func (*InternalError) v1APIProfilePostRes()              {}
-func (*InternalError) v1APIProfilePutRes()               {}
-func (*InternalError) v1APISigninPostRes()               {}
-func (*InternalError) v1PageGroupGroupNameGetRes()       {}
-func (*InternalError) v1PageProfileUsernameGetRes()      {}
-func (*InternalError) v1PageSearchGetRes()               {}
-func (*InternalError) v1PageSigninGetRes()               {}
-func (*InternalError) v1PageSignupGetRes()               {}
+func (*InternalError) v1APIContactContactIDDeleteRes()                       {}
+func (*InternalError) v1APIContactContactIDPutRes()                          {}
+func (*InternalError) v1APIContactPostRes()                                  {}
+func (*InternalError) v1APIGroupGroupIDDeleteRes()                           {}
+func (*InternalError) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
+func (*InternalError) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
+func (*InternalError) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
+func (*InternalError) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
+func (*InternalError) v1APIGroupGroupIDPostPostIDPutRes()                    {}
+func (*InternalError) v1APIGroupGroupIDPostPostRes()                         {}
+func (*InternalError) v1APIGroupGroupIDPutRes()                              {}
+func (*InternalError) v1APIGroupPostRes()                                    {}
+func (*InternalError) v1APIInterestInterestIDDeleteRes()                     {}
+func (*InternalError) v1APIInterestInterestIDPostRes()                       {}
+func (*InternalError) v1APILogoutPostRes()                                   {}
+func (*InternalError) v1APIProfileDeleteRes()                                {}
+func (*InternalError) v1APIProfilePostRes()                                  {}
+func (*InternalError) v1APIProfilePutRes()                                   {}
+func (*InternalError) v1APISigninPostRes()                                   {}
+func (*InternalError) v1PageGroupGroupIDGetRes()                             {}
+func (*InternalError) v1PageProfileUsernameGetRes()                          {}
+func (*InternalError) v1PageSearchGetRes()                                   {}
+func (*InternalError) v1PageSigninGetRes()                                   {}
+func (*InternalError) v1PageSignupGetRes()                                   {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -129,9 +180,17 @@ func (s NotAuthorized) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotAuthorized) v1APISigninPostRes()          {}
-func (*NotAuthorized) v1PageGroupGroupNameGetRes()  {}
-func (*NotAuthorized) v1PageProfileUsernameGetRes() {}
+func (*NotAuthorized) v1APIGroupGroupIDDeleteRes()                           {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostIDPutRes()                    {}
+func (*NotAuthorized) v1APIGroupGroupIDPostPostRes()                         {}
+func (*NotAuthorized) v1APIGroupGroupIDPutRes()                              {}
+func (*NotAuthorized) v1APISigninPostRes()                                   {}
+func (*NotAuthorized) v1PageGroupGroupIDGetRes()                             {}
+func (*NotAuthorized) v1PageProfileUsernameGetRes()                          {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -154,7 +213,7 @@ func (*NotFound) v1APIContactContactIDPutRes()      {}
 func (*NotFound) v1APIContactPostRes()              {}
 func (*NotFound) v1APIInterestInterestIDDeleteRes() {}
 func (*NotFound) v1APIInterestInterestIDPostRes()   {}
-func (*NotFound) v1PageGroupGroupNameGetRes()       {}
+func (*NotFound) v1PageGroupGroupIDGetRes()         {}
 func (*NotFound) v1PageProfileUsernameGetRes()      {}
 
 // NewOptDate returns new OptDate with value set to v.
@@ -293,6 +352,21 @@ func (o OptURI) Or(d url.URL) url.URL {
 		return v
 	}
 	return d
+}
+
+// Ref: #/Post
+type Post struct {
+	Content string `json:"content"`
+}
+
+// GetContent returns the value of Content.
+func (s *Post) GetContent() string {
+	return s.Content
+}
+
+// SetContent sets the value of Content.
+func (s *Post) SetContent(val string) {
+	s.Content = val
 }
 
 // Ref: #/ProfileCreate
@@ -472,12 +546,14 @@ func (s *Redirect302) SetSetCookie(val OptString) {
 	s.SetCookie = val
 }
 
-func (*Redirect302) v1APILogoutPostRes()    {}
-func (*Redirect302) v1APIProfileDeleteRes() {}
-func (*Redirect302) v1APIProfilePostRes()   {}
-func (*Redirect302) v1APISigninPostRes()    {}
-func (*Redirect302) v1PageSigninGetRes()    {}
-func (*Redirect302) v1PageSignupGetRes()    {}
+func (*Redirect302) v1APIGroupGroupIDDeleteRes() {}
+func (*Redirect302) v1APIGroupPostRes()          {}
+func (*Redirect302) v1APILogoutPostRes()         {}
+func (*Redirect302) v1APIProfileDeleteRes()      {}
+func (*Redirect302) v1APIProfilePostRes()        {}
+func (*Redirect302) v1APISigninPostRes()         {}
+func (*Redirect302) v1PageSigninGetRes()         {}
+func (*Redirect302) v1PageSignupGetRes()         {}
 
 type SessionAuth struct {
 	APIKey string

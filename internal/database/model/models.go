@@ -8,6 +8,8 @@ const (
 	TableContacts        = "contacts"
 	TableProfilePictures = "profile_pictures"
 	TableGroups          = "groups"
+	TablePosts           = "posts"
+	TableComments        = "comments"
 	TableInterests       = "interests"
 	TableUserInterests   = "user_interests"
 	TableGroupInterests  = "group_interests"
@@ -87,9 +89,7 @@ type ProfilePicture struct {
 
 const (
 	GroupID          = "id"
-	GroupPictureID   = "picture_id"
 	GroupName        = "name"
-	GroupAlias       = "alias"
 	GroupDescription = "description"
 	GroupAuthorID    = "author_id"
 	GroupCreatedAt   = "created_at"
@@ -98,13 +98,49 @@ const (
 
 type Group struct {
 	ID          int64     `db:"id"`
-	PictureID   string    `db:"picture_id"`
 	Name        string    `db:"name"`
 	Description string    `db:"description"`
-	Alias       string    `db:"alias"`
 	AuthorID    int64     `db:"author_id"`
 	CreatedAt   time.Time `db:"created_at"`
 	UpdatedAt   time.Time `db:"updated_at"`
+}
+
+const (
+	PostID        = "id"
+	PostName      = "name"
+	PostGroupID   = "group_id"
+	PostContent   = "content"
+	PostAuthorID  = "author_id"
+	PostCreatedAt = "created_at"
+	PostUpdatedAt = "updated_at"
+)
+
+type Post struct {
+	ID        int64     `db:"id"`
+	GroupID   int64     `db:"group_id"`
+	Content   string    `db:"content"`
+	AuthorID  int64     `db:"author_id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+}
+
+const (
+	CommentID        = "id"
+	CommentName      = "name"
+	CommentPostID    = "post_id"
+	CommentContent   = "content"
+	CommentAuthorID  = "author_id"
+	CommentCreatedAt = "created_at"
+	CommentUpdatedAt = "updated_at"
+)
+
+type Comment struct {
+	ID        int64     `db:"id"`
+	PostID    int64     `db:"post_id"`
+	Content   string    `db:"content"`
+	AuthorID  int64     `db:"author_id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 const (

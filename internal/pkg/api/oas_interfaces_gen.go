@@ -13,6 +13,42 @@ type V1APIContactPostRes interface {
 	v1APIContactPostRes()
 }
 
+type V1APIGroupGroupIDDeleteRes interface {
+	v1APIGroupGroupIDDeleteRes()
+}
+
+type V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes interface {
+	v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes()
+}
+
+type V1APIGroupGroupIDPostPostIDCommentCommentIDPutRes interface {
+	v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()
+}
+
+type V1APIGroupGroupIDPostPostIDCommentPostRes interface {
+	v1APIGroupGroupIDPostPostIDCommentPostRes()
+}
+
+type V1APIGroupGroupIDPostPostIDDeleteRes interface {
+	v1APIGroupGroupIDPostPostIDDeleteRes()
+}
+
+type V1APIGroupGroupIDPostPostIDPutRes interface {
+	v1APIGroupGroupIDPostPostIDPutRes()
+}
+
+type V1APIGroupGroupIDPostPostRes interface {
+	v1APIGroupGroupIDPostPostRes()
+}
+
+type V1APIGroupGroupIDPutRes interface {
+	v1APIGroupGroupIDPutRes()
+}
+
+type V1APIGroupPostRes interface {
+	v1APIGroupPostRes()
+}
+
 type V1APIInterestInterestIDDeleteRes interface {
 	v1APIInterestInterestIDDeleteRes()
 }
@@ -41,8 +77,8 @@ type V1APISigninPostRes interface {
 	v1APISigninPostRes()
 }
 
-type V1PageGroupGroupNameGetRes interface {
-	v1PageGroupGroupNameGetRes()
+type V1PageGroupGroupIDGetRes interface {
+	v1PageGroupGroupIDGetRes()
 }
 
 type V1PageProfileUsernameGetRes interface {

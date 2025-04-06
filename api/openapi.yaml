@@ -15,7 +15,7 @@ paths:
     $ref: "./paths/pages.yaml#/signup"
   /v1/page/profile/{username}:
     $ref: "./paths/pages.yaml#/profile"
-  /v1/page/group/{group_name}:
+  /v1/page/group/{group_id}:
     $ref: "./paths/pages.yaml#/group"
   /v1/page/search:
     $ref: "./paths/pages.yaml#/search"
@@ -31,6 +31,18 @@ paths:
     $ref: "./paths/api.yaml#/create_contact"
   /v1/api/contact/{contact_id}:
     $ref: "./paths/api.yaml#/contact"
+  /v1/api/group:
+    $ref: "./paths/api.yaml#/create_group"
+  /v1/api/group/{group_id}:
+    $ref: "./paths/api.yaml#/group"
+  /v1/api/group/{group_id}/post:
+    $ref: "./paths/api.yaml#/create_post"
+  /v1/api/group/{group_id}/post/{post_id}:
+    $ref: "./paths/api.yaml#/post"
+  /v1/api/group/{group_id}/post/{post_id}/comment:
+    $ref: "./paths/api.yaml#/create_comment"
+  /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}:
+    $ref: "./paths/api.yaml#/comment"
 
 components:
   securitySchemes:

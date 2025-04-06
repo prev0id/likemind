@@ -15,4 +15,5 @@ var (
 	ErrWrongAspectRation        = errors.New("image aspect ratio not allowed")
 	ErrNilRequest               = errors.New("nil request")
 	ErrNotFound                 = errors.New("not found")
+	ErrValidationFailed         = errors.New("validation failed")
 )

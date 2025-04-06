@@ -157,3 +157,174 @@ contact:
         $ref: "../components/responses.yaml#/NotFound"
       "500":
         $ref: "../components/responses.yaml#/InternalError"
+
+create_group:
+  post:
+    summary: Create new group
+    description: Creates new group. If ok redirects to created group page.
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Group"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+group:
+  put:
+    summary: Update group
+    description: Updates group.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/group_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Group"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete group
+    description: Deletes group.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/group_id"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+create_post:
+  post:
+    summary: Create new post
+    description: Creates new post. If ok returns post component.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/group_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Post"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+post:
+  put:
+    summary: Update post
+    description: Updates post. If ok returns updated post.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/post_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Post"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete post
+    description: Deletes post. If ok returns post component.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/post_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+create_comment:
+  post:
+    summary: Create new comment for the post
+    description: Creates new comment. If ok returns updated comment section.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/post_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Post"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+comment:
+  put:
+    summary: Update comment
+    description: Updates comment. If ok returns updated comment section.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/post_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+      - $ref: "../components/parameters.yaml#/comment_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Post"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete comment for the post
+    description: Deletes comment. If ok returns updated comment section.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/post_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+      - $ref: "../components/parameters.yaml#/comment_id"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"

@@ -145,6 +145,912 @@ func decodeV1APIContactContactIDPutParams(args [1]string, argsEscaped bool, r *h
 	return params, nil
 }
 
+// V1APIGroupGroupIDDeleteParams is parameters of DELETE /v1/api/group/{group_id} operation.
+type V1APIGroupGroupIDDeleteParams struct {
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDDeleteParams(packed middleware.Parameters) (params V1APIGroupGroupIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDDeleteParams, _ error) {
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostParams is parameters of POST /v1/api/group/{group_id}/post operation.
+type V1APIGroupGroupIDPostPostParams struct {
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostParams, _ error) {
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams is parameters of DELETE /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id} operation.
+type V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams struct {
+	// The post id.
+	PostID int64
+	// The group id.
+	GroupID int64
+	// The comment id.
+	CommentID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "post_id",
+			In:   "path",
+		}
+		params.PostID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "comment_id",
+			In:   "path",
+		}
+		params.CommentID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams(args [3]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams, _ error) {
+	// Decode path: post_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "post_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.PostID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "post_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: comment_id.
+	if err := func() error {
+		param := args[2]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[2])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "comment_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.CommentID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "comment_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams is parameters of PUT /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id} operation.
+type V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams struct {
+	// The post id.
+	PostID int64
+	// The group id.
+	GroupID int64
+	// The comment id.
+	CommentID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostIDCommentCommentIDPutParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "post_id",
+			In:   "path",
+		}
+		params.PostID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "comment_id",
+			In:   "path",
+		}
+		params.CommentID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostIDCommentCommentIDPutParams(args [3]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams, _ error) {
+	// Decode path: post_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "post_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.PostID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "post_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: comment_id.
+	if err := func() error {
+		param := args[2]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[2])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "comment_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.CommentID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "comment_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostIDCommentPostParams is parameters of POST /v1/api/group/{group_id}/post/{post_id}/comment operation.
+type V1APIGroupGroupIDPostPostIDCommentPostParams struct {
+	// The post id.
+	PostID int64
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostIDCommentPostParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostIDCommentPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "post_id",
+			In:   "path",
+		}
+		params.PostID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostIDCommentPostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostIDCommentPostParams, _ error) {
+	// Decode path: post_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "post_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.PostID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "post_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostIDDeleteParams is parameters of DELETE /v1/api/group/{group_id}/post/{post_id} operation.
+type V1APIGroupGroupIDPostPostIDDeleteParams struct {
+	// The post id.
+	PostID int64
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostIDDeleteParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "post_id",
+			In:   "path",
+		}
+		params.PostID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostIDDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostIDDeleteParams, _ error) {
+	// Decode path: post_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "post_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.PostID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "post_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPostPostIDPutParams is parameters of PUT /v1/api/group/{group_id}/post/{post_id} operation.
+type V1APIGroupGroupIDPostPostIDPutParams struct {
+	// The post id.
+	PostID int64
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDPostPostIDPutParams(packed middleware.Parameters) (params V1APIGroupGroupIDPostPostIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "post_id",
+			In:   "path",
+		}
+		params.PostID = packed[key].(int64)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPostPostIDPutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPostPostIDPutParams, _ error) {
+	// Decode path: post_id.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "post_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.PostID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "post_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDPutParams is parameters of PUT /v1/api/group/{group_id} operation.
+type V1APIGroupGroupIDPutParams struct {
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDPutParams(packed middleware.Parameters) (params V1APIGroupGroupIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDPutParams, _ error) {
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1APIInterestInterestIDDeleteParams is parameters of DELETE /v1/api/interest/{interest_id} operation.
 type V1APIInterestInterestIDDeleteParams struct {
 	InterestID int64
@@ -275,25 +1181,25 @@ func decodeV1APIInterestInterestIDPostParams(args [1]string, argsEscaped bool, r
 	return params, nil
 }
 
-// V1PageGroupGroupNameGetParams is parameters of GET /v1/page/group/{group_name} operation.
-type V1PageGroupGroupNameGetParams struct {
-	// The name of the group.
-	GroupName string
+// V1PageGroupGroupIDGetParams is parameters of GET /v1/page/group/{group_id} operation.
+type V1PageGroupGroupIDGetParams struct {
+	// The group id.
+	GroupID int64
 }
 
-func unpackV1PageGroupGroupNameGetParams(packed middleware.Parameters) (params V1PageGroupGroupNameGetParams) {
+func unpackV1PageGroupGroupIDGetParams(packed middleware.Parameters) (params V1PageGroupGroupIDGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "group_name",
+			Name: "group_id",
 			In:   "path",
 		}
-		params.GroupName = packed[key].(string)
+		params.GroupID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeV1PageGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1PageGroupGroupNameGetParams, _ error) {
-	// Decode path: group_name.
+func decodeV1PageGroupGroupIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1PageGroupGroupIDGetParams, _ error) {
+	// Decode path: group_id.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -305,7 +1211,7 @@ func decodeV1PageGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *ht
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "group_name",
+				Param:   "group_id",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -317,12 +1223,12 @@ func decodeV1PageGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *ht
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToInt64(val)
 				if err != nil {
 					return err
 				}
 
-				params.GroupName = c
+				params.GroupID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -333,7 +1239,7 @@ func decodeV1PageGroupGroupNameGetParams(args [1]string, argsEscaped bool, r *ht
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "group_name",
+			Name: "group_id",
 			In:   "path",
 			Err:  err,
 		}

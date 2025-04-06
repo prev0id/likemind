@@ -26,6 +26,60 @@ type Handler interface {
 	//
 	// POST /v1/api/contact
 	V1APIContactPost(ctx context.Context, req *Contact) (V1APIContactPostRes, error)
+	// V1APIGroupGroupIDDelete implements DELETE /v1/api/group/{group_id} operation.
+	//
+	// Deletes group.
+	//
+	// DELETE /v1/api/group/{group_id}
+	V1APIGroupGroupIDDelete(ctx context.Context, params V1APIGroupGroupIDDeleteParams) (V1APIGroupGroupIDDeleteRes, error)
+	// V1APIGroupGroupIDPostPost implements POST /v1/api/group/{group_id}/post operation.
+	//
+	// Creates new post. If ok returns post component.
+	//
+	// POST /v1/api/group/{group_id}/post
+	V1APIGroupGroupIDPostPost(ctx context.Context, req *Post, params V1APIGroupGroupIDPostPostParams) (V1APIGroupGroupIDPostPostRes, error)
+	// V1APIGroupGroupIDPostPostIDCommentCommentIDDelete implements DELETE /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id} operation.
+	//
+	// Deletes comment. If ok returns updated comment section.
+	//
+	// DELETE /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}
+	V1APIGroupGroupIDPostPostIDCommentCommentIDDelete(ctx context.Context, params V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams) (V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes, error)
+	// V1APIGroupGroupIDPostPostIDCommentCommentIDPut implements PUT /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id} operation.
+	//
+	// Updates comment. If ok returns updated comment section.
+	//
+	// PUT /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}
+	V1APIGroupGroupIDPostPostIDCommentCommentIDPut(ctx context.Context, req *Post, params V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams) (V1APIGroupGroupIDPostPostIDCommentCommentIDPutRes, error)
+	// V1APIGroupGroupIDPostPostIDCommentPost implements POST /v1/api/group/{group_id}/post/{post_id}/comment operation.
+	//
+	// Creates new comment. If ok returns updated comment section.
+	//
+	// POST /v1/api/group/{group_id}/post/{post_id}/comment
+	V1APIGroupGroupIDPostPostIDCommentPost(ctx context.Context, req *Post, params V1APIGroupGroupIDPostPostIDCommentPostParams) (V1APIGroupGroupIDPostPostIDCommentPostRes, error)
+	// V1APIGroupGroupIDPostPostIDDelete implements DELETE /v1/api/group/{group_id}/post/{post_id} operation.
+	//
+	// Deletes post. If ok returns post component.
+	//
+	// DELETE /v1/api/group/{group_id}/post/{post_id}
+	V1APIGroupGroupIDPostPostIDDelete(ctx context.Context, params V1APIGroupGroupIDPostPostIDDeleteParams) (V1APIGroupGroupIDPostPostIDDeleteRes, error)
+	// V1APIGroupGroupIDPostPostIDPut implements PUT /v1/api/group/{group_id}/post/{post_id} operation.
+	//
+	// Updates post. If ok returns updated post.
+	//
+	// PUT /v1/api/group/{group_id}/post/{post_id}
+	V1APIGroupGroupIDPostPostIDPut(ctx context.Context, req *Post, params V1APIGroupGroupIDPostPostIDPutParams) (V1APIGroupGroupIDPostPostIDPutRes, error)
+	// V1APIGroupGroupIDPut implements PUT /v1/api/group/{group_id} operation.
+	//
+	// Updates group.
+	//
+	// PUT /v1/api/group/{group_id}
+	V1APIGroupGroupIDPut(ctx context.Context, req *Group, params V1APIGroupGroupIDPutParams) (V1APIGroupGroupIDPutRes, error)
+	// V1APIGroupPost implements POST /v1/api/group operation.
+	//
+	// Creates new group. If ok redirects to created group page.
+	//
+	// POST /v1/api/group
+	V1APIGroupPost(ctx context.Context, req *Group) (V1APIGroupPostRes, error)
 	// V1APIInterestInterestIDDelete implements DELETE /v1/api/interest/{interest_id} operation.
 	//
 	// Removes an interest with the specified ID from the user's profile.
@@ -68,12 +122,12 @@ type Handler interface {
 	//
 	// POST /v1/api/signin
 	V1APISigninPost(ctx context.Context, req *SignIn) (V1APISigninPostRes, error)
-	// V1PageGroupGroupNameGet implements GET /v1/page/group/{group_name} operation.
+	// V1PageGroupGroupIDGet implements GET /v1/page/group/{group_id} operation.
 	//
 	// Returns an HTML page displaying details of a specific user group. Requires authentication.
 	//
-	// GET /v1/page/group/{group_name}
-	V1PageGroupGroupNameGet(ctx context.Context, params V1PageGroupGroupNameGetParams) (V1PageGroupGroupNameGetRes, error)
+	// GET /v1/page/group/{group_id}
+	V1PageGroupGroupIDGet(ctx context.Context, params V1PageGroupGroupIDGetParams) (V1PageGroupGroupIDGetRes, error)
 	// V1PageProfileUsernameGet implements GET /v1/page/profile/{username} operation.
 	//
 	// Returns an HTML page displaying the user's profile information. Requires authentication.

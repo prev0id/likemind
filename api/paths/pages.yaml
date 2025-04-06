@@ -57,7 +57,7 @@ group:
     tags:
       - page
     parameters:
-      - $ref: "../components/parameters.yaml#/group_name"
+      - $ref: "../components/parameters.yaml#/group_id"
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"

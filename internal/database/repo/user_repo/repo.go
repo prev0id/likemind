@@ -12,19 +12,19 @@ import (
 )
 
 type DB interface {
-	CreateUser(ctx context.Context, user model.User) (int64, error)
-	UpdateUser(ctx context.Context, user model.User) error
-	GetUserByID(ctx context.Context, id int64) (model.User, error)
-	ListUsers(ctx context.Context) ([]model.User, error)
-	RemoveUser(ctx context.Context, userID int64) error
-	GetUserByEmail(ctx context.Context, email string) (model.User, error)
+	Create(ctx context.Context, user model.User) (int64, error)
+	Update(ctx context.Context, user model.User) error
+	GetByID(ctx context.Context, id int64) (model.User, error)
+	GetByEmail(ctx context.Context, email string) (model.User, error)
+	List(ctx context.Context) ([]model.User, error)
+	Delete(ctx context.Context, userID int64) error
 }
 
 var _ DB = (*Repo)(nil)
 
 type Repo struct{}
 
-func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
+func (r *Repo) Create(ctx context.Context, user model.User) (int64, error) {
 	now := time.Now()
 	user.CreatedAt = now
 	user.UpdatedAt = now
@@ -62,7 +62,7 @@ func (r *Repo) CreateUser(ctx context.Context, user model.User) (int64, error) {
 	return id, nil
 }
 
-func (r *Repo) UpdateUser(ctx context.Context, user model.User) error {
+func (r *Repo) Update(ctx context.Context, user model.User) error {
 	user.UpdatedAt = time.Now()
 
 	q := sql.Update(model.TableUsers)
@@ -85,7 +85,7 @@ func (r *Repo) UpdateUser(ctx context.Context, user model.User) error {
 	return nil
 }
 
-func (r *Repo) GetUserByID(ctx context.Context, id int64) (model.User, error) {
+func (r *Repo) GetByID(ctx context.Context, id int64) (model.User, error) {
 	q := sql.Select(
 		model.UserID,
 		model.UserNickname,
@@ -111,7 +111,7 @@ func (r *Repo) GetUserByID(ctx context.Context, id int64) (model.User, error) {
 	return result, nil
 }
 
-func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
+func (r *Repo) List(ctx context.Context) ([]model.User, error) {
 	q := sql.Select(
 		model.UserID,
 		model.UserNickname,
@@ -134,7 +134,7 @@ func (r *Repo) ListUsers(ctx context.Context) ([]model.User, error) {
 	return result, nil
 }
 
-func (r *Repo) RemoveUser(ctx context.Context, userID int64) error {
+func (r *Repo) Delete(ctx context.Context, userID int64) error {
 	q := sql.DeleteFrom(model.TableUsers)
 	q.Where(q.Equal(model.UserID, userID))
 
@@ -145,7 +145,7 @@ func (r *Repo) RemoveUser(ctx context.Context, userID int64) error {
 	return nil
 }
 
-func (r *Repo) GetUserByEmail(ctx context.Context, email string) (model.User, error) {
+func (r *Repo) GetByEmail(ctx context.Context, email string) (model.User, error) {
 	q := sql.Select(
 		model.UserID,
 		model.UserNickname,

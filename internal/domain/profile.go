@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type (
 	UserID    int64
@@ -26,4 +29,8 @@ type Contact struct {
 	ID       int64
 	Platform string
 	Value    string
+}
+
+func (id UserID) String() string {
+	return strconv.FormatInt(int64(id), 10)
 }

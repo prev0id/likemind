@@ -27,6 +27,7 @@ var domainErrors = map[error]errorType{
 	domain.ErrUnsupportedImageFormat:   BadRequestErrorType,
 	domain.ErrWrongResolution:          BadRequestErrorType,
 	domain.ErrWrongAspectRation:        BadRequestErrorType,
+	domain.ErrValidationFailed:         BadRequestErrorType,
 }
 
 func ErrorMsg(err error) io.Reader {

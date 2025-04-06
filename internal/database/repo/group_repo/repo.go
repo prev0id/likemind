@@ -2,6 +2,7 @@ package group_repo
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"likemind/internal/database"
@@ -11,18 +12,18 @@ import (
 )
 
 type DB interface {
-	CreateGroup(ctx context.Context, group model.Group) error
-	UpdateGroup(ctx context.Context, group model.Group) error
-	GetGroupByAlias(ctx context.Context, alias string) (model.Group, error)
-	GetGroupByID(ctx context.Context, id int64) (model.Group, error)
-	ListGroups(ctx context.Context) ([]model.Group, error)
+	Create(ctx context.Context, group model.Group) (int64, error)
+	Update(ctx context.Context, group model.Group) error
+	GetByID(ctx context.Context, id int64) (model.Group, error)
+	List(ctx context.Context) ([]model.Group, error)
+	Delete(ctx context.Context, id int64) error
 }
 
 var _ DB = (*Repo)(nil)
 
 type Repo struct{}
 
-func (r *Repo) CreateGroup(ctx context.Context, group model.Group) error {
+func (r *Repo) Create(ctx context.Context, group model.Group) (int64, error) {
 	now := time.Now()
 	group.CreatedAt = now
 	group.UpdatedAt = now
@@ -30,9 +31,7 @@ func (r *Repo) CreateGroup(ctx context.Context, group model.Group) error {
 	q := sql.InsertInto(model.TableGroups)
 	q.Cols(
 		model.GroupID,
-		model.GroupPictureID,
 		model.GroupName,
-		model.GroupAlias,
 		model.GroupDescription,
 		model.GroupAuthorID,
 		model.GroupCreatedAt,
@@ -40,29 +39,28 @@ func (r *Repo) CreateGroup(ctx context.Context, group model.Group) error {
 	)
 	q.Values(
 		group.ID,
-		group.PictureID,
 		group.Name,
-		group.Alias,
 		group.Description,
 		group.AuthorID,
 		group.CreatedAt,
 		group.UpdatedAt,
 	)
+	q.SQL("RETURNING " + model.GroupID)
 
-	if _, err := database.Exec(ctx, q); err != nil {
-		return err
+	id, err := database.Get[int64](ctx, q)
+	if err != nil {
+		return 0, fmt.Errorf("database.Get: %w", err)
 	}
-	return nil
+
+	return id, nil
 }
 
-func (r *Repo) UpdateGroup(ctx context.Context, group model.Group) error {
+func (r *Repo) Update(ctx context.Context, group model.Group) error {
 	group.UpdatedAt = time.Now()
 
 	q := sql.Update(model.TableGroups)
 	q.Set(
-		q.Assign(model.GroupPictureID, group.PictureID),
 		q.Assign(model.GroupName, group.Name),
-		q.Assign(model.GroupAlias, group.Alias),
 		q.Assign(model.GroupDescription, group.Description),
 		q.Assign(model.GroupAuthorID, group.AuthorID),
 		q.Assign(model.GroupUpdatedAt, group.UpdatedAt),
@@ -70,39 +68,15 @@ func (r *Repo) UpdateGroup(ctx context.Context, group model.Group) error {
 	q.Where(q.Equal(model.GroupID, group.ID))
 
 	if _, err := database.Exec(ctx, q); err != nil {
-		return err
+		return fmt.Errorf("database.Exec: %w", err)
 	}
 	return nil
 }
 
-func (r *Repo) GetGroupByAlias(ctx context.Context, alias string) (model.Group, error) {
+func (r *Repo) GetByID(ctx context.Context, id int64) (model.Group, error) {
 	q := sql.Select(
 		model.GroupID,
-		model.GroupPictureID,
 		model.GroupName,
-		model.GroupAlias,
-		model.GroupDescription,
-		model.GroupAuthorID,
-		model.GroupCreatedAt,
-		model.GroupUpdatedAt,
-	)
-	q.From(model.TableGroups)
-	q.Where(q.Equal(model.GroupAlias, alias))
-
-	result, err := database.Get[model.Group](ctx, q)
-	if err != nil {
-		return model.Group{}, err
-	}
-
-	return result, nil
-}
-
-func (r *Repo) GetGroupByID(ctx context.Context, id int64) (model.Group, error) {
-	q := sql.Select(
-		model.GroupID,
-		model.GroupPictureID,
-		model.GroupName,
-		model.GroupAlias,
 		model.GroupDescription,
 		model.GroupAuthorID,
 		model.GroupCreatedAt,
@@ -113,18 +87,16 @@ func (r *Repo) GetGroupByID(ctx context.Context, id int64) (model.Group, error) 
 
 	result, err := database.Get[model.Group](ctx, q)
 	if err != nil {
-		return model.Group{}, err
+		return model.Group{}, fmt.Errorf("database.Get: %w", err)
 	}
 
 	return result, nil
 }
 
-func (r *Repo) ListGroups(ctx context.Context) ([]model.Group, error) {
+func (r *Repo) List(ctx context.Context) ([]model.Group, error) {
 	q := sql.Select(
 		model.GroupID,
-		model.GroupPictureID,
 		model.GroupName,
-		model.GroupAlias,
 		model.GroupDescription,
 		model.GroupAuthorID,
 		model.GroupCreatedAt,
@@ -134,8 +106,19 @@ func (r *Repo) ListGroups(ctx context.Context) ([]model.Group, error) {
 
 	results, err := database.Select[model.Group](ctx, q)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("database.Select: %w", err)
 	}
 
 	return results, nil
+}
+
+func (r *Repo) Delete(ctx context.Context, id int64) error {
+	q := sql.DeleteFrom(model.TableGroups)
+	q.Where(q.Equal(model.GroupID, id))
+
+	if _, err := database.Exec(ctx, q); err != nil {
+		return fmt.Errorf("database.Exec: %w", err)
+	}
+
+	return nil
 }

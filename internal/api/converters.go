@@ -5,7 +5,7 @@ import (
 	"likemind/website/view"
 )
 
-func convertProfile(user domain.User, contacts []domain.Contact, pictures []domain.PictureID) view.Profile {
+func profileFromDomainToView(user domain.User, contacts []domain.Contact, pictures []domain.PictureID) view.Profile {
 	return view.Profile{
 		Name:        user.Name,
 		Surname:     user.Surname,
@@ -15,7 +15,7 @@ func convertProfile(user domain.User, contacts []domain.Contact, pictures []doma
 		DateOfBirth: user.DateOfBirth,
 
 		PictureID: convertPicturesIDs(pictures),
-		Contacts:  convertContacts(contacts),
+		Contacts:  contactsDomainToView(contacts),
 	}
 }
 
@@ -26,7 +26,7 @@ func convertPicturesIDs(picutres []domain.PictureID) string {
 	return ""
 }
 
-func convertContacts(contacts []domain.Contact) []view.Contact {
+func contactsDomainToView(contacts []domain.Contact) []view.Contact {
 	result := make([]view.Contact, 0, len(contacts))
 	for _, contact := range contacts {
 		result = append(result, view.Contact{

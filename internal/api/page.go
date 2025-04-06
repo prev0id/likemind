@@ -12,7 +12,7 @@ import (
 	user_search_page "likemind/website/page/user_search"
 )
 
-func (s *Server) V1PageGroupGroupNameGet(ctx context.Context, params desc.V1PageGroupGroupNameGetParams) (desc.V1PageGroupGroupNameGetRes, error) {
+func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGroupGroupIDGetParams) (desc.V1PageGroupGroupIDGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, group_page.Page(group_page.State)),
 	}, nil
@@ -39,7 +39,7 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	state := convertProfile(profile, contacts, pictures)
+	state := profileFromDomainToView(profile, contacts, pictures)
 	pageComponent := page.Profile(state)
 
 	return &desc.HTMLResponse{

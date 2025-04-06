@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"likemind/internal/common"
 	"likemind/internal/database"
 	"likemind/internal/database/repo/contact_repo"
 	profile_picture_repo "likemind/internal/database/repo/picture_repo"
@@ -12,9 +13,6 @@ import (
 )
 
 type Adapter interface {
-	// GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error)
-	// ListProfiles(ctx context.Context) ([]domain.Profile, error)
-
 	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
 	UpdateUser(ctx context.Context, user domain.User) error
 	RemoveUser(ctx context.Context, id domain.UserID) error
@@ -31,104 +29,60 @@ type Adapter interface {
 	RemovePictureByID(ctx context.Context, pictureID domain.PictureID) error
 }
 
-type implementation struct {
-	userDB    user_repo.DB
-	contactDB contact_repo.DB
-	pictureDB profile_picture_repo.DB
+type Implementation struct {
+	user    user_repo.DB
+	contact contact_repo.DB
+	picture profile_picture_repo.DB
 }
 
-func NewAdapter(userDB user_repo.DB, contactDB contact_repo.DB, pictureDB profile_picture_repo.DB) Adapter {
-	return &implementation{
-		userDB:    userDB,
-		contactDB: contactDB,
-		pictureDB: pictureDB,
+var _ Adapter = (*Implementation)(nil)
+
+func NewAdapter(userDB user_repo.DB, contactDB contact_repo.DB, pictureDB profile_picture_repo.DB) *Implementation {
+	return &Implementation{
+		user:    userDB,
+		contact: contactDB,
+		picture: pictureDB,
 	}
 }
 
-// func (i *implementation) GetProfileByUserID(ctx context.Context, id domain.UserID) (domain.Profile, error) {
-// 	user, err := i.userDB.GetUserByID(ctx, int64(id))
-// 	if err != nil {
-// 		return domain.Profile{}, fmt.Errorf("i.userDB.GetUserByID: %w", err)
-// 	}
-
-// 	contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
-// 	if err != nil {
-// 		return domain.Profile{}, fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
-// 	}
-
-// 	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
-// 	if err != nil {
-// 		return domain.Profile{}, fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
-// 	}
-
-// 	// TODO: multiple pictures
-// 	var picture string
-// 	if len(pictures) > 0 {
-// 		picture = pictures[0].ID
-// 	}
-
-// 	return domain.Profile{
-// 		User:     modelUserToDomain(user),
-// 		Contacts: convert(contacts, modelContactToDomain),
-// 		Picture:  picture,
-// 	}, nil
-// }
-
-// func (i *implementation) ListProfiles(ctx context.Context) ([]domain.Profile, error) {
-// 	users, err := i.userDB.ListUsers(ctx)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("i.userDB.ListUsers: %w", err)
-// 	}
-
-// 	profiles := make([]domain.Profile, 0, len(users))
-// 	for _, user := range users {
-// 		profile, err := i.GetProfileByUserID(ctx, domain.UserID(user.ID))
-// 		if err != nil {
-// 			return nil, fmt.Errorf("i.GetProfileByUserID: %w", err)
-// 		}
-// 		profiles = append(profiles, profile)
-// 	}
-// 	return profiles, nil
-// }
-
-func (i *implementation) CreateUser(ctx context.Context, user domain.User) (domain.UserID, error) {
-	id, err := i.userDB.CreateUser(ctx, domainUserToModel(user))
+func (i *Implementation) CreateUser(ctx context.Context, user domain.User) (domain.UserID, error) {
+	id, err := i.user.Create(ctx, domainUserToModel(user))
 	if err != nil {
 		return 0, fmt.Errorf("i.userDB.CreateUser: %w", err)
 	}
 	return domain.UserID(id), nil
 }
 
-func (i *implementation) UpdateUser(ctx context.Context, user domain.User) error {
-	if err := i.userDB.UpdateUser(ctx, domainUserToModel(user)); err != nil {
+func (i *Implementation) UpdateUser(ctx context.Context, user domain.User) error {
+	if err := i.user.Update(ctx, domainUserToModel(user)); err != nil {
 		return fmt.Errorf("i.userDB.UpdateUser: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) RemoveUser(ctx context.Context, id domain.UserID) error {
+func (i *Implementation) RemoveUser(ctx context.Context, id domain.UserID) error {
 	err := database.InTransaction(ctx, func(ctx context.Context) error {
-		pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
+		pictures, err := i.picture.GetProfilePicturesByUserID(ctx, int64(id))
 		if err != nil {
 			return fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
 		}
 		for _, picture := range pictures {
-			if pictureErr := i.pictureDB.RemovePictureByID(ctx, picture.ID); pictureErr != nil {
+			if pictureErr := i.picture.RemovePictureByID(ctx, picture.ID); pictureErr != nil {
 				return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", pictureErr)
 			}
 		}
 
-		contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
+		contacts, err := i.contact.GetContactsByUserID(ctx, int64(id))
 		if err != nil {
 			return fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
 		}
 		for _, contact := range contacts {
-			if err := i.contactDB.RemoveContactByID(ctx, contact.ID); err != nil {
+			if err := i.contact.RemoveContactByID(ctx, contact.ID); err != nil {
 				return fmt.Errorf("i.contactDB.RemoveContactByID: %w", err)
 			}
 		}
 
-		if err := i.userDB.RemoveUser(ctx, int64(id)); err != nil {
+		if err := i.user.Delete(ctx, int64(id)); err != nil {
 			return fmt.Errorf("i.userDB.RemoveUser: %w", err)
 		}
 		return nil
@@ -139,70 +93,70 @@ func (i *implementation) RemoveUser(ctx context.Context, id domain.UserID) error
 	return nil
 }
 
-func (i *implementation) GetUserByLogin(ctx context.Context, login domain.Email) (domain.User, error) {
-	user, err := i.userDB.GetUserByEmail(ctx, string(login))
+func (i *Implementation) GetUserByLogin(ctx context.Context, login domain.Email) (domain.User, error) {
+	user, err := i.user.GetByEmail(ctx, string(login))
 	if err != nil {
 		return domain.User{}, fmt.Errorf("i.userDB.GetUserByLogin: %w", err)
 	}
 	return modelUserToDomain(user), nil
 }
 
-func (i *implementation) GetUserByID(ctx context.Context, id domain.UserID) (domain.User, error) {
-	user, err := i.userDB.GetUserByID(ctx, int64(id))
+func (i *Implementation) GetUserByID(ctx context.Context, id domain.UserID) (domain.User, error) {
+	user, err := i.user.GetByID(ctx, int64(id))
 	if err != nil {
 		return domain.User{}, fmt.Errorf("i.userDB.GetUserByID: %w", err)
 	}
 	return modelUserToDomain(user), nil
 }
 
-func (i *implementation) AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error {
-	if err := i.contactDB.AddContact(ctx, domainContactToModel(contact, int64(id))); err != nil {
+func (i *Implementation) AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error {
+	if err := i.contact.AddContact(ctx, domainContactToModel(contact, int64(id))); err != nil {
 		return fmt.Errorf("i.contactDB.AddContact: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error {
-	if err := i.contactDB.UpdateContact(ctx, domainContactToModel(contact, int64(id))); err != nil {
+func (i *Implementation) UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error {
+	if err := i.contact.UpdateContact(ctx, domainContactToModel(contact, int64(id))); err != nil {
 		return fmt.Errorf("i.contactDB.UpdateContact: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) RemoveContactByID(ctx context.Context, contactID int64) error {
-	if err := i.contactDB.RemoveContactByID(ctx, contactID); err != nil {
+func (i *Implementation) RemoveContactByID(ctx context.Context, contactID int64) error {
+	if err := i.contact.RemoveContactByID(ctx, contactID); err != nil {
 		return fmt.Errorf("i.contactDB.RemoveContactByID: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error {
-	if err := i.pictureDB.AddProfilePicture(ctx, domainProfilePictureToModel(pictureID, int64(id))); err != nil {
+func (i *Implementation) AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error {
+	if err := i.picture.AddProfilePicture(ctx, domainProfilePictureToModel(pictureID, int64(id))); err != nil {
 		return fmt.Errorf("i.pictureDB.AddProfilePicture: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]domain.PictureID, error) {
-	pictures, err := i.pictureDB.GetProfilePicturesByUserID(ctx, int64(id))
+func (i *Implementation) GetProfilePicturesByUserID(ctx context.Context, id domain.UserID) ([]domain.PictureID, error) {
+	pictures, err := i.picture.GetProfilePicturesByUserID(ctx, int64(id))
 	if err != nil {
 		return nil, fmt.Errorf("i.pictureDB.GetProfilePicturesByUserID: %w", err)
 	}
-	return convert(pictures, modelProfilePictureToDomain), nil
+	return common.Convert(pictures, modelProfilePictureToDomain), nil
 }
 
-func (i *implementation) RemovePictureByID(ctx context.Context, pictureID domain.PictureID) error {
-	if err := i.pictureDB.RemovePictureByID(ctx, string(pictureID)); err != nil {
+func (i *Implementation) RemovePictureByID(ctx context.Context, pictureID domain.PictureID) error {
+	if err := i.picture.RemovePictureByID(ctx, string(pictureID)); err != nil {
 		return fmt.Errorf("i.pictureDB.RemovePictureByID: %w", err)
 	}
 	return nil
 }
 
-func (i *implementation) GetContactsByUserID(ctx context.Context, id domain.UserID) ([]domain.Contact, error) {
-	contacts, err := i.contactDB.GetContactsByUserID(ctx, int64(id))
+func (i *Implementation) GetContactsByUserID(ctx context.Context, id domain.UserID) ([]domain.Contact, error) {
+	contacts, err := i.contact.GetContactsByUserID(ctx, int64(id))
 	if err != nil {
 		return nil, fmt.Errorf("i.contactDB.GetContactsByUserID: %w", err)
 	}
 
-	return convert(contacts, modelContactToDomain), nil
+	return common.Convert(contacts, modelContactToDomain), nil
 }

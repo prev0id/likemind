@@ -7,7 +7,14 @@ type Interest struct {
 	GroupID     int64
 }
 
+type Interests map[InterestGroup]Interest
+
 type InterestGroup struct {
 	ID   int64
 	Name string
+}
+
+type UserInterest struct {
+	UserID   UserID
+	Interest []Interest
 }

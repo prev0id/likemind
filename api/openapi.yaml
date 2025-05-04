@@ -25,6 +25,14 @@ paths:
     $ref: "./paths/api.yaml#/logout"
   /v1/api/profile:
     $ref: "./paths/api.yaml#/profile"
+  /v1/api/profile/image:
+    $ref: "./paths/api.yaml#/create_profile_image"
+  /v1/api/profile/image/{image_id}:
+    $ref: "./paths/api.yaml#/profile_image"
+  /v1/api/profile/email:
+    $ref: "./paths/api.yaml#/profile_image"
+  /v1/api/profile/password:
+    $ref: "./paths/api.yaml#/profile_image"
   /v1/api/interest/{interest_id}:
     $ref: "./paths/api.yaml#/interest"
   /v1/api/contact:

@@ -1,9 +1,12 @@
 package widget
 
 import (
+	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
 	common_widget "likemind/website/widget/common"
+	"strconv"
+	"time"
 )
 
 templ FormSignIn() {
@@ -138,5 +141,253 @@ templ authFormWrapper() {
 		<div class="w-full bg-yellow-400 rounded-lg shadow-sm sm:max-w-md p-8">
 			{ children... }
 		</div>
+	</div>
+}
+
+templ UpdateProfileData(state *view.Profile) {
+	@common_widget.Details(view.Details{
+		Summary: "Update your data",
+	}) {
+		@common_widget.Form(view.Form{
+			Htmx: view.HTMX{
+				Target: domain.PathAPIProfile,
+			},
+		}) {
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Username",
+					For:  "username",
+				})
+				@common_widget.Input(view.Input{
+					Type:  "text",
+					Value: state.Nickname,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Name",
+					For:  "name",
+				})
+				@common_widget.Input(view.Input{
+					Type:  "text",
+					Value: state.Name,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Surname",
+					For:  "surname",
+				})
+				@common_widget.Input(view.Input{
+					Type:  "text",
+					Value: state.Surname,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Location",
+					For:  "location",
+				})
+				@common_widget.Input(view.Input{
+					Type:        "text",
+					Placeholder: "City, Country",
+					Value:       state.Location,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Birthday",
+					For:  "date_of_birth",
+				})
+				@common_widget.Input(view.Input{
+					Name:  "date_of_birth",
+					Type:  "date",
+					Value: state.DateOfBirth.Format(time.DateOnly),
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "About",
+					For:  "about",
+				})
+				@common_widget.TextArea(view.TextArea{
+					Name:        "about",
+					Placeholder: "write here about yourself",
+					Value:       state.About,
+					Rows:        4,
+				})
+			</div>
+			@common_widget.Button(view.Button{
+				Type: "submit",
+			}) {
+				Submit
+			}
+		}
+	}
+}
+
+templ UpdatePassword() {
+	@common_widget.Details(view.Details{
+		Summary: "Update your password",
+	}) {
+		@common_widget.Form(view.Form{
+			Htmx: view.HTMX{
+				Target: domain.PathAPIPassword,
+			},
+		}) {
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Repeate your email",
+					For:  "email",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "email",
+					Type:        "email",
+					Placeholder: "mail@example.com",
+					Required:    true,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Repeate your current password",
+					For:  "password",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "password",
+					Type:        "password",
+					Placeholder: "*******",
+					Required:    true,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "New password",
+					For:  "new_password",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "new_password",
+					Type:        "password",
+					Placeholder: "*******",
+					Required:    true,
+				})
+			</div>
+			@common_widget.Button(view.Button{
+				Type: "submit",
+			}) {
+				Submit
+			}
+		}
+	}
+}
+
+templ UpdateEmail() {
+	@common_widget.Details(view.Details{
+		Summary: "Update your email",
+	}) {
+		@common_widget.Form(view.Form{
+			Htmx: view.HTMX{
+				Target: domain.PathAPIEmail,
+			},
+		}) {
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Repeate your current email",
+					For:  "email",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "email",
+					Type:        "email",
+					Placeholder: "mail@example.com",
+					Required:    true,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "Repeate your password",
+					For:  "password",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "password",
+					Type:        "password",
+					Placeholder: "*******",
+					Required:    true,
+				})
+			</div>
+			<div>
+				@common_widget.InputLabel(view.InputLabel{
+					Text: "New email",
+					For:  "email",
+				})
+				@common_widget.Input(view.Input{
+					Name:        "new_email",
+					Type:        "email",
+					Placeholder: "mail@example.com",
+					Required:    true,
+				})
+			</div>
+			@common_widget.Button(view.Button{
+				Type: "submit",
+			}) {
+				Submit
+			}
+		}
+	}
+}
+
+templ UpdateContacts(contacts []view.Contact) {
+	<div id="contacts-container" class="space-y-3">
+		for _, contact := range contacts {
+			<div class="grid grid-cols-[3fr_3fr_1fr] gap-4">
+				@common_widget.Input(view.Input{
+					Type:     "text",
+					Name:     "platform",
+					Value:    contact.Platform,
+					Disabled: true,
+				})
+				@common_widget.Input(view.Input{
+					Type:     "url",
+					Name:     "link",
+					Value:    contact.Value,
+					Disabled: true,
+				})
+				@common_widget.XButton(view.HTMX{
+					Delete: common.FillPath(
+						domain.PathAPIContactID,
+						map[string]string{
+							domain.PathParamContactID: strconv.FormatInt(contact.ID, 10),
+						},
+					),
+					Target: "#contacts-container",
+					Swap:   "outerHTML",
+				})
+			</div>
+		}
+		@common_widget.Form(view.Form{
+			Htmx: view.HTMX{
+				Post:   domain.PathAPIContact,
+				Target: "#contacts-container",
+				Swap:   "outerHTML",
+			},
+		}) {
+			<div class="grid grid-cols-[3fr_3fr_1fr] gap-4">
+				@common_widget.Input(view.Input{
+					Type:        "text",
+					Name:        "platform",
+					Placeholder: "New Platform",
+					Required:    true,
+				})
+				@common_widget.Input(view.Input{
+					Type:        "url",
+					Name:        "link",
+					Placeholder: "https://example.com",
+					Required:    true,
+				})
+				@common_widget.Button(view.Button{
+					Type: "submit",
+				}) {
+					Add
+				}
+			</div>
+		}
 	</div>
 }

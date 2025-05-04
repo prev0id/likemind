@@ -39,7 +39,7 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	state := profileFromDomainToView(profile, contacts, pictures)
+	state := profileFromDomainToView(ctx, profile, contacts, pictures)
 	pageComponent := page.Profile(state)
 
 	return &desc.HTMLResponse{

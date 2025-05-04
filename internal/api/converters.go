@@ -1,18 +1,23 @@
 package api
 
 import (
+	"context"
+
+	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
 )
 
-func profileFromDomainToView(user domain.User, contacts []domain.Contact, pictures []domain.PictureID) view.Profile {
-	return view.Profile{
+func profileFromDomainToView(ctx context.Context, user domain.User, contacts []domain.Contact, pictures []domain.PictureID) *view.Profile {
+	userID := common.UserIDFromContext(ctx)
+	return &view.Profile{
 		Name:        user.Name,
 		Surname:     user.Surname,
-		Nickname:    user.Name,
+		Nickname:    user.Nickname,
 		About:       user.About,
 		Location:    user.Location,
 		DateOfBirth: user.DateOfBirth,
+		Owner:       userID == user.ID,
 
 		PictureID: convertPicturesIDs(pictures),
 		Contacts:  contactsDomainToView(contacts),

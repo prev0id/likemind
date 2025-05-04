@@ -39,3 +39,29 @@ Post:
     application/x-www-form-urlencoded:
       schema:
         $ref: "schemas.yaml#/Post"
+
+Image:
+  required: true
+  content:
+    image/png:
+      schema:
+        type: string
+        format: binary
+    image/jpeg:
+      schema:
+        type: string
+        format: binary
+
+PasswordUpdate:
+  required: true
+  content:
+    application/x-www-form-urlencoded:
+      schema:
+        $ref: "schemas.yaml#/PasswordUpdate"
+
+EmailUpdate:
+  required: true
+  content:
+    application/x-www-form-urlencoded:
+      schema:
+        $ref: "schemas.yaml#/EmailUpdate"

@@ -54,3 +54,11 @@ comment_id:
   schema:
     type: integer
     format: int64
+
+image_id:
+  name: image_id
+  in: path
+  required: true
+  description: The image id.
+  schema:
+    type: string

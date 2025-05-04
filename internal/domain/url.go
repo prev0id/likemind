@@ -21,6 +21,10 @@ const (
 	PathAPIContact    = prefixAPI + "/contact"
 	PathAPIContactID  = prefixAPI + "/contact/{contact_id}"
 	PathAPIInterestID = prefixAPI + "/interest/{interest_id}"
+	PathAPIImage      = prefixAPI + "/profile/image"
+	PathAPIImageID    = prefixAPI + "/profile/image/{image_id}"
+	PathAPIPassword   = prefixAPI + "/v1/api/profile/password"
+	PathAPIEmail      = prefixAPI + "/v1/api/profile/email"
 
 	PathAPIGroup     = prefixAPI + "/group"
 	PathAPIGroupID   = prefixAPI + "/group/{group_id}"
@@ -30,8 +34,8 @@ const (
 	PathAPICommentID = prefixAPI + "/group/{group_id}/post/{post_id}/comment/{comment_id}"
 
 	PathStaticHTMX         = prefixStatic + "/js/htmx.min.js"
-	PathStaticAlpine       = prefixStatic + "/js/alpine.js"
 	PathStaticErrorHandler = prefixStatic + "/js/error_handler.js"
+	PathStaticUploadFile   = prefixStatic + "/js/upload_file.js"
 	PathStaticFavicon      = prefixStatic + "/img/favicon.png"
 	PathStaticStyles       = prefixStatic + "/css/styles.css"
 
@@ -42,6 +46,7 @@ const (
 	PathParamFilePath   = "filepath"
 	PathParamContactID  = "contact_id"
 	PathParamInterestID = "interest_id"
+	PathParamImageID    = "image_id"
 
 	prefixAPI     = "/v1/api"
 	prefixStatic  = "/static"

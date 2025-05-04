@@ -328,3 +328,63 @@ comment:
         $ref: "../components/responses.yaml#/NotAuthorized"
       "500":
         $ref: "../components/responses.yaml#/InternalError"
+
+create_profile_image:
+  post:
+    summary: Upload new image
+    description: Creates new image. If ok returns redirect to updated profile.
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/image_id"
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Image"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+
+password_update:
+  put:
+    summary: Update password
+    description: Updates password.
+    tags:
+      - user
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/PasswordUpdate"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+email_update:
+  put:
+    summary: Update email
+    description: Updates email.
+    tags:
+      - user
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/EmailUpdate"
+    responses:
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"

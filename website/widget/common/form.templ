@@ -1,22 +1,14 @@
 package common_widget
 
-import "likemind/website/view"
+import (
+	"likemind/website/view"
+	"strconv"
+)
 
 templ Form(form view.Form) {
 	<form
 		class="space-y-6 max-w-2xl mx-auto"
-		if form.Htmx.Post != "" {
-			hx-post={ form.Htmx.Post }
-		}
-		if form.Htmx.Target != "" {
-			hx-post={ form.Htmx.Target }
-		}
-		if form.Htmx.Swap != "" {
-			hx-post={ form.Htmx.Swap }
-		}
-		if form.Htmx.Encoding != "" {
-			hx-encoding={ form.Htmx.Encoding }
-		}
+		{ form.Htmx.Attributes()... }
 		{ form.Attributes... }
 	>
 		{ children... }
@@ -29,10 +21,9 @@ templ Input(input view.Input) {
 		name={ input.Name }
 		placeholder={ input.Placeholder }
 		value={ input.Value }
-		class="w-full px-4 py-3 rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 font-semibold focus:outline-hidden focus:ring-orange focus:border-orange"
-		if input.Required {
-			required
-		}
+		class="w-full px-4 py-3 rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 font-semibold focus:outline-hidden focus:ring-orange focus:border-orange disabled:bg-pink-100 disabled:text-black-200"
+		required?={ input.Required }
+		disabled?={ input.Disabled }
 		{ input.Attributes... }
 	/>
 }
@@ -58,9 +49,89 @@ templ Button(button view.Button) {
 		if button.PopoverAction != "" {
 			popovertargetaction={ button.PopoverAction }
 		}
-		class="w-full bg-red text-white py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2"
+		if button.ID != "" {
+			id={ button.ID }
+		}
+		disabled?={ button.Disabled }
+		autocomplete="off"
+		class="w-full bg-red text-white py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2 disabled:bg-black-100 hover:disabled:bg-black-100"
+		{ button.Htmx.Attributes()... }
 		{ button.Attributes... }
 	>
 		{ children... }
 	</button>
+}
+
+templ SettingsButton(button view.Button) {
+	<button
+		if button.PopoverTarget != "" {
+			popovertarget={ button.PopoverTarget }
+		}
+		if button.PopoverAction != "" {
+			popovertargetaction={ button.PopoverAction }
+		}
+		autocomplete="off"
+		class="bg-red text-white p-2 rounded-full hover:bg-orange transition-all shadow-xs hover:shadow-md"
+		{ button.Attributes... }
+	>
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"></path>
+		</svg>
+	</button>
+}
+
+templ Details(details view.Details) {
+	<details class="group border-t border-pink pt-4">
+		<summary class="list-none flex items-center p-2 cursor-pointer">
+			<svg class="group-open:hidden w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+			</svg>
+			<svg class="hidden group-open:inline rotate-180 w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+			</svg>
+			<p class="font-medium ml-2">{ details.Summary }</p>
+		</summary>
+		<div class="my-2 mx-4 space-y-2">
+			{ children... }
+		</div>
+	</details>
+}
+
+templ TextArea(state view.TextArea) {
+	<textarea
+		name={ state.Name }
+		class="w-full p-3 rounded-lg rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 focus:outline-hidden focus:ring-orange focus:border-orange"
+		placeholder={ state.Placeholder }
+		rows={ strconv.Itoa(state.Rows) }
+	></textarea>
+}
+
+templ XButton(state view.HTMX) {
+	<button
+		{ state.Attributes()... }
+		class="m-auto text-black rounded-full hover:text-red hover:bg-pink"
+	>
+		<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+		</svg>
+	</button>
+}
+
+templ Checkbox(checkbox view.Checkbox) {
+	<input
+		type="checkbox"
+		id={ checkbox.ID }
+		value={ checkbox.Value }
+		name={ checkbox.Name }
+		class="mr-2 accent-black"
+		autocomplete="off"
+		checked?={ checkbox.Checked }
+		{ checkbox.Htmx.Attributes()... }
+	/>
+	<label
+		class="text-black-400 font-medium"
+		for={ checkbox.Name }
+	>
+		{ checkbox.Text }
+	</label>
 }

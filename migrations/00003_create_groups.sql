@@ -18,7 +18,7 @@ CREATE TABLE posts (
     updated_at  TIMESTAMPTZ     NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_posts_group_id ON group_posts (group_id);
+CREATE INDEX idx_posts_group_id ON posts (group_id);
 
 CREATE TABLE comments (
     id          BIGSERIAL       PRIMARY KEY NOT NULL,

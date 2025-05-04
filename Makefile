@@ -15,7 +15,7 @@ migrate:
 
 .PHONY: create-bucket
 create-bucket:
-	docker-compose exec minio mc mb minio/my-bucket
+	docker compose exec minio mc mb minio/my-bucket
 
 .PHONY: dev
 dev:
@@ -39,3 +39,7 @@ build-tailwind:
 .PHONY: generate
 generate:
 	go generate ./...
+
+.PHONY: pgweb
+pgweb:
+	pgweb --host=localhost --port=5432 --user=user --pass=password --db=likemind --ssl=disable

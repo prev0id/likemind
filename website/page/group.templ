@@ -1,0 +1,11 @@
+package page
+
+import (
+	"likemind/website/view"
+	"likemind/website/widget/header"
+)
+
+templ Group(state *view.Group) {
+	@StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
+	}
+}

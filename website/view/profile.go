@@ -13,6 +13,10 @@ type Profile struct {
 	Contacts  []Contact
 	PictureID string
 	Interests []Interest
+
+	GroupedInterests GroupedInterests
+
+	Owner bool
 }
 
 type Contact struct {

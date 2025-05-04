@@ -8,8 +8,7 @@ import (
 )
 
 templ StandardLayout(headerState ...header.State) {
-	<!DOCTYPE html>
-	<html class="h-full">
+	@HTML() {
 		@Head()
 		<body class="min-h-screen flex flex-col">
 			@Scripts()
@@ -25,12 +24,12 @@ templ StandardLayout(headerState ...header.State) {
 			</main>
 			@footer.Component()
 		</body>
-	</html>
+	}
 }
 
 templ HTML() {
 	<!DOCTYPE html>
-	<html>
+	<html class="h-full">
 		{ children... }
 	</html>
 }
@@ -61,10 +60,5 @@ templ Main() {
 
 templ Scripts() {
 	<script src={ domain.PathStaticHTMX }></script>
-	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
-	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
-	// should be last
-	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 	<script src={ domain.PathStaticErrorHandler }></script>
-	// <script src={ domain.PathStaticAlpine }></script>
 }

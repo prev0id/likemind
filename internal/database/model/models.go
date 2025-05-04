@@ -68,7 +68,7 @@ type Contact struct {
 	ID        int64     `db:"id"`
 	UserID    int64     `db:"user_id"`
 	Platform  string    `db:"platform"`
-	Value     string    `db:"value"`
+	Value     string    `db:"contact"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 }

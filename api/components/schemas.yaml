@@ -146,3 +146,21 @@ EmailUpdate:
       type: string
       format: email
       maxLength: 50
+
+Search:
+  type: object
+  required: [type]
+  properties:
+    type:
+      type: string
+      enum: ["profile", "group"]
+    include_interests:
+      type: array
+      items:
+        type: integer
+        format: int64
+    exclude_interests:
+      type: array
+      items:
+        type: integer
+        format: int64

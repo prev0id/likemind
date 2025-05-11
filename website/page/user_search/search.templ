@@ -5,7 +5,6 @@ import (
 	"likemind/website/view"
 	"likemind/website/widget/button"
 	"likemind/website/widget/card"
-	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
 )
 
@@ -54,7 +53,7 @@ var state = []User{
 }
 
 templ Page() {
-	@page.StandardLayout(header.AuthorizedTabs.Select(header.PeopleTab)) {
+	@page.StandardLayout(view.SearchTab) {
 		<div class="w-full h-full">
 			<div class="bg-yellow w-full">
 				@MultiSelect()

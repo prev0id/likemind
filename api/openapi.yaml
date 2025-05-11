@@ -13,12 +13,17 @@ paths:
     $ref: "./paths/pages.yaml#/signin"
   /v1/page/signup:
     $ref: "./paths/pages.yaml#/signup"
+  /v1/page/profile:
+    $ref: "./paths/pages.yaml#/own_profile"
   /v1/page/profile/{username}:
     $ref: "./paths/pages.yaml#/profile"
+  /v1/page/group:
+    $ref: "./paths/pages.yaml#/own_group"
   /v1/page/group/{group_id}:
     $ref: "./paths/pages.yaml#/group"
   /v1/page/search:
     $ref: "./paths/pages.yaml#/search"
+
   /v1/api/signin:
     $ref: "./paths/api.yaml#/signin"
   /v1/api/logout:
@@ -30,15 +35,16 @@ paths:
   /v1/api/profile/image/{image_id}:
     $ref: "./paths/api.yaml#/profile_image"
   /v1/api/profile/email:
-    $ref: "./paths/api.yaml#/profile_image"
+    $ref: "./paths/api.yaml#/email_update"
   /v1/api/profile/password:
-    $ref: "./paths/api.yaml#/profile_image"
+    $ref: "./paths/api.yaml#/password_update"
   /v1/api/interest/{interest_id}:
     $ref: "./paths/api.yaml#/interest"
   /v1/api/contact:
     $ref: "./paths/api.yaml#/create_contact"
   /v1/api/contact/{contact_id}:
     $ref: "./paths/api.yaml#/contact"
+
   /v1/api/group:
     $ref: "./paths/api.yaml#/create_group"
   /v1/api/group/{group_id}:
@@ -51,6 +57,9 @@ paths:
     $ref: "./paths/api.yaml#/create_comment"
   /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}:
     $ref: "./paths/api.yaml#/comment"
+
+  /v1/api/search:
+    $ref: "./paths/api.yaml#/search"
 
 components:
   securitySchemes:

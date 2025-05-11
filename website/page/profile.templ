@@ -3,19 +3,16 @@ package page
 import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
 	"likemind/website/widget"
 	common_widget "likemind/website/widget/common"
 	"likemind/website/widget/contacts"
-	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
-	"strconv"
 )
 
 templ Profile(state *view.Profile) {
-	@StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
+	@StandardLayout(view.ProfileTab) {
 		<div
 			class="mx-auto max-w-7xl md:grid md:grid-cols-2 md:gap-20 px-8 py-12"
 		>
@@ -84,7 +81,7 @@ templ About(state *view.Profile) {
 	} else if state.Owner {
 		<div>Update your profile description</div>
 	} else {
-		<div>We don't know about { state.Nickname } yet</div>
+		<div>We don't know about { state.Nickname } much yet</div>
 	}
 }
 
@@ -146,26 +143,29 @@ templ profileImagePreview(state *view.Profile) {
 		<img
 			src="/static/img/img1.jpg"
 			alt="Profile picture"
-			class="max-w-full min-h-50 max-h-150 overflow-hidden rounded-3xl transition duration-300 ease-in-out group-hover:blur-sm"
+			class="max-w-full min-h-50 max-h-150 overflow-hidden rounded-3xl transition duration-300 ease-in-out data-owner:group-hover:blur-sm"
+			data-owner?={ state.Owner }
 		/>
-		<div
-			class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out flex items-center justify-center mx-auto"
-		>
-			<div>
-				@common_widget.Button(view.Button{
-					PopoverTarget: "modal-upload-pfp",
-					PopoverAction: "show",
-				}) {
-					Upload your new avatar
-				}
-				@common_widget.Modal(view.Modal{
-					ID:    "modal-upload-pfp",
-					Title: "Upload your new avatar",
-				}) {
-					@uploadNewImage()
-				}
+		if state.Owner {
+			<div
+				class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out flex items-center justify-center mx-auto"
+			>
+				<div>
+					@common_widget.Button(view.Button{
+						PopoverTarget: "modal-upload-pfp",
+						PopoverAction: "show",
+					}) {
+						Upload your new avatar
+					}
+					@common_widget.Modal(view.Modal{
+						ID:    "modal-upload-pfp",
+						Title: "Upload your new avatar",
+					}) {
+						@uploadNewImage()
+					}
+				</div>
 			</div>
-		</div>
+		}
 	</div>
 }
 
@@ -226,20 +226,40 @@ templ contactsContainer(state *view.Profile) {
 }
 
 templ updateInterests(state *view.Profile) {
+	@common_widget.LineBreak()
+	if state.Owner {
+		@withIcon() {
+			@common_widget.Semibold("Your interests")
+			@common_widget.SettingsButton(view.Button{
+				PopoverTarget: "modal_update_interests",
+				PopoverAction: "show",
+			})
+		}
+		@common_widget.Modal(view.Modal{
+			ID:    "modal_update_interests",
+			Title: "Update your interests",
+		}) {
+			<div class="grid grid-flow-row gap-2">
+				@widget.SelectInterests(state.Interests)
+			</div>
+		}
+	} else {
+		@common_widget.Semibold(state.Nickname + "'s interests")
+	}
 	@tag.Container() {
-		for _, interest := range state.Interests {
-			@tag.Interest(interest)
+		for _, group := range state.Interests {
+			for _, interest := range group.Interests {
+				if interest.Selected {
+					@tag.Interest(interest)
+				}
+			}
 		}
 	}
-	@common_widget.Checkbox(view.Checkbox{
-		Name:    "hello",
-		Value:   "val1",
-		Checked: true,
-		Text:    "hello",
-		Htmx: view.HTMX{
-			Delete: common.FillPath(domain.PathAPIInterestID, map[string]string{
-				domain.PathParamInterestID: strconv.FormatInt(123, 10),
-			}),
-		},
-	})
+	if state.About != "" {
+		<div>{ state.About }</div>
+	} else if state.Owner {
+		<div>Add your interests</div>
+	} else {
+		<div>{ state.Nickname } doesn't provide their interests yet</div>
+	}
 }

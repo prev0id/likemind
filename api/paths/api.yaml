@@ -335,10 +335,10 @@ create_profile_image:
     description: Creates new image. If ok returns redirect to updated profile.
     security:
       - SessionAuth: []
-    parameters:
-      - $ref: "../components/parameters.yaml#/image_id"
     requestBody:
       $ref: "../components/requestBodies.yaml#/Image"
+    parameters:
+      - $ref: "../components/parameters.yaml#/Content-Length"
     responses:
       "302":
         $ref: "../components/responses.yaml#/Redirect302"
@@ -348,6 +348,24 @@ create_profile_image:
         $ref: "../components/responses.yaml#/InternalError"
       "400":
         $ref: "../components/responses.yaml#/BadRequest"
+
+profile_image:
+  get:
+    summary: Get image
+    description: Get user image
+    security:
+      - SessionAuth: []
+    parameters:
+      - $ref: "../components/parameters.yaml#/image_id"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/Image"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
 
 password_update:
   put:
@@ -382,6 +400,27 @@ email_update:
     responses:
       "302":
         $ref: "../components/responses.yaml#/Redirect302"
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+search:
+  get:
+    summary: Search
+    description: Search users of groups.
+    tags:
+      - user
+      - group
+    security:
+      - SessionAuth: []
+    requestBody:
+      $ref: "../components/requestBodies.yaml#/Search"
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
       "400":
         $ref: "../components/responses.yaml#/BadRequest"
       "401":

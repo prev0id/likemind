@@ -10,6 +10,7 @@ const (
 	TableGroups          = "groups"
 	TablePosts           = "posts"
 	TableComments        = "comments"
+	TableInterestGroups  = "interest_groups"
 	TableInterests       = "interests"
 	TableUserInterests   = "user_interests"
 	TableGroupInterests  = "group_interests"
@@ -144,24 +145,32 @@ type Comment struct {
 }
 
 const (
+	InterestGroupsID   = "id"
+	InterestGroupsName = "name"
+)
+
+type InterestGroup struct {
+	ID   int64  `db:"id"`
+	Name string `db:"name"`
+}
+
+const (
 	InterestID          = "id"
 	InterestName        = "name"
 	InterestDescription = "description"
-	InterestCreatedAt   = "created_at"
-	InterestUpdatedAt   = "updated_at"
+	InterestGroupID     = "group_id"
 )
 
 type Interest struct {
-	ID          int64     `db:"id"`
-	Name        string    `db:"name"`
-	Description string    `db:"description"`
-	CreatedAt   time.Time `db:"created_at"`
-	UpdatedAt   time.Time `db:"updated_at"`
+	ID          int64  `db:"id"`
+	GroupID     int64  `db:"group_id"`
+	Name        string `db:"name"`
+	Description string `db:"description"`
 }
 
 const (
 	UserInterestUserID     = "user_id"
-	UserInterestInterestID = "name"
+	UserInterestInterestID = "interest_id"
 	UserInterestCreatedAt  = "created_at"
 )
 
@@ -173,7 +182,7 @@ type UserInterest struct {
 
 const (
 	GroupInterestGroupID    = "group_id"
-	GroupInterestInterestID = "name"
+	GroupInterestInterestID = "interest_id"
 	GroupInterestCreatedAt  = "created_at"
 )
 

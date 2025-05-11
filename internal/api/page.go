@@ -12,6 +12,10 @@ import (
 	user_search_page "likemind/website/page/user_search"
 )
 
+func (s *Server) V1PageGroupGet(ctx context.Context) (desc.V1PageGroupGetRes, error) {
+	return nil, nil
+}
+
 func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGroupGroupIDGetParams) (desc.V1PageGroupGroupIDGetRes, error) {
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, group_page.Page(group_page.State)),
@@ -29,7 +33,13 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	pictures, err := s.profile.GetProfilePictures(ctx, userID)
+	if userID == profile.ID {
+		return &desc.Redirect302{
+			Location: getProfilePage(),
+		}, nil
+	}
+
+	pictures, err := s.image.GetProfileImages(ctx, userID)
 	if err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
@@ -39,7 +49,43 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	state := profileFromDomainToView(ctx, profile, contacts, pictures)
+	interests, err := s.interests.GetUserInterests(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	state := profileFromDomainToView(userID, profile, contacts, pictures, interests)
+	pageComponent := page.Profile(state)
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, pageComponent),
+	}, nil
+}
+
+func (s *Server) V1PageProfileGet(ctx context.Context) (desc.V1PageProfileGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	profile, err := s.profile.GetUser(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	pictures, err := s.image.GetProfileImages(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	contacts, err := s.profile.GetContacts(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	interests, err := s.interests.GetUserInterests(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	state := profileFromDomainToView(userID, profile, contacts, pictures, interests)
 	pageComponent := page.Profile(state)
 
 	return &desc.HTMLResponse{

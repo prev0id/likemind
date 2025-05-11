@@ -65,6 +65,26 @@ type V1APIProfileDeleteRes interface {
 	v1APIProfileDeleteRes()
 }
 
+type V1APIProfileEmailPutRes interface {
+	v1APIProfileEmailPutRes()
+}
+
+type V1APIProfileImageImageIDGetRes interface {
+	v1APIProfileImageImageIDGetRes()
+}
+
+type V1APIProfileImagePostReq interface {
+	v1APIProfileImagePostReq()
+}
+
+type V1APIProfileImagePostRes interface {
+	v1APIProfileImagePostRes()
+}
+
+type V1APIProfilePasswordPutRes interface {
+	v1APIProfilePasswordPutRes()
+}
+
 type V1APIProfilePostRes interface {
 	v1APIProfilePostRes()
 }
@@ -73,12 +93,24 @@ type V1APIProfilePutRes interface {
 	v1APIProfilePutRes()
 }
 
+type V1APISearchGetRes interface {
+	v1APISearchGetRes()
+}
+
 type V1APISigninPostRes interface {
 	v1APISigninPostRes()
 }
 
+type V1PageGroupGetRes interface {
+	v1PageGroupGetRes()
+}
+
 type V1PageGroupGroupIDGetRes interface {
 	v1PageGroupGroupIDGetRes()
+}
+
+type V1PageProfileGetRes interface {
+	v1PageProfileGetRes()
 }
 
 type V1PageProfileUsernameGetRes interface {

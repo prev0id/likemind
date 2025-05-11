@@ -2,6 +2,7 @@ package error_page
 
 import (
 	"likemind/website/page"
+	"likemind/website/view"
 	"net/http"
 	"strconv"
 )
@@ -11,7 +12,7 @@ type State struct {
 }
 
 templ Page(state State) {
-	@page.StandardLayout() {
+	@page.StandardLayout(view.WithoutSelectedTab) {
 		<div class="text-black text-xl font-medium py-14 flex flex-col items-center justify-center gap-6">
 			<h1 class="text-6xl font-semibold pb-8">
 				{ strconv.Itoa(state.Code) }

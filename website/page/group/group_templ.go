@@ -15,7 +15,6 @@ import (
 	"likemind/website/page"
 	"likemind/website/view"
 	"likemind/website/widget/card"
-	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
 	"likemind/website/widget/textarea"
 )
@@ -218,7 +217,7 @@ func Page(state view.Group) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = page.StandardLayout(header.AuthorizedTabs.Select(header.GroupTab)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = page.StandardLayout(view.GroupTab).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -361,7 +360,7 @@ func CommentDropdownComponent(comments []view.Comment) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(numberOfComments(len(comments)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/group/group.templ`, Line: 114, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/group/group.templ`, Line: 113, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {

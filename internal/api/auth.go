@@ -47,7 +47,7 @@ func (s *Server) V1APISigninPost(ctx context.Context, req *desc.SignIn) (desc.V1
 	}
 
 	return &desc.Redirect302{
-		HxRedirect: desc.NewOptURI(getProfilePage(user)),
+		HxRedirect: getProfilePage(),
 		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }

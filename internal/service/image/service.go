@@ -1,4 +1,4 @@
-package service
+package image
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 
+	"likemind/internal/common"
 	"likemind/internal/database/adapter/profile_adapter"
 	"likemind/internal/domain"
 	s3_image_repo "likemind/internal/s3/image_repo"
@@ -28,7 +29,16 @@ const (
 	supportedFormats = "jpeg,png"
 )
 
-type ImageService struct {
+type Service interface {
+	UploadImage(ctx context.Context, file io.Reader, fileSize int64) error
+	DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error
+	GetProfileImages(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
+	GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error)
+}
+
+var _ (Service) = (*implementation)(nil)
+
+type implementation struct {
 	s3   s3_image_repo.ImageRepository
 	repo profile_adapter.Adapter
 }
@@ -36,50 +46,43 @@ type ImageService struct {
 func NewImageService(
 	s3 s3_image_repo.ImageRepository,
 	repo profile_adapter.Adapter,
-) (*ImageService, error) {
-	if s3 == nil {
-		return nil, fmt.Errorf("s3 repository is required")
-	}
-	if repo == nil {
-		return nil, fmt.Errorf("profile adapter is required")
-	}
-
-	return &ImageService{
+) *implementation {
+	return &implementation{
 		repo: repo,
 		s3:   s3,
-	}, nil
+	}
 }
 
-func (s *ImageService) UploadImage(ctx context.Context, file io.Reader, fileSize int64) (string, error) {
+func (s *implementation) UploadImage(ctx context.Context, file io.Reader, fileSize int64) error {
 	if file == nil {
-		return "", fmt.Errorf("file reader is required")
+		return fmt.Errorf("file reader is required")
 	}
 	if fileSize <= 0 {
-		return "", fmt.Errorf("invalid file size")
+		return fmt.Errorf("invalid file size")
 	}
 	if fileSize > MaxFileSize {
-		return "", domain.ErrFileSizeExceedsLimit
+		return domain.ErrFileSizeExceedsLimit
 	}
 
 	config, format, err := image.DecodeConfig(file)
 	if err != nil {
-		return "", fmt.Errorf("failed to decode image: %w", domain.ErrInvalidFile)
+		return fmt.Errorf("failed to decode image: %w", domain.ErrInvalidFile)
 	}
 
 	format = strings.ToLower(format)
 	if !strings.Contains(supportedFormats, format) {
-		return "", domain.ErrUnsupportedImageFormat
+		return domain.ErrUnsupportedImageFormat
 	}
 
 	contentType := fmt.Sprintf("image/%s", format)
 
 	if config.Width > MaxDimension || config.Height > MaxDimension {
-		return "", domain.ErrWrongResolution
+		return domain.ErrWrongResolution
 	}
 
 	ratio := float64(config.Width) / float64(config.Height)
 	if ratio < MinAspectRatio || ratio > MaxAspectRatio {
-		return "", domain.ErrWrongAspectRation
+		return domain.ErrWrongAspectRation
 	}
 
 	id := uuid.New()
@@ -94,13 +97,22 @@ func (s *ImageService) UploadImage(ctx context.Context, file io.Reader, fileSize
 	}
 
 	if err := s.s3.UploadImage(ctx, req); err != nil {
-		return "", fmt.Errorf("failed to upload image: %w", err)
+		return fmt.Errorf("failed to upload image: %w", err)
 	}
 
-	return uniqueFilename, nil
+	err = s.repo.AddProfilePicture(
+		ctx,
+		common.UserIDFromContext(ctx),
+		domain.PictureID(uniqueFilename),
+	)
+	if err != nil {
+		return fmt.Errorf("s.repo.AddProfilePicture: %w", err)
+	}
+
+	return nil
 }
 
-func (s *ImageService) DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error {
+func (s *implementation) DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error {
 	if image == "" {
 		return fmt.Errorf("image name is required")
 	}
@@ -128,7 +140,7 @@ func (s *ImageService) DeleteImage(ctx context.Context, image domain.PictureID, 
 	return nil
 }
 
-func (s *ImageService) GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error) {
+func (s *implementation) GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error) {
 	if ctx == nil {
 		return nil, fmt.Errorf("context is required")
 	}
@@ -154,4 +166,12 @@ func (s *ImageService) GetImage(ctx context.Context, image domain.PictureID, use
 	}
 
 	return data, nil
+}
+
+func (s *implementation) GetProfileImages(ctx context.Context, id domain.UserID) ([]domain.PictureID, error) {
+	pictures, err := s.repo.GetProfilePicturesByUserID(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("s.repo.GetProfilePicturesByUserID: %w", err)
+	}
+	return pictures, nil
 }

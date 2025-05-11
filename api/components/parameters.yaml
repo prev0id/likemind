@@ -62,3 +62,11 @@ image_id:
   description: The image id.
   schema:
     type: string
+
+Content-Length:
+  name: Content-Length
+  description: Size of file
+  in: header
+  schema:
+    type: integer
+    format: int64

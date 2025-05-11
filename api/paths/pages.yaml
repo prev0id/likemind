@@ -43,10 +43,28 @@ profile:
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
       "401":
         $ref: "../components/responses.yaml#/NotAuthorized"
       "404":
         $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
+own_profile:
+  get:
+    summary: Get user profile page
+    description: Returns an HTML page displaying the user's profile information. Requires authentication.
+    tags:
+      - page
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 
@@ -68,6 +86,20 @@ group:
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 
+own_group:
+  get:
+    summary: Get user's group page
+    description: Returns an HTML page displaying details of a user's groups. Requires authentication.
+    tags:
+      - page
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
 search:
   get:
     summary: Get search page
@@ -77,5 +109,7 @@ search:
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
+      "401":
+        $ref: "../components/responses.yaml#/NotAuthorized"
       "500":
         $ref: "../components/responses.yaml#/InternalError"

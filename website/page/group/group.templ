@@ -7,7 +7,6 @@ import (
 	"likemind/website/page"
 	"likemind/website/view"
 	"likemind/website/widget/card"
-	"likemind/website/widget/header"
 	tag "likemind/website/widget/interest"
 	"likemind/website/widget/textarea"
 )
@@ -76,7 +75,7 @@ var State = view.Group{
 }
 
 templ Page(state view.Group) {
-	@page.StandardLayout(header.AuthorizedTabs.Select(header.GroupTab)) {
+	@page.StandardLayout(view.GroupTab) {
 		@card.Container() {
 			@card.Card(nil) {
 				@card.Header() {

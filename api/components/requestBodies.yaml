@@ -65,3 +65,10 @@ EmailUpdate:
     application/x-www-form-urlencoded:
       schema:
         $ref: "schemas.yaml#/EmailUpdate"
+
+Search:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "schemas.yaml#/Search"

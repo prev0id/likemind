@@ -3,26 +3,31 @@ package view
 import "likemind/internal/domain"
 
 type Tab struct {
-	URL     string
-	Name    string
-	Kaomoji string
+	URL        string
+	Name       string
+	Kaomoji    string
+	Authorized bool
 }
 
 var (
-	GroupTab = Tab{
-		URL:     domain.PathPageGroup,
-		Name:    "Group",
-		Kaomoji: `\( ˙▿˙ )/\( ˙▿˙ )/`,
+	WithoutSelectedTab = Tab{}
+	GroupTab           = Tab{
+		URL:        domain.PathPageGroup,
+		Name:       "Group",
+		Kaomoji:    `\( ˙▿˙ )/\( ˙▿˙ )/`,
+		Authorized: true,
 	}
 	SearchTab = Tab{
-		URL:     domain.PathPageSearch,
-		Name:    "Search",
-		Kaomoji: `⊂(￣▽￣)⊃`,
+		URL:        domain.PathPageSearch,
+		Name:       "Search",
+		Kaomoji:    `⊂(￣▽￣)⊃`,
+		Authorized: true,
 	}
 	ProfileTab = Tab{
-		// URL generated
-		Name:    "My Profile",
-		Kaomoji: `(„• ᴗ •„)`,
+		URL:        domain.PathPageOwnProfile,
+		Name:       "My Profile",
+		Kaomoji:    `(„• ᴗ •„)`,
+		Authorized: true,
 	}
 	SignInTab = Tab{
 		URL:     domain.PathPageSignIn,

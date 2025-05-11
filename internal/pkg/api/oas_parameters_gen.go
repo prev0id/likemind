@@ -1181,6 +1181,135 @@ func decodeV1APIInterestInterestIDPostParams(args [1]string, argsEscaped bool, r
 	return params, nil
 }
 
+// V1APIProfileImageImageIDGetParams is parameters of GET /v1/api/profile/image/{image_id} operation.
+type V1APIProfileImageImageIDGetParams struct {
+	// The image id.
+	ImageID string
+}
+
+func unpackV1APIProfileImageImageIDGetParams(packed middleware.Parameters) (params V1APIProfileImageImageIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "image_id",
+			In:   "path",
+		}
+		params.ImageID = packed[key].(string)
+	}
+	return params
+}
+
+func decodeV1APIProfileImageImageIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIProfileImageImageIDGetParams, _ error) {
+	// Decode path: image_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "image_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.ImageID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "image_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIProfileImagePostParams is parameters of POST /v1/api/profile/image operation.
+type V1APIProfileImagePostParams struct {
+	// Size of file.
+	ContentLength OptInt64
+}
+
+func unpackV1APIProfileImagePostParams(packed middleware.Parameters) (params V1APIProfileImagePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "Content-Length",
+			In:   "header",
+		}
+		if v, ok := packed[key]; ok {
+			params.ContentLength = v.(OptInt64)
+		}
+	}
+	return params
+}
+
+func decodeV1APIProfileImagePostParams(args [0]string, argsEscaped bool, r *http.Request) (params V1APIProfileImagePostParams, _ error) {
+	h := uri.NewHeaderDecoder(r.Header)
+	// Decode header: Content-Length.
+	if err := func() error {
+		cfg := uri.HeaderParameterDecodingConfig{
+			Name:    "Content-Length",
+			Explode: false,
+		}
+		if err := h.HasParam(cfg); err == nil {
+			if err := h.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotContentLengthVal int64
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt64(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotContentLengthVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.ContentLength.SetTo(paramsDotContentLengthVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "Content-Length",
+			In:   "header",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1PageGroupGroupIDGetParams is parameters of GET /v1/page/group/{group_id} operation.
 type V1PageGroupGroupIDGetParams struct {
 	// The group id.

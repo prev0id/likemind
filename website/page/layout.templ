@@ -2,21 +2,19 @@ package page
 
 import (
 	"likemind/internal/domain"
+	"likemind/website/view"
+	"likemind/website/widget"
 	"likemind/website/widget/footer"
-	"likemind/website/widget/header"
 	"likemind/website/widget/notification"
 )
 
-templ StandardLayout(headerState ...header.State) {
+templ StandardLayout(tab view.Tab) {
 	@HTML() {
 		@Head()
 		<body class="min-h-screen flex flex-col">
 			@Scripts()
 			<script src={ domain.PathStaticErrorHandler }></script>
-			// TODO: move header into children
-			if len(headerState) > 0 {
-				@header.Component(headerState[0])
-			}
+			@widget.Header(tab)
 			<main class="grow flex bg-white text-black">
 				<div class="min-h-full min-w-full">
 					{ children... }

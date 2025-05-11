@@ -104,6 +104,30 @@ type Handler interface {
 	//
 	// DELETE /v1/api/profile
 	V1APIProfileDelete(ctx context.Context) (V1APIProfileDeleteRes, error)
+	// V1APIProfileEmailPut implements PUT /v1/api/profile/email operation.
+	//
+	// Updates email.
+	//
+	// PUT /v1/api/profile/email
+	V1APIProfileEmailPut(ctx context.Context, req *EmailUpdate) (V1APIProfileEmailPutRes, error)
+	// V1APIProfileImageImageIDGet implements GET /v1/api/profile/image/{image_id} operation.
+	//
+	// Get user image.
+	//
+	// GET /v1/api/profile/image/{image_id}
+	V1APIProfileImageImageIDGet(ctx context.Context, params V1APIProfileImageImageIDGetParams) (V1APIProfileImageImageIDGetRes, error)
+	// V1APIProfileImagePost implements POST /v1/api/profile/image operation.
+	//
+	// Creates new image. If ok returns redirect to updated profile.
+	//
+	// POST /v1/api/profile/image
+	V1APIProfileImagePost(ctx context.Context, req V1APIProfileImagePostReq, params V1APIProfileImagePostParams) (V1APIProfileImagePostRes, error)
+	// V1APIProfilePasswordPut implements PUT /v1/api/profile/password operation.
+	//
+	// Updates password.
+	//
+	// PUT /v1/api/profile/password
+	V1APIProfilePasswordPut(ctx context.Context, req *PasswordUpdate) (V1APIProfilePasswordPutRes, error)
 	// V1APIProfilePost implements POST /v1/api/profile operation.
 	//
 	// Redirects to profile page if ok.
@@ -116,18 +140,36 @@ type Handler interface {
 	//
 	// PUT /v1/api/profile
 	V1APIProfilePut(ctx context.Context, req *ProfileUpdate) (V1APIProfilePutRes, error)
+	// V1APISearchGet implements GET /v1/api/search operation.
+	//
+	// Search users of groups.
+	//
+	// GET /v1/api/search
+	V1APISearchGet(ctx context.Context, req *Search) (V1APISearchGetRes, error)
 	// V1APISigninPost implements POST /v1/api/signin operation.
 	//
 	// Redirects to profile page if ok.
 	//
 	// POST /v1/api/signin
 	V1APISigninPost(ctx context.Context, req *SignIn) (V1APISigninPostRes, error)
+	// V1PageGroupGet implements GET /v1/page/group operation.
+	//
+	// Returns an HTML page displaying details of a user's groups. Requires authentication.
+	//
+	// GET /v1/page/group
+	V1PageGroupGet(ctx context.Context) (V1PageGroupGetRes, error)
 	// V1PageGroupGroupIDGet implements GET /v1/page/group/{group_id} operation.
 	//
 	// Returns an HTML page displaying details of a specific user group. Requires authentication.
 	//
 	// GET /v1/page/group/{group_id}
 	V1PageGroupGroupIDGet(ctx context.Context, params V1PageGroupGroupIDGetParams) (V1PageGroupGroupIDGetRes, error)
+	// V1PageProfileGet implements GET /v1/page/profile operation.
+	//
+	// Returns an HTML page displaying the user's profile information. Requires authentication.
+	//
+	// GET /v1/page/profile
+	V1PageProfileGet(ctx context.Context) (V1PageProfileGetRes, error)
 	// V1PageProfileUsernameGet implements GET /v1/page/profile/{username} operation.
 	//
 	// Returns an HTML page displaying the user's profile information. Requires authentication.

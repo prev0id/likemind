@@ -12,6 +12,7 @@ import (
 
 type DB interface {
 	ListInterests(ctx context.Context) ([]model.Interest, error)
+	ListInterestGroups(ctx context.Context) ([]model.InterestGroup, error)
 	ListInterestsByIDs(ctx context.Context, ids []int64) ([]model.Interest, error)
 
 	GetUserInterestsByID(ctx context.Context, userID int64) ([]model.UserInterest, error)
@@ -30,23 +31,31 @@ type Repo struct{}
 func (r *Repo) ListInterests(ctx context.Context) ([]model.Interest, error) {
 	q := sql.Select(
 		model.InterestID,
+		model.InterestGroupID,
 		model.InterestName,
 		model.InterestDescription,
-		model.InterestCreatedAt,
-		model.InterestUpdatedAt,
 	)
 	q.From(model.TableInterests)
 
 	return database.Select[model.Interest](ctx, q)
 }
 
+func (r *Repo) ListInterestGroups(ctx context.Context) ([]model.InterestGroup, error) {
+	q := sql.Select(
+		model.InterestGroupsID,
+		model.InterestGroupsName,
+	)
+	q.From(model.TableInterestGroups)
+
+	return database.Select[model.InterestGroup](ctx, q)
+}
+
 func (r *Repo) ListInterestsByIDs(ctx context.Context, ids []int64) ([]model.Interest, error) {
 	q := sql.Select(
 		model.InterestID,
 		model.InterestName,
+		model.InterestGroupID,
 		model.InterestDescription,
-		model.InterestCreatedAt,
-		model.InterestUpdatedAt,
 	)
 	q.From(model.TableInterests)
 	q.Where(q.In(model.InterestID, toInterfaceSlice(ids)...))
@@ -151,8 +160,8 @@ func (r *Repo) RemoveInterestFromGroup(ctx context.Context, groupID, interestID 
 	return nil
 }
 
-func toInterfaceSlice(ints []int64) []interface{} {
-	s := make([]interface{}, len(ints))
+func toInterfaceSlice(ints []int64) []any {
+	s := make([]any, len(ints))
 	for i, v := range ints {
 		s[i] = v
 	}

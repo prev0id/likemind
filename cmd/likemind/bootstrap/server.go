@@ -4,21 +4,29 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/rs/zerolog/log"
+
 	"likemind/internal/api"
 	"likemind/internal/config"
 	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
+	"likemind/internal/service/image"
+	"likemind/internal/service/interests"
 	"likemind/internal/service/profile"
 	"likemind/internal/service/session"
 	"likemind/website"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/rs/zerolog/log"
 )
 
-func Server(cfg config.App, sessionService session.Service, profileService profile.Service) error {
-	server := api.NewServer(sessionService, profileService)
+func Server(
+	cfg config.App,
+	sessionService session.Service,
+	profileService profile.Service,
+	imageService image.Service,
+	interests interests.Service,
+) error {
+	server := api.NewServer(sessionService, profileService, imageService, interests)
 	security := api.NewSecurityHandler(sessionService)
 
 	router := chi.NewRouter()

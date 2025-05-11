@@ -1,11 +1,8 @@
 package page
 
-import (
-	"likemind/website/view"
-	"likemind/website/widget/header"
-)
+import "likemind/website/view"
 
 templ Group(state *view.Group) {
-	@StandardLayout(header.AuthorizedTabs.Select(header.ProfileTab)) {
+	@StandardLayout(view.GroupTab) {
 	}
 }

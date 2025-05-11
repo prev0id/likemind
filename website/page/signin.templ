@@ -6,14 +6,7 @@ import (
 )
 
 templ SignIn() {
-	@HTML() {
-		@Head()
-		@Body() {
-			@widget.UnauthorizedHeader(view.SignInTab)
-			@Main() {
-				@widget.FormSignIn()
-			}
-			@widget.Footer()
-		}
+	@StandardLayout(view.SignInTab) {
+		@widget.FormSignIn()
 	}
 }

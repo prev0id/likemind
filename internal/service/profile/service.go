@@ -21,17 +21,14 @@ type Service interface {
 	CreateUser(ctx context.Context, user domain.User) (domain.UserID, error)
 	UpdateUser(ctx context.Context, user domain.User) error
 	GetUser(ctx context.Context, id domain.UserID) (domain.User, error)
-	UpdatePassword(ctx context.Context, id domain.UserID, oldPassword, newPassword domain.Password) error
+	UpdatePassword(ctx context.Context, id domain.UserID, login domain.Email, oldPassword, newPassword domain.Password) error
+	UpdateEmail(ctx context.Context, id domain.UserID, oldLogin, login domain.Email, password domain.Password) error
 	SignIn(ctx context.Context, login domain.Email, password domain.Password) (domain.User, error)
 
 	GetContacts(ctx context.Context, id domain.UserID) ([]domain.Contact, error)
 	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	RemoveContact(ctx context.Context, id domain.UserID, contactID int64) error
-
-	AddProfilePicture(ctx context.Context, id domain.UserID, pictureID domain.PictureID) error
-	GetProfilePictures(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
-	RemovePicture(ctx context.Context, pictureID domain.PictureID) error
 }
 
 type implementation struct {
@@ -76,15 +73,6 @@ func (s *implementation) DeleteProfile(ctx context.Context, id domain.UserID) er
 	return nil
 }
 
-// func (s *implementation) GetProfile(ctx context.Context, id domain.UserID) (domain.Profile, error) {
-// 	profile, err := s.db.GetProfileByUserID(ctx, id)
-// 	if err != nil {
-// 		return domain.Profile{}, fmt.Errorf("s.db.GetProfileByUserID: %w", err)
-// 	}
-
-// 	return profile, nil
-// }
-
 func (s *implementation) GetUser(ctx context.Context, id domain.UserID) (domain.User, error) {
 	user, err := s.db.GetUserByID(ctx, id)
 	if err != nil {
@@ -94,17 +82,36 @@ func (s *implementation) GetUser(ctx context.Context, id domain.UserID) (domain.
 	return user, nil
 }
 
-func (s *implementation) UpdatePassword(ctx context.Context, id domain.UserID, oldPassword, newPassword domain.Password) error {
+func (s *implementation) UpdatePassword(ctx context.Context, id domain.UserID, email domain.Email, oldPassword, newPassword domain.Password) error {
 	user, err := s.db.GetUserByID(ctx, id)
 	if err != nil {
 		return fmt.Errorf("s.db.GetUserByID: %w", err)
 	}
 
-	if !passwordsEqual(user.HashedPassword, oldPassword, user.Login) {
+	if !passwordsEqual(user.HashedPassword, oldPassword, email) {
 		return domain.ErrNotAuthenticated
 	}
 
-	user.HashedPassword = hash(newPassword, user.Login)
+	user.HashedPassword = hash(newPassword, email)
+
+	if err := s.db.UpdateUser(ctx, user); err != nil {
+		return fmt.Errorf("s.db.UpdateUser: %w", err)
+	}
+
+	return nil
+}
+
+func (s *implementation) UpdateEmail(ctx context.Context, id domain.UserID, oldEmail, newEmail domain.Email, password domain.Password) error {
+	user, err := s.db.GetUserByID(ctx, id)
+	if err != nil {
+		return fmt.Errorf("s.db.GetUserByID: %w", err)
+	}
+
+	if !passwordsEqual(user.HashedPassword, password, oldEmail) {
+		return domain.ErrNotAuthenticated
+	}
+
+	user.HashedPassword = hash(password, newEmail)
 
 	if err := s.db.UpdateUser(ctx, user); err != nil {
 		return fmt.Errorf("s.db.UpdateUser: %w", err)

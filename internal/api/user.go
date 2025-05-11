@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"io"
 	"net/url"
 
 	"likemind/internal/common"
@@ -33,7 +34,7 @@ func (s *Server) V1APIProfilePost(ctx context.Context, req *desc.ProfileCreate) 
 	}
 
 	return &desc.Redirect302{
-		HxRedirect: desc.NewOptURI(getProfilePage(user)),
+		HxRedirect: getProfilePage(),
 		SetCookie:  desc.NewOptString(cookie.String()),
 	}, nil
 }
@@ -73,22 +74,75 @@ func (s *Server) V1APIProfilePut(ctx context.Context, req *desc.ProfileUpdate) (
 	return &desc.HTMLResponse{}, nil
 }
 
-func getProfilePage(user domain.User) url.URL {
-	params := map[string]string{
-		domain.PathParamUsername: user.Nickname,
+func (s *Server) V1APIProfileEmailPut(ctx context.Context, req *desc.EmailUpdate) (desc.V1APIProfileEmailPutRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	err := s.profile.UpdateEmail(
+		ctx,
+		userID,
+		domain.Email(req.Email),
+		domain.Email(req.NewEmail),
+		domain.Password(req.Password),
+	)
+	if err != nil {
+		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
 	}
 
-	path := common.FillPath(domain.PathPageProfile, params)
+	return &desc.Redirect302{
+		Location: getProfilePage(),
+	}, nil
+}
 
-	return url.URL{
-		Path: path,
+func (s *Server) V1APIProfileImageImageIDGet(ctx context.Context, params desc.V1APIProfileImageImageIDGetParams) (desc.V1APIProfileImageImageIDGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	img, err := s.image.GetImage(ctx, domain.PictureID(params.ImageID), userID)
+	if err != nil {
+		return &desc.NotFound{Data: common.ErrorMsg(err)}, nil
 	}
+
+	return &desc.ImageImageJpeg{Data: img}, nil
+}
+
+func (s *Server) V1APIProfileImagePost(ctx context.Context, req desc.V1APIProfileImagePostReq, params desc.V1APIProfileImagePostParams) (desc.V1APIProfileImagePostRes, error) {
+	data, ok := getImageData(req)
+	if !ok {
+		return &desc.BadRequest{}, nil
+	}
+
+	s.image.UploadImage(ctx, data, params.ContentLength.Value)
+
+	return &desc.Redirect302{
+		Location: getProfilePage(),
+	}, nil
+}
+
+func (s *Server) V1APIProfilePasswordPut(ctx context.Context, req *desc.PasswordUpdate) (desc.V1APIProfilePasswordPutRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	err := s.profile.UpdatePassword(
+		ctx,
+		userID,
+		domain.Email(req.Email),
+		domain.Password(req.Password),
+		domain.Password(req.NewPassword),
+	)
+	if err != nil {
+		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
+	}
+
+	return &desc.Redirect302{
+		Location: getProfilePage(),
+	}, nil
+}
+
+func getProfilePage() desc.OptURI {
+	return desc.NewOptURI(url.URL{
+		Path: domain.PathPageOwnProfile,
+	})
 }
 
 func updateUserFields(user domain.User, req *desc.ProfileUpdate) domain.User {
-	if email := req.GetEmail(); email.IsSet() {
-		user.Login = domain.Email(email.Value)
-	}
 	if name := req.GetName(); name.IsSet() {
 		user.Name = name.Value
 	}
@@ -108,4 +162,15 @@ func updateUserFields(user domain.User, req *desc.ProfileUpdate) domain.User {
 		user.Location = location.Value
 	}
 	return user
+}
+
+func getImageData(req desc.V1APIProfileImagePostReq) (io.Reader, bool) {
+	switch request := req.(type) {
+	case *desc.V1APIProfileImagePostReqImageJpeg:
+		return request.Data, true
+	case *desc.V1APIProfileImagePostReqImagePNG:
+		return request.Data, true
+	default:
+		return nil, false
+	}
 }

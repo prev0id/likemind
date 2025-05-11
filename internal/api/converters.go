@@ -1,15 +1,17 @@
 package api
 
 import (
-	"context"
-
-	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
 )
 
-func profileFromDomainToView(ctx context.Context, user domain.User, contacts []domain.Contact, pictures []domain.PictureID) *view.Profile {
-	userID := common.UserIDFromContext(ctx)
+func profileFromDomainToView(
+	userID domain.UserID,
+	user domain.User,
+	contacts []domain.Contact,
+	pictures []domain.PictureID,
+	interests domain.Interests,
+) *view.Profile {
 	return &view.Profile{
 		Name:        user.Name,
 		Surname:     user.Surname,
@@ -21,6 +23,8 @@ func profileFromDomainToView(ctx context.Context, user domain.User, contacts []d
 
 		PictureID: convertPicturesIDs(pictures),
 		Contacts:  contactsDomainToView(contacts),
+
+		Interests: interestGroupDomainToView(interests),
 	}
 }
 
@@ -38,6 +42,30 @@ func contactsDomainToView(contacts []domain.Contact) []view.Contact {
 			ID:       contact.ID,
 			Platform: contact.Platform,
 			Value:    contact.Value,
+		})
+	}
+	return result
+}
+
+func interestGroupDomainToView(interests domain.Interests) []view.GroupedInterests {
+	result := make([]view.GroupedInterests, 0, len(interests))
+	for _, group := range interests {
+		result = append(result, view.GroupedInterests{
+			Name:      group.Name,
+			Interests: interestsDomainToView(group.Interests),
+		})
+	}
+	return result
+}
+
+func interestsDomainToView(interests []domain.Interest) []view.Interest {
+	result := make([]view.Interest, 0, len(interests))
+	for _, interest := range interests {
+		result = append(result, view.Interest{
+			ID:          interest.ID,
+			Name:        interest.Name,
+			Description: interest.Description,
+			Selected:    interest.Selected,
 		})
 	}
 	return result

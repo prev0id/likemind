@@ -1,15 +1,21 @@
 package widget
 
 import (
-	"likemind/internal/common"
-	"likemind/internal/domain"
 	"likemind/website/view"
 	common_widget "likemind/website/widget/common"
 )
 
 const logo = "Likemind"
 
-templ UnauthorizedHeader(selected view.Tab) {
+templ Header(selected view.Tab) {
+	if selected.Authorized {
+		@authorizedHeader(selected)
+	} else {
+		@unauthorizedHeader(selected)
+	}
+}
+
+templ unauthorizedHeader(selected view.Tab) {
 	@common_widget.Header() {
 		@common_widget.HeaderTopRow() {
 			@common_widget.HeaderLogo(logo)
@@ -21,7 +27,7 @@ templ UnauthorizedHeader(selected view.Tab) {
 	}
 }
 
-templ AuthorizedHeader(selected view.Tab, nickname string) {
+templ authorizedHeader(selected view.Tab) {
 	@common_widget.Header() {
 		@common_widget.HeaderTopRow() {
 			@common_widget.HeaderLogo(logo)
@@ -31,13 +37,6 @@ templ AuthorizedHeader(selected view.Tab, nickname string) {
 	@common_widget.HeaderNavRow() {
 		@common_widget.HeaderTab(view.GroupTab, selected)
 		@common_widget.HeaderTab(view.SearchTab, selected)
-		@common_widget.HeaderTab(
-			view.Tab{
-				Name:    view.ProfileTab.Name,
-				URL:     common.FillPath(domain.PathPageProfile, map[string]string{domain.PathParamUsername: nickname}),
-				Kaomoji: view.ProfileTab.Kaomoji,
-			},
-			selected,
-		)
+		@common_widget.HeaderTab(view.ProfileTab, selected)
 	}
 }

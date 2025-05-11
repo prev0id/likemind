@@ -374,7 +374,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "DELETE":
 							s.handleV1APIProfileDeleteRequest([0]string{}, elemIsEscaped, w, r)
@@ -388,25 +387,167 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
 
-				case 's': // Prefix: "signin"
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PUT":
+									s.handleV1APIProfileEmailPutRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PUT")
+								}
+
+								return
+							}
+
+						case 'i': // Prefix: "image"
+
+							if l := len("image"); len(elem) >= l && elem[0:l] == "image" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "POST":
+									s.handleV1APIProfileImagePostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "image_id"
+								// Leaf parameter, slashes are prohibited
+								idx := strings.IndexByte(elem, '/')
+								if idx >= 0 {
+									break
+								}
+								args[0] = elem
+								elem = ""
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleV1APIProfileImageImageIDGetRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
+
+									return
+								}
+
+							}
+
+						case 'p': // Prefix: "password"
+
+							if l := len("password"); len(elem) >= l && elem[0:l] == "password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "PUT":
+									s.handleV1APIProfilePasswordPutRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "PUT")
+								}
+
+								return
+							}
+
+						}
+
+					}
+
+				case 's': // Prefix: "s"
+
+					if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'e': // Prefix: "earch"
+
+						if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1APISearchGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					case 'i': // Prefix: "ignin"
+
+						if l := len("ignin"); len(elem) >= l && elem[0:l] == "ignin" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1APISigninPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
 					}
 
 				}
@@ -423,66 +564,108 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "group/"
+				case 'g': // Prefix: "group"
 
-					if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
+					if l := len("group"); len(elem) >= l && elem[0:l] == "group" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "group_id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1PageGroupGroupIDGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
+							s.handleV1PageGroupGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
 
 						return
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
 
-				case 'p': // Prefix: "profile/"
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
+						// Param: "group_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1PageGroupGroupIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+					}
+
+				case 'p': // Prefix: "profile"
+
+					if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "username"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1PageProfileUsernameGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
+							s.handleV1PageProfileGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
 
 						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "username"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1PageProfileUsernameGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
 					}
 
 				case 's': // Prefix: "s"
@@ -1021,7 +1204,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "DELETE":
 							r.name = V1APIProfileDeleteOperation
@@ -1051,29 +1233,189 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
 
-				case 's': // Prefix: "signin"
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PUT":
+									r.name = V1APIProfileEmailPutOperation
+									r.summary = "Update email"
+									r.operationID = ""
+									r.pathPattern = "/v1/api/profile/email"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						case 'i': // Prefix: "image"
+
+							if l := len("image"); len(elem) >= l && elem[0:l] == "image" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									r.name = V1APIProfileImagePostOperation
+									r.summary = "Upload new image"
+									r.operationID = ""
+									r.pathPattern = "/v1/api/profile/image"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "image_id"
+								// Leaf parameter, slashes are prohibited
+								idx := strings.IndexByte(elem, '/')
+								if idx >= 0 {
+									break
+								}
+								args[0] = elem
+								elem = ""
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "GET":
+										r.name = V1APIProfileImageImageIDGetOperation
+										r.summary = "Get image"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/profile/image/{image_id}"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+							}
+
+						case 'p': // Prefix: "password"
+
+							if l := len("password"); len(elem) >= l && elem[0:l] == "password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "PUT":
+									r.name = V1APIProfilePasswordPutOperation
+									r.summary = "Update password"
+									r.operationID = ""
+									r.pathPattern = "/v1/api/profile/password"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+						}
+
+					}
+
+				case 's': // Prefix: "s"
+
+					if l := len("s"); len(elem) >= l && elem[0:l] == "s" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = V1APISigninPostOperation
-							r.summary = "Sign-in into account"
-							r.operationID = ""
-							r.pathPattern = "/v1/api/signin"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'e': // Prefix: "earch"
+
+						if l := len("earch"); len(elem) >= l && elem[0:l] == "earch" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = V1APISearchGetOperation
+								r.summary = "Search"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/search"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+					case 'i': // Prefix: "ignin"
+
+						if l := len("ignin"); len(elem) >= l && elem[0:l] == "ignin" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = V1APISigninPostOperation
+								r.summary = "Sign-in into account"
+								r.operationID = ""
+								r.pathPattern = "/v1/api/signin"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
 					}
 
 				}
@@ -1090,70 +1432,120 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "group/"
+				case 'g': // Prefix: "group"
 
-					if l := len("group/"); len(elem) >= l && elem[0:l] == "group/" {
+					if l := len("group"); len(elem) >= l && elem[0:l] == "group" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "group_id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = V1PageGroupGroupIDGetOperation
-							r.summary = "Get group page"
+							r.name = V1PageGroupGetOperation
+							r.summary = "Get user's group page"
 							r.operationID = ""
-							r.pathPattern = "/v1/page/group/{group_id}"
+							r.pathPattern = "/v1/page/group"
 							r.args = args
-							r.count = 1
+							r.count = 0
 							return r, true
 						default:
 							return
 						}
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
 
-				case 'p': // Prefix: "profile/"
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
 
-					if l := len("profile/"); len(elem) >= l && elem[0:l] == "profile/" {
+						// Param: "group_id"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = V1PageGroupGroupIDGetOperation
+								r.summary = "Get group page"
+								r.operationID = ""
+								r.pathPattern = "/v1/page/group/{group_id}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				case 'p': // Prefix: "profile"
+
+					if l := len("profile"); len(elem) >= l && elem[0:l] == "profile" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					// Param: "username"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = V1PageProfileUsernameGetOperation
+							r.name = V1PageProfileGetOperation
 							r.summary = "Get user profile page"
 							r.operationID = ""
-							r.pathPattern = "/v1/page/profile/{username}"
+							r.pathPattern = "/v1/page/profile"
 							r.args = args
-							r.count = 1
+							r.count = 0
 							return r, true
 						default:
 							return
 						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "username"
+						// Leaf parameter, slashes are prohibited
+						idx := strings.IndexByte(elem, '/')
+						if idx >= 0 {
+							break
+						}
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = V1PageProfileUsernameGetOperation
+								r.summary = "Get user profile page"
+								r.operationID = ""
+								r.pathPattern = "/v1/page/profile/{username}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
 					}
 
 				case 's': // Prefix: "s"

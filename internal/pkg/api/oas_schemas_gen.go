@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/url"
 	"time"
+
+	"github.com/go-faster/errors"
 )
 
 // A plain text error message.
@@ -33,8 +35,12 @@ func (*BadRequest) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*BadRequest) v1APIGroupGroupIDPostPostRes()                         {}
 func (*BadRequest) v1APIGroupGroupIDPutRes()                              {}
 func (*BadRequest) v1APIGroupPostRes()                                    {}
+func (*BadRequest) v1APIProfileEmailPutRes()                              {}
+func (*BadRequest) v1APIProfileImagePostRes()                             {}
+func (*BadRequest) v1APIProfilePasswordPutRes()                           {}
 func (*BadRequest) v1APIProfilePostRes()                                  {}
 func (*BadRequest) v1APIProfilePutRes()                                   {}
+func (*BadRequest) v1APISearchGetRes()                                    {}
 
 // Ref: #/Contact
 type Contact struct {
@@ -60,6 +66,43 @@ func (s *Contact) SetPlatform(val string) {
 // SetLink sets the value of Link.
 func (s *Contact) SetLink(val string) {
 	s.Link = val
+}
+
+// Ref: #/EmailUpdate
+type EmailUpdate struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	NewEmail string `json:"new_email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *EmailUpdate) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *EmailUpdate) GetPassword() string {
+	return s.Password
+}
+
+// GetNewEmail returns the value of NewEmail.
+func (s *EmailUpdate) GetNewEmail() string {
+	return s.NewEmail
+}
+
+// SetEmail sets the value of Email.
+func (s *EmailUpdate) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *EmailUpdate) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetNewEmail sets the value of NewEmail.
+func (s *EmailUpdate) SetNewEmail(val string) {
+	s.NewEmail = val
 }
 
 // Ref: #/Group
@@ -117,11 +160,46 @@ func (*HTMLResponse) v1APIGroupGroupIDPutRes()                              {}
 func (*HTMLResponse) v1APIInterestInterestIDDeleteRes()                     {}
 func (*HTMLResponse) v1APIInterestInterestIDPostRes()                       {}
 func (*HTMLResponse) v1APIProfilePutRes()                                   {}
+func (*HTMLResponse) v1APISearchGetRes()                                    {}
+func (*HTMLResponse) v1PageGroupGetRes()                                    {}
 func (*HTMLResponse) v1PageGroupGroupIDGetRes()                             {}
+func (*HTMLResponse) v1PageProfileGetRes()                                  {}
 func (*HTMLResponse) v1PageProfileUsernameGetRes()                          {}
 func (*HTMLResponse) v1PageSearchGetRes()                                   {}
 func (*HTMLResponse) v1PageSigninGetRes()                                   {}
 func (*HTMLResponse) v1PageSignupGetRes()                                   {}
+
+type ImageImageJpeg struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s ImageImageJpeg) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*ImageImageJpeg) v1APIProfileImageImageIDGetRes() {}
+
+type ImageImagePNG struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s ImageImagePNG) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*ImageImagePNG) v1APIProfileImageImageIDGetRes() {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -155,10 +233,17 @@ func (*InternalError) v1APIInterestInterestIDDeleteRes()                     {}
 func (*InternalError) v1APIInterestInterestIDPostRes()                       {}
 func (*InternalError) v1APILogoutPostRes()                                   {}
 func (*InternalError) v1APIProfileDeleteRes()                                {}
+func (*InternalError) v1APIProfileEmailPutRes()                              {}
+func (*InternalError) v1APIProfileImageImageIDGetRes()                       {}
+func (*InternalError) v1APIProfileImagePostRes()                             {}
+func (*InternalError) v1APIProfilePasswordPutRes()                           {}
 func (*InternalError) v1APIProfilePostRes()                                  {}
 func (*InternalError) v1APIProfilePutRes()                                   {}
+func (*InternalError) v1APISearchGetRes()                                    {}
 func (*InternalError) v1APISigninPostRes()                                   {}
+func (*InternalError) v1PageGroupGetRes()                                    {}
 func (*InternalError) v1PageGroupGroupIDGetRes()                             {}
+func (*InternalError) v1PageProfileGetRes()                                  {}
 func (*InternalError) v1PageProfileUsernameGetRes()                          {}
 func (*InternalError) v1PageSearchGetRes()                                   {}
 func (*InternalError) v1PageSigninGetRes()                                   {}
@@ -188,9 +273,17 @@ func (*NotAuthorized) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*NotAuthorized) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*NotAuthorized) v1APIGroupGroupIDPostPostRes()                         {}
 func (*NotAuthorized) v1APIGroupGroupIDPutRes()                              {}
+func (*NotAuthorized) v1APIProfileEmailPutRes()                              {}
+func (*NotAuthorized) v1APIProfileImageImageIDGetRes()                       {}
+func (*NotAuthorized) v1APIProfileImagePostRes()                             {}
+func (*NotAuthorized) v1APIProfilePasswordPutRes()                           {}
+func (*NotAuthorized) v1APISearchGetRes()                                    {}
 func (*NotAuthorized) v1APISigninPostRes()                                   {}
+func (*NotAuthorized) v1PageGroupGetRes()                                    {}
 func (*NotAuthorized) v1PageGroupGroupIDGetRes()                             {}
+func (*NotAuthorized) v1PageProfileGetRes()                                  {}
 func (*NotAuthorized) v1PageProfileUsernameGetRes()                          {}
+func (*NotAuthorized) v1PageSearchGetRes()                                   {}
 
 // A plain text error message.
 // Ref: #/ErrorResponse
@@ -213,6 +306,7 @@ func (*NotFound) v1APIContactContactIDPutRes()      {}
 func (*NotFound) v1APIContactPostRes()              {}
 func (*NotFound) v1APIInterestInterestIDDeleteRes() {}
 func (*NotFound) v1APIInterestInterestIDPostRes()   {}
+func (*NotFound) v1APIProfileImageImageIDGetRes()   {}
 func (*NotFound) v1PageGroupGroupIDGetRes()         {}
 func (*NotFound) v1PageProfileUsernameGetRes()      {}
 
@@ -256,6 +350,52 @@ func (o OptDate) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDate) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -354,6 +494,43 @@ func (o OptURI) Or(d url.URL) url.URL {
 	return d
 }
 
+// Ref: #/PasswordUpdate
+type PasswordUpdate struct {
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	NewPassword string `json:"new_password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *PasswordUpdate) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *PasswordUpdate) GetPassword() string {
+	return s.Password
+}
+
+// GetNewPassword returns the value of NewPassword.
+func (s *PasswordUpdate) GetNewPassword() string {
+	return s.NewPassword
+}
+
+// SetEmail sets the value of Email.
+func (s *PasswordUpdate) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *PasswordUpdate) SetPassword(val string) {
+	s.Password = val
+}
+
+// SetNewPassword sets the value of NewPassword.
+func (s *PasswordUpdate) SetNewPassword(val string) {
+	s.NewPassword = val
+}
+
 // Ref: #/Post
 type Post struct {
 	Content string `json:"content"`
@@ -441,18 +618,12 @@ func (s *ProfileCreate) SetDateOfBirth(val time.Time) {
 
 // Ref: #/ProfileUpdate
 type ProfileUpdate struct {
-	Email       OptString `json:"email"`
 	Name        OptString `json:"name"`
 	Surname     OptString `json:"surname"`
 	Username    OptString `json:"username"`
 	DateOfBirth OptDate   `json:"date_of_birth"`
 	About       OptString `json:"about"`
 	Location    OptString `json:"location"`
-}
-
-// GetEmail returns the value of Email.
-func (s *ProfileUpdate) GetEmail() OptString {
-	return s.Email
 }
 
 // GetName returns the value of Name.
@@ -483,11 +654,6 @@ func (s *ProfileUpdate) GetAbout() OptString {
 // GetLocation returns the value of Location.
 func (s *ProfileUpdate) GetLocation() OptString {
 	return s.Location
-}
-
-// SetEmail sets the value of Email.
-func (s *ProfileUpdate) SetEmail(val OptString) {
-	s.Email = val
 }
 
 // SetName sets the value of Name.
@@ -523,12 +689,18 @@ func (s *ProfileUpdate) SetLocation(val OptString) {
 // Ref: #/Redirect302
 type Redirect302 struct {
 	HxRedirect OptURI
+	Location   OptURI
 	SetCookie  OptString
 }
 
 // GetHxRedirect returns the value of HxRedirect.
 func (s *Redirect302) GetHxRedirect() OptURI {
 	return s.HxRedirect
+}
+
+// GetLocation returns the value of Location.
+func (s *Redirect302) GetLocation() OptURI {
+	return s.Location
 }
 
 // GetSetCookie returns the value of SetCookie.
@@ -541,19 +713,106 @@ func (s *Redirect302) SetHxRedirect(val OptURI) {
 	s.HxRedirect = val
 }
 
+// SetLocation sets the value of Location.
+func (s *Redirect302) SetLocation(val OptURI) {
+	s.Location = val
+}
+
 // SetSetCookie sets the value of SetCookie.
 func (s *Redirect302) SetSetCookie(val OptString) {
 	s.SetCookie = val
 }
 
-func (*Redirect302) v1APIGroupGroupIDDeleteRes() {}
-func (*Redirect302) v1APIGroupPostRes()          {}
-func (*Redirect302) v1APILogoutPostRes()         {}
-func (*Redirect302) v1APIProfileDeleteRes()      {}
-func (*Redirect302) v1APIProfilePostRes()        {}
-func (*Redirect302) v1APISigninPostRes()         {}
-func (*Redirect302) v1PageSigninGetRes()         {}
-func (*Redirect302) v1PageSignupGetRes()         {}
+func (*Redirect302) v1APIGroupGroupIDDeleteRes()  {}
+func (*Redirect302) v1APIGroupPostRes()           {}
+func (*Redirect302) v1APILogoutPostRes()          {}
+func (*Redirect302) v1APIProfileDeleteRes()       {}
+func (*Redirect302) v1APIProfileEmailPutRes()     {}
+func (*Redirect302) v1APIProfileImagePostRes()    {}
+func (*Redirect302) v1APIProfilePasswordPutRes()  {}
+func (*Redirect302) v1APIProfilePostRes()         {}
+func (*Redirect302) v1APISigninPostRes()          {}
+func (*Redirect302) v1PageProfileUsernameGetRes() {}
+func (*Redirect302) v1PageSigninGetRes()          {}
+func (*Redirect302) v1PageSignupGetRes()          {}
+
+// Ref: #/Search
+type Search struct {
+	Type             SearchType `json:"type"`
+	IncludeInterests []int64    `json:"include_interests"`
+	ExcludeInterests []int64    `json:"exclude_interests"`
+}
+
+// GetType returns the value of Type.
+func (s *Search) GetType() SearchType {
+	return s.Type
+}
+
+// GetIncludeInterests returns the value of IncludeInterests.
+func (s *Search) GetIncludeInterests() []int64 {
+	return s.IncludeInterests
+}
+
+// GetExcludeInterests returns the value of ExcludeInterests.
+func (s *Search) GetExcludeInterests() []int64 {
+	return s.ExcludeInterests
+}
+
+// SetType sets the value of Type.
+func (s *Search) SetType(val SearchType) {
+	s.Type = val
+}
+
+// SetIncludeInterests sets the value of IncludeInterests.
+func (s *Search) SetIncludeInterests(val []int64) {
+	s.IncludeInterests = val
+}
+
+// SetExcludeInterests sets the value of ExcludeInterests.
+func (s *Search) SetExcludeInterests(val []int64) {
+	s.ExcludeInterests = val
+}
+
+type SearchType string
+
+const (
+	SearchTypeProfile SearchType = "profile"
+	SearchTypeGroup   SearchType = "group"
+)
+
+// AllValues returns all SearchType values.
+func (SearchType) AllValues() []SearchType {
+	return []SearchType{
+		SearchTypeProfile,
+		SearchTypeGroup,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s SearchType) MarshalText() ([]byte, error) {
+	switch s {
+	case SearchTypeProfile:
+		return []byte(s), nil
+	case SearchTypeGroup:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *SearchType) UnmarshalText(data []byte) error {
+	switch SearchType(data) {
+	case SearchTypeProfile:
+		*s = SearchTypeProfile
+		return nil
+	case SearchTypeGroup:
+		*s = SearchTypeGroup
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type SessionAuth struct {
 	APIKey string
@@ -594,3 +853,35 @@ func (s *SignIn) SetEmail(val string) {
 func (s *SignIn) SetPassword(val string) {
 	s.Password = val
 }
+
+type V1APIProfileImagePostReqImageJpeg struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s V1APIProfileImagePostReqImageJpeg) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*V1APIProfileImagePostReqImageJpeg) v1APIProfileImagePostReq() {}
+
+type V1APIProfileImagePostReqImagePNG struct {
+	Data io.Reader
+}
+
+// Read reads data from the Data reader.
+//
+// Kept to satisfy the io.Reader interface.
+func (s V1APIProfileImagePostReqImagePNG) Read(p []byte) (n int, err error) {
+	if s.Data == nil {
+		return 0, io.EOF
+	}
+	return s.Data.Read(p)
+}
+
+func (*V1APIProfileImagePostReqImagePNG) v1APIProfileImagePostReq() {}

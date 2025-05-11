@@ -4,6 +4,8 @@ import (
 	"context"
 	"io"
 
+	"likemind/internal/config"
+
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
@@ -16,7 +18,7 @@ type ImageRepository interface {
 
 type S3Repository struct {
 	client *minio.Client
-	cfg    config
+	cfg    config.S3
 }
 
 type Image struct {
@@ -26,16 +28,7 @@ type Image struct {
 	Size        int64
 }
 
-type config struct {
-	Endpoint        string
-	AccessKeyID     string
-	SecretAccessKey string
-	BucketName      string
-	Location        string
-	UseSSL          bool
-}
-
-func NewS3Repository(cfg config) (ImageRepository, error) {
+func NewS3Repository(cfg config.S3) (ImageRepository, error) {
 	minioClient, err := minio.New(cfg.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(cfg.AccessKeyID, cfg.SecretAccessKey, ""),
 		Secure: cfg.UseSSL,

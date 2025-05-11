@@ -12,6 +12,7 @@ type Config struct {
 	DB   DB   `toml:"db"`
 	App  App  `toml:"app"`
 	Auth Auth `toml:"auth"`
+	S3   S3   `toml:"s3"`
 }
 
 type App struct {
@@ -25,6 +26,15 @@ type DB struct {
 
 type Auth struct {
 	Expiration time.Duration `toml:"expiration"`
+}
+
+type S3 struct {
+	Endpoint        string `toml:"endpoint"`
+	AccessKeyID     string `toml:"access_key_id"`
+	SecretAccessKey string `toml:"secret_access_key"`
+	BucketName      string `toml:"bucket_name"`
+	Location        string `toml:"location"`
+	UseSSL          bool   `toml:"use_ssl"`
 }
 
 var configPath = flag.String("config", "./config.toml", "path to application config")

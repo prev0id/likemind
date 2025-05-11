@@ -6,6 +6,7 @@ const (
 	PathPageSignIn      = "/signin"
 	PathPageSignUp      = "/signup"
 	PathPageCurrentUser = "/user"
+	PathPageOwnProfile  = "/profile"
 	PathPageProfile     = "/profile/{username}"
 	PathPageGroup       = "/group/{groupname}"
 	PathPageSearch      = "/search"

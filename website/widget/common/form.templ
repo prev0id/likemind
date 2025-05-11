@@ -118,20 +118,22 @@ templ XButton(state view.HTMX) {
 }
 
 templ Checkbox(checkbox view.Checkbox) {
-	<input
-		type="checkbox"
-		id={ checkbox.ID }
-		value={ checkbox.Value }
-		name={ checkbox.Name }
-		class="mr-2 accent-black"
-		autocomplete="off"
-		checked?={ checkbox.Checked }
-		{ checkbox.Htmx.Attributes()... }
-	/>
-	<label
-		class="text-black-400 font-medium"
-		for={ checkbox.Name }
-	>
-		{ checkbox.Text }
-	</label>
+	<div class="flex">
+		<input
+			type="checkbox"
+			id={ checkbox.ID }
+			value={ checkbox.Value }
+			name={ checkbox.Name }
+			class="mr-2 accent-black"
+			autocomplete="off"
+			checked?={ checkbox.Checked }
+			{ checkbox.Htmx.Attributes()... }
+		/>
+		<label
+			class="text-black-400 font-medium"
+			for={ checkbox.ID }
+		>
+			{ checkbox.Text }
+		</label>
+	</div>
 }

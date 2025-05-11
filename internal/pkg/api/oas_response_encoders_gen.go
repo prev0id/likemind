@@ -164,6 +164,21 @@ func encodeV1APIGroupGroupIDDeleteResponse(response V1APIGroupGroupIDDeleteRes, 
 					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
 			// Encode "Set-Cookie" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
@@ -632,6 +647,21 @@ func encodeV1APIGroupPostResponse(response V1APIGroupPostRes, w http.ResponseWri
 					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
 			// Encode "Set-Cookie" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
@@ -789,6 +819,21 @@ func encodeV1APILogoutPostResponse(response V1APILogoutPostRes, w http.ResponseW
 					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
 			// Encode "Set-Cookie" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
@@ -848,6 +893,21 @@ func encodeV1APIProfileDeleteResponse(response V1APIProfileDeleteRes, w http.Res
 					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
 			// Encode "Set-Cookie" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
@@ -866,6 +926,367 @@ func encodeV1APIProfileDeleteResponse(response V1APIProfileDeleteRes, w http.Res
 		}
 		w.WriteHeader(302)
 		span.SetStatus(codes.Ok, http.StatusText(302))
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1APIProfileEmailPutResponse(response V1APIProfileEmailPutRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
+		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
+
+		return nil
+
+	case *BadRequest:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(400)
+		span.SetStatus(codes.Error, http.StatusText(400))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1APIProfileImageImageIDGetResponse(response V1APIProfileImageImageIDGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *ImageImageJpeg:
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ImageImagePNG:
+		w.Header().Set("Content-Type", "image/png")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotFound:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(404)
+		span.SetStatus(codes.Error, http.StatusText(404))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1APIProfileImagePostResponse(response V1APIProfileImagePostRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
+		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
+
+		return nil
+
+	case *BadRequest:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(400)
+		span.SetStatus(codes.Error, http.StatusText(400))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1APIProfilePasswordPutResponse(response V1APIProfilePasswordPutRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
+		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
+
+		return nil
+
+	case *BadRequest:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(400)
+		span.SetStatus(codes.Error, http.StatusText(400))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
 
 		return nil
 
@@ -905,6 +1326,21 @@ func encodeV1APIProfilePostResponse(response V1APIProfilePostRes, w http.Respons
 					return nil
 				}); err != nil {
 					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -1000,6 +1436,61 @@ func encodeV1APIProfilePutResponse(response V1APIProfilePutRes, w http.ResponseW
 	}
 }
 
+func encodeV1APISearchGetResponse(response V1APISearchGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *HTMLResponse:
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *BadRequest:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(400)
+		span.SetStatus(codes.Error, http.StatusText(400))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
 func encodeV1APISigninPostResponse(response V1APISigninPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Redirect302:
@@ -1021,6 +1512,21 @@ func encodeV1APISigninPostResponse(response V1APISigninPostRes, w http.ResponseW
 					return errors.Wrap(err, "encode Hx-Redirect header")
 				}
 			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
 			// Encode "Set-Cookie" header.
 			{
 				cfg := uri.HeaderParameterEncodingConfig{
@@ -1039,6 +1545,49 @@ func encodeV1APISigninPostResponse(response V1APISigninPostRes, w http.ResponseW
 		}
 		w.WriteHeader(302)
 		span.SetStatus(codes.Ok, http.StatusText(302))
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1PageGroupGetResponse(response V1PageGroupGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *HTMLResponse:
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
 
 		return nil
 
@@ -1126,6 +1675,49 @@ func encodeV1PageGroupGroupIDGetResponse(response V1PageGroupGroupIDGetRes, w ht
 	}
 }
 
+func encodeV1PageProfileGetResponse(response V1PageProfileGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *HTMLResponse:
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *InternalError:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(500)
+		span.SetStatus(codes.Error, http.StatusText(500))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
 func encodeV1PageProfileUsernameGetResponse(response V1PageProfileUsernameGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *HTMLResponse:
@@ -1137,6 +1729,61 @@ func encodeV1PageProfileUsernameGetResponse(response V1PageProfileUsernameGetRes
 		if _, err := io.Copy(writer, response); err != nil {
 			return errors.Wrap(err, "write")
 		}
+
+		return nil
+
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
+		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
 
 		return nil
 
@@ -1195,6 +1842,18 @@ func encodeV1PageSearchGetResponse(response V1PageSearchGetRes, w http.ResponseW
 
 		return nil
 
+	case *NotAuthorized:
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(401)
+		span.SetStatus(codes.Error, http.StatusText(401))
+
+		writer := w
+		if _, err := io.Copy(writer, response); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
 	case *InternalError:
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(500)
@@ -1243,6 +1902,21 @@ func encodeV1PageSigninGetResponse(response V1PageSigninGetRes, w http.ResponseW
 					return nil
 				}); err != nil {
 					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
 				}
 			}
 			// Encode "Set-Cookie" header.
@@ -1314,6 +1988,21 @@ func encodeV1PageSignupGetResponse(response V1PageSignupGetRes, w http.ResponseW
 					return nil
 				}); err != nil {
 					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
 				}
 			}
 			// Encode "Set-Cookie" header.

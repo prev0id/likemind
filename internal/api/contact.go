@@ -8,7 +8,7 @@ import (
 	desc "likemind/internal/pkg/api"
 )
 
-func (s *Server) V1APIContactContactIDDelete(ctx context.Context, params desc.V1APIContactContactIDDeleteParams) (desc.V1APIContactContactIDDeleteRes, error) {
+func (s *Server) V1APIProfileContactContactIDDelete(ctx context.Context, params desc.V1APIProfileContactContactIDDeleteParams) (desc.V1APIProfileContactContactIDDeleteRes, error) {
 	userID := common.UserIDFromContext(ctx)
 
 	err := s.profile.RemoveContact(ctx, userID, params.ContactID)
@@ -23,7 +23,7 @@ func (s *Server) V1APIContactContactIDDelete(ctx context.Context, params desc.V1
 	return &desc.HTMLResponse{}, nil
 }
 
-func (s *Server) V1APIContactContactIDPut(ctx context.Context, req *desc.Contact, params desc.V1APIContactContactIDPutParams) (desc.V1APIContactContactIDPutRes, error) {
+func (s *Server) V1APIProfileContactContactIDPut(ctx context.Context, req *desc.Contact, params desc.V1APIProfileContactContactIDPutParams) (desc.V1APIProfileContactContactIDPutRes, error) {
 	userID := common.UserIDFromContext(ctx)
 
 	contact := convertContactToDomain(req)
@@ -41,7 +41,7 @@ func (s *Server) V1APIContactContactIDPut(ctx context.Context, req *desc.Contact
 	return &desc.HTMLResponse{}, nil
 }
 
-func (s *Server) V1APIContactPost(ctx context.Context, req *desc.Contact) (desc.V1APIContactPostRes, error) {
+func (s *Server) V1APIProfileContactPost(ctx context.Context, req *desc.Contact) (desc.V1APIProfileContactPostRes, error) {
 	userID := common.UserIDFromContext(ctx)
 
 	err := s.profile.AddContact(ctx, userID, convertContactToDomain(req))

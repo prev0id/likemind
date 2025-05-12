@@ -3,17 +3,18 @@ package model
 import "time"
 
 const (
-	TableSessions        = "sessions"
-	TableUsers           = "users"
-	TableContacts        = "contacts"
-	TableProfilePictures = "profile_pictures"
-	TableGroups          = "groups"
-	TablePosts           = "posts"
-	TableComments        = "comments"
-	TableInterestGroups  = "interest_groups"
-	TableInterests       = "interests"
-	TableUserInterests   = "user_interests"
-	TableGroupInterests  = "group_interests"
+	TableSessions          = "sessions"
+	TableUsers             = "users"
+	TableContacts          = "contacts"
+	TableProfilePictures   = "profile_pictures"
+	TableGroups            = "groups"
+	TablePosts             = "posts"
+	TableComments          = "comments"
+	TableInterestGroups    = "interest_groups"
+	TableInterests         = "interests"
+	TableUserInterests     = "user_interests"
+	TableGroupInterests    = "group_interests"
+	TableUserSubscriptions = "user_subscriptions"
 )
 
 const (
@@ -190,4 +191,16 @@ type GroupInterest struct {
 	GroupID    int64     `db:"group_id"`
 	InterestID int64     `db:"interest_id"`
 	CreatedAt  time.Time `db:"created_at"`
+}
+
+const (
+	UserSubscriptionUserID   = "user_id"
+	UserSubscriptionGroupID  = "user_id"
+	UserSubscriptionCreateAt = "created_at"
+)
+
+type UserSubscription struct {
+	GroupID   int64     `db:"group_id"`
+	UserID    int64     `db:"user_id"`
+	CreatedAt time.Time `db:"created_at"`
 }

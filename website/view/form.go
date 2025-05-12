@@ -67,6 +67,7 @@ func (htmx HTMX) Attributes() templ.Attributes {
 
 type Details struct {
 	Summary string
+	Open    bool
 }
 
 type TextArea struct {

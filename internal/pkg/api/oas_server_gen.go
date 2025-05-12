@@ -8,30 +8,24 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1APIContactContactIDDelete implements DELETE /v1/api/contact/{contact_id} operation.
-	//
-	// Removes a contact with the specified ID from the user's profile.
-	//
-	// DELETE /v1/api/contact/{contact_id}
-	V1APIContactContactIDDelete(ctx context.Context, params V1APIContactContactIDDeleteParams) (V1APIContactContactIDDeleteRes, error)
-	// V1APIContactContactIDPut implements PUT /v1/api/contact/{contact_id} operation.
-	//
-	// Updates user's contact with the specified ID.
-	//
-	// PUT /v1/api/contact/{contact_id}
-	V1APIContactContactIDPut(ctx context.Context, req *Contact, params V1APIContactContactIDPutParams) (V1APIContactContactIDPutRes, error)
-	// V1APIContactPost implements POST /v1/api/contact operation.
-	//
-	// Adds a contact with the specified ID to the user's profile.
-	//
-	// POST /v1/api/contact
-	V1APIContactPost(ctx context.Context, req *Contact) (V1APIContactPostRes, error)
 	// V1APIGroupGroupIDDelete implements DELETE /v1/api/group/{group_id} operation.
 	//
 	// Deletes group.
 	//
 	// DELETE /v1/api/group/{group_id}
 	V1APIGroupGroupIDDelete(ctx context.Context, params V1APIGroupGroupIDDeleteParams) (V1APIGroupGroupIDDeleteRes, error)
+	// V1APIGroupGroupIDInterestInterestIDDelete implements DELETE /v1/api/group/{group_id}/interest/{interest_id} operation.
+	//
+	// Removes an interest with the specified ID from the group's profile.
+	//
+	// DELETE /v1/api/group/{group_id}/interest/{interest_id}
+	V1APIGroupGroupIDInterestInterestIDDelete(ctx context.Context, params V1APIGroupGroupIDInterestInterestIDDeleteParams) (V1APIGroupGroupIDInterestInterestIDDeleteRes, error)
+	// V1APIGroupGroupIDInterestInterestIDPost implements POST /v1/api/group/{group_id}/interest/{interest_id} operation.
+	//
+	// Adds an interest with the specified ID to the group's description.
+	//
+	// POST /v1/api/group/{group_id}/interest/{interest_id}
+	V1APIGroupGroupIDInterestInterestIDPost(ctx context.Context, params V1APIGroupGroupIDInterestInterestIDPostParams) (V1APIGroupGroupIDInterestInterestIDPostRes, error)
 	// V1APIGroupGroupIDPostPost implements POST /v1/api/group/{group_id}/post operation.
 	//
 	// Creates new post. If ok returns post component.
@@ -80,24 +74,30 @@ type Handler interface {
 	//
 	// POST /v1/api/group
 	V1APIGroupPost(ctx context.Context, req *Group) (V1APIGroupPostRes, error)
-	// V1APIInterestInterestIDDelete implements DELETE /v1/api/interest/{interest_id} operation.
-	//
-	// Removes an interest with the specified ID from the user's profile.
-	//
-	// DELETE /v1/api/interest/{interest_id}
-	V1APIInterestInterestIDDelete(ctx context.Context, params V1APIInterestInterestIDDeleteParams) (V1APIInterestInterestIDDeleteRes, error)
-	// V1APIInterestInterestIDPost implements POST /v1/api/interest/{interest_id} operation.
-	//
-	// Adds an interest with the specified ID to the user's profile.
-	//
-	// POST /v1/api/interest/{interest_id}
-	V1APIInterestInterestIDPost(ctx context.Context, params V1APIInterestInterestIDPostParams) (V1APIInterestInterestIDPostRes, error)
 	// V1APILogoutPost implements POST /v1/api/logout operation.
 	//
 	// Terminates the user session and redirects to the sign-in page.
 	//
 	// POST /v1/api/logout
 	V1APILogoutPost(ctx context.Context) (V1APILogoutPostRes, error)
+	// V1APIProfileContactContactIDDelete implements DELETE /v1/api/profile/contact/{contact_id} operation.
+	//
+	// Removes a contact with the specified ID from the user's profile.
+	//
+	// DELETE /v1/api/profile/contact/{contact_id}
+	V1APIProfileContactContactIDDelete(ctx context.Context, params V1APIProfileContactContactIDDeleteParams) (V1APIProfileContactContactIDDeleteRes, error)
+	// V1APIProfileContactContactIDPut implements PUT /v1/api/profile/contact/{contact_id} operation.
+	//
+	// Updates user's contact with the specified ID.
+	//
+	// PUT /v1/api/profile/contact/{contact_id}
+	V1APIProfileContactContactIDPut(ctx context.Context, req *Contact, params V1APIProfileContactContactIDPutParams) (V1APIProfileContactContactIDPutRes, error)
+	// V1APIProfileContactPost implements POST /v1/api/profile/contact operation.
+	//
+	// Adds a contact with the specified ID to the user's profile.
+	//
+	// POST /v1/api/profile/contact
+	V1APIProfileContactPost(ctx context.Context, req *Contact) (V1APIProfileContactPostRes, error)
 	// V1APIProfileDelete implements DELETE /v1/api/profile operation.
 	//
 	// Permanently deletes the user profile and all associated data.
@@ -122,6 +122,18 @@ type Handler interface {
 	//
 	// POST /v1/api/profile/image
 	V1APIProfileImagePost(ctx context.Context, req V1APIProfileImagePostReq, params V1APIProfileImagePostParams) (V1APIProfileImagePostRes, error)
+	// V1APIProfileInterestInterestIDDelete implements DELETE /v1/api/profile/interest/{interest_id} operation.
+	//
+	// Removes an interest with the specified ID from the user's profile.
+	//
+	// DELETE /v1/api/profile/interest/{interest_id}
+	V1APIProfileInterestInterestIDDelete(ctx context.Context, params V1APIProfileInterestInterestIDDeleteParams) (V1APIProfileInterestInterestIDDeleteRes, error)
+	// V1APIProfileInterestInterestIDPost implements POST /v1/api/profile/interest/{interest_id} operation.
+	//
+	// Adds an interest with the specified ID to the user's profile.
+	//
+	// POST /v1/api/profile/interest/{interest_id}
+	V1APIProfileInterestInterestIDPost(ctx context.Context, params V1APIProfileInterestInterestIDPostParams) (V1APIProfileInterestInterestIDPostRes, error)
 	// V1APIProfilePasswordPut implements PUT /v1/api/profile/password operation.
 	//
 	// Updates password.

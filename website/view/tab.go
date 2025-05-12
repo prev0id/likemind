@@ -12,7 +12,7 @@ type Tab struct {
 var (
 	WithoutSelectedTab = Tab{}
 	GroupTab           = Tab{
-		URL:        domain.PathPageGroup,
+		URL:        domain.PathPageOwnGroups,
 		Name:       "Group",
 		Kaomoji:    `\( ˙▿˙ )/\( ˙▿˙ )/`,
 		Authorized: true,

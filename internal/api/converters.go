@@ -10,7 +10,7 @@ func profileFromDomainToView(
 	user domain.User,
 	contacts []domain.Contact,
 	pictures []domain.PictureID,
-	interests domain.Interests,
+	interests []domain.InterestGroup,
 ) *view.Profile {
 	return &view.Profile{
 		Name:        user.Name,
@@ -47,7 +47,7 @@ func contactsDomainToView(contacts []domain.Contact) []view.Contact {
 	return result
 }
 
-func interestGroupDomainToView(interests domain.Interests) []view.GroupedInterests {
+func interestGroupDomainToView(interests []domain.InterestGroup) []view.GroupedInterests {
 	result := make([]view.GroupedInterests, 0, len(interests))
 	for _, group := range interests {
 		result = append(result, view.GroupedInterests{
@@ -62,7 +62,7 @@ func interestsDomainToView(interests []domain.Interest) []view.Interest {
 	result := make([]view.Interest, 0, len(interests))
 	for _, interest := range interests {
 		result = append(result, view.Interest{
-			ID:          interest.ID,
+			ID:          int64(interest.ID),
 			Name:        interest.Name,
 			Description: interest.Description,
 			Selected:    interest.Selected,

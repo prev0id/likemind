@@ -106,6 +106,42 @@ interest:
       "500":
         $ref: "../components/responses.yaml#/InternalError"
 
+group_interest:
+  post:
+    summary: Add interest to the group
+    description: Adds an interest with the specified ID to the group's description.
+    tags:
+      - user
+    parameters:
+      - $ref: "../components/parameters.yaml#/interest_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+  delete:
+    summary: Delete interest from the group
+    description: Removes an interest with the specified ID from the group's profile.
+    tags:
+      - user
+    parameters:
+      - $ref: "../components/parameters.yaml#/interest_id"
+      - $ref: "../components/parameters.yaml#/group_id"
+    security:
+      - SessionAuth: []
+    responses:
+      "200":
+        $ref: "../components/responses.yaml#/HTMLResponse"
+      "404":
+        $ref: "../components/responses.yaml#/NotFound"
+      "500":
+        $ref: "../components/responses.yaml#/InternalError"
+
 create_contact:
   post:
     summary: Add contact to the user

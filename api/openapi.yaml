@@ -38,11 +38,11 @@ paths:
     $ref: "./paths/api.yaml#/email_update"
   /v1/api/profile/password:
     $ref: "./paths/api.yaml#/password_update"
-  /v1/api/interest/{interest_id}:
+  /v1/api/profile/interest/{interest_id}:
     $ref: "./paths/api.yaml#/interest"
-  /v1/api/contact:
+  /v1/api/profile/contact:
     $ref: "./paths/api.yaml#/create_contact"
-  /v1/api/contact/{contact_id}:
+  /v1/api/profile/contact/{contact_id}:
     $ref: "./paths/api.yaml#/contact"
 
   /v1/api/group:
@@ -57,6 +57,8 @@ paths:
     $ref: "./paths/api.yaml#/create_comment"
   /v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}:
     $ref: "./paths/api.yaml#/comment"
+  /v1/api/group/{group_id}/interest/{interest_id}:
+    $ref: "./paths/api.yaml#/group_interest"
 
   /v1/api/search:
     $ref: "./paths/api.yaml#/search"

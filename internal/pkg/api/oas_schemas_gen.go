@@ -147,9 +147,8 @@ func (s HTMLResponse) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*HTMLResponse) v1APIContactContactIDDeleteRes()                       {}
-func (*HTMLResponse) v1APIContactContactIDPutRes()                          {}
-func (*HTMLResponse) v1APIContactPostRes()                                  {}
+func (*HTMLResponse) v1APIGroupGroupIDInterestInterestIDDeleteRes()         {}
+func (*HTMLResponse) v1APIGroupGroupIDInterestInterestIDPostRes()           {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
@@ -157,8 +156,11 @@ func (*HTMLResponse) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostRes()                         {}
 func (*HTMLResponse) v1APIGroupGroupIDPutRes()                              {}
-func (*HTMLResponse) v1APIInterestInterestIDDeleteRes()                     {}
-func (*HTMLResponse) v1APIInterestInterestIDPostRes()                       {}
+func (*HTMLResponse) v1APIProfileContactContactIDDeleteRes()                {}
+func (*HTMLResponse) v1APIProfileContactContactIDPutRes()                   {}
+func (*HTMLResponse) v1APIProfileContactPostRes()                           {}
+func (*HTMLResponse) v1APIProfileInterestInterestIDDeleteRes()              {}
+func (*HTMLResponse) v1APIProfileInterestInterestIDPostRes()                {}
 func (*HTMLResponse) v1APIProfilePutRes()                                   {}
 func (*HTMLResponse) v1APISearchGetRes()                                    {}
 func (*HTMLResponse) v1PageGroupGetRes()                                    {}
@@ -217,10 +219,9 @@ func (s InternalError) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*InternalError) v1APIContactContactIDDeleteRes()                       {}
-func (*InternalError) v1APIContactContactIDPutRes()                          {}
-func (*InternalError) v1APIContactPostRes()                                  {}
 func (*InternalError) v1APIGroupGroupIDDeleteRes()                           {}
+func (*InternalError) v1APIGroupGroupIDInterestInterestIDDeleteRes()         {}
+func (*InternalError) v1APIGroupGroupIDInterestInterestIDPostRes()           {}
 func (*InternalError) v1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes() {}
 func (*InternalError) v1APIGroupGroupIDPostPostIDCommentCommentIDPutRes()    {}
 func (*InternalError) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
@@ -229,13 +230,16 @@ func (*InternalError) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*InternalError) v1APIGroupGroupIDPostPostRes()                         {}
 func (*InternalError) v1APIGroupGroupIDPutRes()                              {}
 func (*InternalError) v1APIGroupPostRes()                                    {}
-func (*InternalError) v1APIInterestInterestIDDeleteRes()                     {}
-func (*InternalError) v1APIInterestInterestIDPostRes()                       {}
 func (*InternalError) v1APILogoutPostRes()                                   {}
+func (*InternalError) v1APIProfileContactContactIDDeleteRes()                {}
+func (*InternalError) v1APIProfileContactContactIDPutRes()                   {}
+func (*InternalError) v1APIProfileContactPostRes()                           {}
 func (*InternalError) v1APIProfileDeleteRes()                                {}
 func (*InternalError) v1APIProfileEmailPutRes()                              {}
 func (*InternalError) v1APIProfileImageImageIDGetRes()                       {}
 func (*InternalError) v1APIProfileImagePostRes()                             {}
+func (*InternalError) v1APIProfileInterestInterestIDDeleteRes()              {}
+func (*InternalError) v1APIProfileInterestInterestIDPostRes()                {}
 func (*InternalError) v1APIProfilePasswordPutRes()                           {}
 func (*InternalError) v1APIProfilePostRes()                                  {}
 func (*InternalError) v1APIProfilePutRes()                                   {}
@@ -301,14 +305,16 @@ func (s NotFound) Read(p []byte) (n int, err error) {
 	return s.Data.Read(p)
 }
 
-func (*NotFound) v1APIContactContactIDDeleteRes()   {}
-func (*NotFound) v1APIContactContactIDPutRes()      {}
-func (*NotFound) v1APIContactPostRes()              {}
-func (*NotFound) v1APIInterestInterestIDDeleteRes() {}
-func (*NotFound) v1APIInterestInterestIDPostRes()   {}
-func (*NotFound) v1APIProfileImageImageIDGetRes()   {}
-func (*NotFound) v1PageGroupGroupIDGetRes()         {}
-func (*NotFound) v1PageProfileUsernameGetRes()      {}
+func (*NotFound) v1APIGroupGroupIDInterestInterestIDDeleteRes() {}
+func (*NotFound) v1APIGroupGroupIDInterestInterestIDPostRes()   {}
+func (*NotFound) v1APIProfileContactContactIDDeleteRes()        {}
+func (*NotFound) v1APIProfileContactContactIDPutRes()           {}
+func (*NotFound) v1APIProfileContactPostRes()                   {}
+func (*NotFound) v1APIProfileImageImageIDGetRes()               {}
+func (*NotFound) v1APIProfileInterestInterestIDDeleteRes()      {}
+func (*NotFound) v1APIProfileInterestInterestIDPostRes()        {}
+func (*NotFound) v1PageGroupGroupIDGetRes()                     {}
+func (*NotFound) v1PageProfileUsernameGetRes()                  {}
 
 // NewOptDate returns new OptDate with value set to v.
 func NewOptDate(v time.Time) OptDate {

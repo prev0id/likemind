@@ -15,7 +15,7 @@ func repoInterestToDomain(groupID int64, interests []model.Interest, selected ma
 		_, isSelected := selected[interest.ID]
 
 		result = append(result, domain.Interest{
-			ID:          interest.ID,
+			ID:          domain.InterestID(interest.ID),
 			Name:        interest.Name,
 			Description: interest.Description,
 			GroupID:     interest.GroupID,
@@ -25,16 +25,15 @@ func repoInterestToDomain(groupID int64, interests []model.Interest, selected ma
 	return result
 }
 
-func repoUserInterestsToDomain(userInterests []model.UserInterest, groups []model.InterestGroup, interests []model.Interest) domain.Interests {
+func repoUserInterestsToDomain(userInterests []model.UserInterest, groups []model.InterestGroup, interests []model.Interest) []domain.InterestGroup {
 	selected := make(map[int64]struct{}, len(userInterests))
 	for _, interest := range userInterests {
 		selected[interest.InterestID] = struct{}{}
 	}
 
-	result := make(domain.Interests, 0, len(groups))
+	result := make([]domain.InterestGroup, 0, len(groups))
 	for _, group := range groups {
 		result = append(result, domain.InterestGroup{
-			ID:        group.ID,
 			Name:      group.Name,
 			Interests: repoInterestToDomain(group.ID, interests, selected),
 		})
@@ -42,16 +41,15 @@ func repoUserInterestsToDomain(userInterests []model.UserInterest, groups []mode
 	return result
 }
 
-func repoGroupInterestsToDomain(groupInterests []model.GroupInterest, groups []model.InterestGroup, interests []model.Interest) domain.Interests {
+func repoGroupInterestsToDomain(groupInterests []model.GroupInterest, groups []model.InterestGroup, interests []model.Interest) []domain.InterestGroup {
 	selected := make(map[int64]struct{}, len(groupInterests))
 	for _, interest := range groupInterests {
 		selected[interest.InterestID] = struct{}{}
 	}
 
-	result := make(domain.Interests, 0, len(groups))
+	result := make([]domain.InterestGroup, 0, len(groups))
 	for _, group := range groups {
 		result = append(result, domain.InterestGroup{
-			ID:        group.ID,
 			Name:      group.Name,
 			Interests: repoInterestToDomain(group.ID, interests, selected),
 		})

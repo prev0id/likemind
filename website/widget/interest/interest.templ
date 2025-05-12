@@ -1,28 +1,12 @@
 package tag
 
 import (
-	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
-	common_widget "likemind/website/widget/common"
-	"strconv"
 )
 
 templ Interest(interest view.Interest) {
 	<p class="bg-pink text-red px-3 py-1 rounded-full text-sm">{ interest.Name }</p>
-}
-
-templ OwnInterest(interest view.Interest) {
-	<p
-		class="bg-pink text-red px-3 py-1 rounded-full text-sm"
-	>
-		{ interest.Name }
-		@common_widget.XButton(view.HTMX{
-			Delete: common.FillPath(domain.PathAPIInterestID, map[string]string{
-				domain.PathParamInterestID: strconv.FormatInt(interest.ID, 10),
-			}),
-		})
-	</p>
 }
 
 templ Container() {

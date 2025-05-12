@@ -945,7 +945,7 @@ func UpdateEmail() templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Form(view.Form{
 				Htmx: view.HTMX{
-					Target: domain.PathAPIEmail,
+					Post: domain.PathAPIEmail,
 				},
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var22), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -1013,7 +1013,7 @@ func UpdateContacts(contacts []view.Contact) templ.Component {
 			}
 			templ_7745c5c3_Err = common_widget.XButton(view.HTMX{
 				Delete: common.FillPath(
-					domain.PathAPIContactID,
+					domain.PathAPIProfileContactID,
 					map[string]string{
 						domain.PathParamContactID: strconv.FormatInt(contact.ID, 10),
 					},
@@ -1095,7 +1095,7 @@ func UpdateContacts(contacts []view.Contact) templ.Component {
 		})
 		templ_7745c5c3_Err = common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post:   domain.PathAPIContact,
+				Post:   domain.PathAPIProfileContact,
 				Target: "#contacts-container",
 				Swap:   "outerHTML",
 			},
@@ -1111,7 +1111,7 @@ func UpdateContacts(contacts []view.Contact) templ.Component {
 	})
 }
 
-func SelectInterests(groups []view.GroupedInterests) templ.Component {
+func SelectInterests(groups []view.GroupedInterests, path string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -1132,6 +1132,10 @@ func SelectInterests(groups []view.GroupedInterests) templ.Component {
 			templ_7745c5c3_Var27 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "<div id=\"select-interests-wrapper\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		for _, group := range groups {
 			templ_7745c5c3_Var28 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -1146,7 +1150,7 @@ func SelectInterests(groups []view.GroupedInterests) templ.Component {
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, interest := range group.Interests {
-					templ_7745c5c3_Err = common_widget.Checkbox(userInterestCheckboxState(interest)).Render(ctx, templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = common_widget.Checkbox(userInterestCheckboxState(interest, path)).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1155,25 +1159,33 @@ func SelectInterests(groups []view.GroupedInterests) templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Details(view.Details{
 				Summary: group.Name,
+				Open:    true,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var28), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, "</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		return nil
 	})
 }
 
-func userInterestCheckboxState(interest view.Interest) view.Checkbox {
-	path := common.FillPath(domain.PathAPIInterestID, map[string]string{
+func userInterestCheckboxState(interest view.Interest, path string) view.Checkbox {
+	resultPath := common.FillPath(path, map[string]string{
 		domain.PathParamInterestID: strconv.FormatInt(interest.ID, 10),
 	})
 
-	htmx := view.HTMX{}
+	htmx := view.HTMX{
+		Target: "#select-interests-wrapper",
+		Swap:   "outer",
+	}
 	if interest.Selected {
-		htmx.Delete = path
+		htmx.Delete = resultPath
 	} else {
-		htmx.Post = path
+		htmx.Post = resultPath
 	}
 
 	return view.Checkbox{

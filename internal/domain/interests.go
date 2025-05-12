@@ -1,15 +1,14 @@
 package domain
 
-type Interests []InterestGroup
+type InterestID int64
 
 type InterestGroup struct {
-	ID        int64
 	Name      string
 	Interests []Interest
 }
 
 type Interest struct {
-	ID          int64
+	ID          InterestID
 	Name        string
 	Description string
 	GroupID     int64

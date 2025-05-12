@@ -1,8 +1,28 @@
 package page
 
-import "likemind/website/view"
+import (
+	"likemind/website/view"
+	"likemind/website/widget/card"
+	tag "likemind/website/widget/interest"
+)
 
 templ Group(state *view.Group) {
 	@StandardLayout(view.GroupTab) {
+		@card.Container() {
+			@card.Card(nil) {
+				@card.Header() {
+					@card.Title(state.Name)
+				}
+				@card.Text(state.Description)
+				@tag.Container() {
+					for _, interest := range state.Interests {
+						@tag.Interest(interest)
+					}
+				}
+			}
+			// for _, post := range state.Posts {
+			//  @PostComponent(post)
+			// }
+		}
 	}
 }

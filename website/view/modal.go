@@ -1,6 +1,7 @@
 package view
 
 type Modal struct {
-	ID    string
-	Title string
+	ID             string
+	Title          string
+	RefreshOnClose bool
 }

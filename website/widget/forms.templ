@@ -287,7 +287,7 @@ templ UpdateEmail() {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Target: domain.PathAPIEmail,
+				Post: domain.PathAPIEmail,
 			},
 		}) {
 			<div>
@@ -353,7 +353,7 @@ templ UpdateContacts(contacts []view.Contact) {
 				})
 				@common_widget.XButton(view.HTMX{
 					Delete: common.FillPath(
-						domain.PathAPIContactID,
+						domain.PathAPIProfileContactID,
 						map[string]string{
 							domain.PathParamContactID: strconv.FormatInt(contact.ID, 10),
 						},
@@ -365,7 +365,7 @@ templ UpdateContacts(contacts []view.Contact) {
 		}
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post:   domain.PathAPIContact,
+				Post:   domain.PathAPIProfileContact,
 				Target: "#contacts-container",
 				Swap:   "outerHTML",
 			},
@@ -393,28 +393,34 @@ templ UpdateContacts(contacts []view.Contact) {
 	</div>
 }
 
-templ SelectInterests(groups []view.GroupedInterests) {
-	for _, group := range groups {
-		@common_widget.Details(view.Details{
-			Summary: group.Name,
-		}) {
-			for _, interest := range group.Interests {
-				@common_widget.Checkbox(userInterestCheckboxState(interest))
+templ SelectInterests(groups []view.GroupedInterests, path string) {
+	<div id="select-interests-wrapper">
+		for _, group := range groups {
+			@common_widget.Details(view.Details{
+				Summary: group.Name,
+				Open:    true,
+			}) {
+				for _, interest := range group.Interests {
+					@common_widget.Checkbox(userInterestCheckboxState(interest, path))
+				}
 			}
 		}
-	}
+	</div>
 }
 
-func userInterestCheckboxState(interest view.Interest) view.Checkbox {
-	path := common.FillPath(domain.PathAPIInterestID, map[string]string{
+func userInterestCheckboxState(interest view.Interest, path string) view.Checkbox {
+	resultPath := common.FillPath(path, map[string]string{
 		domain.PathParamInterestID: strconv.FormatInt(interest.ID, 10),
 	})
 
-	htmx := view.HTMX{}
+	htmx := view.HTMX{
+		Target: "#select-interests-wrapper",
+		Swap:   "outer",
+	}
 	if interest.Selected {
-		htmx.Delete = path
+		htmx.Delete = resultPath
 	} else {
-		htmx.Post = path
+		htmx.Post = resultPath
 	}
 
 	return view.Checkbox{

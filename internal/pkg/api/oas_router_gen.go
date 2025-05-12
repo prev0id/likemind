@@ -73,62 +73,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "contact"
-
-					if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						switch r.Method {
-						case "POST":
-							s.handleV1APIContactPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-					switch elem[0] {
-					case '/': // Prefix: "/"
-
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						// Param: "contact_id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
-						}
-						args[0] = elem
-						elem = ""
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "DELETE":
-								s.handleV1APIContactContactIDDeleteRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "PUT":
-								s.handleV1APIContactContactIDPutRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "DELETE,PUT")
-							}
-
-							return
-						}
-
-					}
-
 				case 'g': // Prefix: "group"
 
 					if l := len("group"); len(elem) >= l && elem[0:l] == "group" {
@@ -182,122 +126,173 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/post"
+						case '/': // Prefix: "/"
 
-							if l := len("/post"); len(elem) >= l && elem[0:l] == "/post" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch r.Method {
-								case "POST":
-									s.handleV1APIGroupGroupIDPostPostRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
+								break
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'i': // Prefix: "interest/"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
-								// Param: "post_id"
-								// Match until "/"
+								// Param: "interest_id"
+								// Leaf parameter, slashes are prohibited
 								idx := strings.IndexByte(elem, '/')
-								if idx < 0 {
-									idx = len(elem)
+								if idx >= 0 {
+									break
 								}
-								args[1] = elem[:idx]
-								elem = elem[idx:]
+								args[1] = elem
+								elem = ""
 
 								if len(elem) == 0 {
+									// Leaf node.
 									switch r.Method {
 									case "DELETE":
-										s.handleV1APIGroupGroupIDPostPostIDDeleteRequest([2]string{
+										s.handleV1APIGroupGroupIDInterestInterestIDDeleteRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
-									case "PUT":
-										s.handleV1APIGroupGroupIDPostPostIDPutRequest([2]string{
+									case "POST":
+										s.handleV1APIGroupGroupIDInterestInterestIDPostRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "DELETE,PUT")
+										s.notAllowed(w, r, "DELETE,POST")
+									}
+
+									return
+								}
+
+							case 'p': // Prefix: "post"
+
+								if l := len("post"); len(elem) >= l && elem[0:l] == "post" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch r.Method {
+									case "POST":
+										s.handleV1APIGroupGroupIDPostPostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
 									}
 
 									return
 								}
 								switch elem[0] {
-								case '/': // Prefix: "/comment"
+								case '/': // Prefix: "/"
 
-									if l := len("/comment"); len(elem) >= l && elem[0:l] == "/comment" {
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 										elem = elem[l:]
 									} else {
 										break
 									}
 
+									// Param: "post_id"
+									// Match until "/"
+									idx := strings.IndexByte(elem, '/')
+									if idx < 0 {
+										idx = len(elem)
+									}
+									args[1] = elem[:idx]
+									elem = elem[idx:]
+
 									if len(elem) == 0 {
 										switch r.Method {
-										case "POST":
-											s.handleV1APIGroupGroupIDPostPostIDCommentPostRequest([2]string{
+										case "DELETE":
+											s.handleV1APIGroupGroupIDPostPostIDDeleteRequest([2]string{
+												args[0],
+												args[1],
+											}, elemIsEscaped, w, r)
+										case "PUT":
+											s.handleV1APIGroupGroupIDPostPostIDPutRequest([2]string{
 												args[0],
 												args[1],
 											}, elemIsEscaped, w, r)
 										default:
-											s.notAllowed(w, r, "POST")
+											s.notAllowed(w, r, "DELETE,PUT")
 										}
 
 										return
 									}
 									switch elem[0] {
-									case '/': // Prefix: "/"
+									case '/': // Prefix: "/comment"
 
-										if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										if l := len("/comment"); len(elem) >= l && elem[0:l] == "/comment" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
-										// Param: "comment_id"
-										// Leaf parameter, slashes are prohibited
-										idx := strings.IndexByte(elem, '/')
-										if idx >= 0 {
-											break
-										}
-										args[2] = elem
-										elem = ""
-
 										if len(elem) == 0 {
-											// Leaf node.
 											switch r.Method {
-											case "DELETE":
-												s.handleV1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRequest([3]string{
+											case "POST":
+												s.handleV1APIGroupGroupIDPostPostIDCommentPostRequest([2]string{
 													args[0],
 													args[1],
-													args[2],
-												}, elemIsEscaped, w, r)
-											case "PUT":
-												s.handleV1APIGroupGroupIDPostPostIDCommentCommentIDPutRequest([3]string{
-													args[0],
-													args[1],
-													args[2],
 												}, elemIsEscaped, w, r)
 											default:
-												s.notAllowed(w, r, "DELETE,PUT")
+												s.notAllowed(w, r, "POST")
 											}
 
 											return
+										}
+										switch elem[0] {
+										case '/': // Prefix: "/"
+
+											if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											// Param: "comment_id"
+											// Leaf parameter, slashes are prohibited
+											idx := strings.IndexByte(elem, '/')
+											if idx >= 0 {
+												break
+											}
+											args[2] = elem
+											elem = ""
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "DELETE":
+													s.handleV1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												case "PUT":
+													s.handleV1APIGroupGroupIDPostPostIDCommentCommentIDPutRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "DELETE,PUT")
+												}
+
+												return
+											}
+
 										}
 
 									}
@@ -308,41 +303,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						}
 
-					}
-
-				case 'i': // Prefix: "interest/"
-
-					if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "interest_id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "DELETE":
-							s.handleV1APIInterestInterestIDDeleteRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1APIInterestInterestIDPostRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "DELETE,POST")
-						}
-
-						return
 					}
 
 				case 'l': // Prefix: "logout"
@@ -400,6 +360,62 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
+						case 'c': // Prefix: "contact"
+
+							if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch r.Method {
+								case "POST":
+									s.handleV1APIProfileContactPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "contact_id"
+								// Leaf parameter, slashes are prohibited
+								idx := strings.IndexByte(elem, '/')
+								if idx >= 0 {
+									break
+								}
+								args[0] = elem
+								elem = ""
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "DELETE":
+										s.handleV1APIProfileContactContactIDDeleteRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									case "PUT":
+										s.handleV1APIProfileContactContactIDPutRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "DELETE,PUT")
+									}
+
+									return
+								}
+
+							}
+
 						case 'e': // Prefix: "email"
 
 							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
@@ -420,34 +436,79 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								return
 							}
 
-						case 'i': // Prefix: "image"
+						case 'i': // Prefix: "i"
 
-							if l := len("image"); len(elem) >= l && elem[0:l] == "image" {
+							if l := len("i"); len(elem) >= l && elem[0:l] == "i" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch r.Method {
-								case "POST":
-									s.handleV1APIProfileImagePostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
+								break
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'm': // Prefix: "mage"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("mage"); len(elem) >= l && elem[0:l] == "mage" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
-								// Param: "image_id"
+								if len(elem) == 0 {
+									switch r.Method {
+									case "POST":
+										s.handleV1APIProfileImagePostRequest([0]string{}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "image_id"
+									// Leaf parameter, slashes are prohibited
+									idx := strings.IndexByte(elem, '/')
+									if idx >= 0 {
+										break
+									}
+									args[0] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "GET":
+											s.handleV1APIProfileImageImageIDGetRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "GET")
+										}
+
+										return
+									}
+
+								}
+
+							case 'n': // Prefix: "nterest/"
+
+								if l := len("nterest/"); len(elem) >= l && elem[0:l] == "nterest/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "interest_id"
 								// Leaf parameter, slashes are prohibited
 								idx := strings.IndexByte(elem, '/')
 								if idx >= 0 {
@@ -459,12 +520,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch r.Method {
-									case "GET":
-										s.handleV1APIProfileImageImageIDGetRequest([1]string{
+									case "DELETE":
+										s.handleV1APIProfileInterestInterestIDDeleteRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									case "POST":
+										s.handleV1APIProfileInterestInterestIDPostRequest([1]string{
 											args[0],
 										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "GET")
+										s.notAllowed(w, r, "DELETE,POST")
 									}
 
 									return
@@ -864,72 +929,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "contact"
-
-					if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						switch method {
-						case "POST":
-							r.name = V1APIContactPostOperation
-							r.summary = "Add contact to the user"
-							r.operationID = ""
-							r.pathPattern = "/v1/api/contact"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-					switch elem[0] {
-					case '/': // Prefix: "/"
-
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						// Param: "contact_id"
-						// Leaf parameter, slashes are prohibited
-						idx := strings.IndexByte(elem, '/')
-						if idx >= 0 {
-							break
-						}
-						args[0] = elem
-						elem = ""
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "DELETE":
-								r.name = V1APIContactContactIDDeleteOperation
-								r.summary = "Delete contact from the user"
-								r.operationID = ""
-								r.pathPattern = "/v1/api/contact/{contact_id}"
-								r.args = args
-								r.count = 1
-								return r, true
-							case "PUT":
-								r.name = V1APIContactContactIDPutOperation
-								r.summary = "Update user's contact"
-								r.operationID = ""
-								r.pathPattern = "/v1/api/contact/{contact_id}"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-
-					}
-
 				case 'g': // Prefix: "group"
 
 					if l := len("group"); len(elem) >= l && elem[0:l] == "group" {
@@ -993,61 +992,51 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/post"
+						case '/': // Prefix: "/"
 
-							if l := len("/post"); len(elem) >= l && elem[0:l] == "/post" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									r.name = V1APIGroupGroupIDPostPostOperation
-									r.summary = "Create new post"
-									r.operationID = ""
-									r.pathPattern = "/v1/api/group/{group_id}/post"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
-								}
+								break
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'i': // Prefix: "interest/"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
-								// Param: "post_id"
-								// Match until "/"
+								// Param: "interest_id"
+								// Leaf parameter, slashes are prohibited
 								idx := strings.IndexByte(elem, '/')
-								if idx < 0 {
-									idx = len(elem)
+								if idx >= 0 {
+									break
 								}
-								args[1] = elem[:idx]
-								elem = elem[idx:]
+								args[1] = elem
+								elem = ""
 
 								if len(elem) == 0 {
+									// Leaf node.
 									switch method {
 									case "DELETE":
-										r.name = V1APIGroupGroupIDPostPostIDDeleteOperation
-										r.summary = "Delete post"
+										r.name = V1APIGroupGroupIDInterestInterestIDDeleteOperation
+										r.summary = "Delete interest from the group"
 										r.operationID = ""
-										r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}"
+										r.pathPattern = "/v1/api/group/{group_id}/interest/{interest_id}"
 										r.args = args
 										r.count = 2
 										return r, true
-									case "PUT":
-										r.name = V1APIGroupGroupIDPostPostIDPutOperation
-										r.summary = "Update post"
+									case "POST":
+										r.name = V1APIGroupGroupIDInterestInterestIDPostOperation
+										r.summary = "Add interest to the group"
 										r.operationID = ""
-										r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}"
+										r.pathPattern = "/v1/api/group/{group_id}/interest/{interest_id}"
 										r.args = args
 										r.count = 2
 										return r, true
@@ -1055,22 +1044,62 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										return
 									}
 								}
-								switch elem[0] {
-								case '/': // Prefix: "/comment"
 
-									if l := len("/comment"); len(elem) >= l && elem[0:l] == "/comment" {
+							case 'p': // Prefix: "post"
+
+								if l := len("post"); len(elem) >= l && elem[0:l] == "post" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										r.name = V1APIGroupGroupIDPostPostOperation
+										r.summary = "Create new post"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/group/{group_id}/post"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 										elem = elem[l:]
 									} else {
 										break
 									}
 
+									// Param: "post_id"
+									// Match until "/"
+									idx := strings.IndexByte(elem, '/')
+									if idx < 0 {
+										idx = len(elem)
+									}
+									args[1] = elem[:idx]
+									elem = elem[idx:]
+
 									if len(elem) == 0 {
 										switch method {
-										case "POST":
-											r.name = V1APIGroupGroupIDPostPostIDCommentPostOperation
-											r.summary = "Create new comment for the post"
+										case "DELETE":
+											r.name = V1APIGroupGroupIDPostPostIDDeleteOperation
+											r.summary = "Delete post"
 											r.operationID = ""
-											r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment"
+											r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}"
+											r.args = args
+											r.count = 2
+											return r, true
+										case "PUT":
+											r.name = V1APIGroupGroupIDPostPostIDPutOperation
+											r.summary = "Update post"
+											r.operationID = ""
+											r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}"
 											r.args = args
 											r.count = 2
 											return r, true
@@ -1079,45 +1108,70 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 									}
 									switch elem[0] {
-									case '/': // Prefix: "/"
+									case '/': // Prefix: "/comment"
 
-										if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										if l := len("/comment"); len(elem) >= l && elem[0:l] == "/comment" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
-										// Param: "comment_id"
-										// Leaf parameter, slashes are prohibited
-										idx := strings.IndexByte(elem, '/')
-										if idx >= 0 {
-											break
-										}
-										args[2] = elem
-										elem = ""
-
 										if len(elem) == 0 {
-											// Leaf node.
 											switch method {
-											case "DELETE":
-												r.name = V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteOperation
-												r.summary = "Delete comment for the post"
+											case "POST":
+												r.name = V1APIGroupGroupIDPostPostIDCommentPostOperation
+												r.summary = "Create new comment for the post"
 												r.operationID = ""
-												r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}"
+												r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment"
 												r.args = args
-												r.count = 3
-												return r, true
-											case "PUT":
-												r.name = V1APIGroupGroupIDPostPostIDCommentCommentIDPutOperation
-												r.summary = "Update comment"
-												r.operationID = ""
-												r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}"
-												r.args = args
-												r.count = 3
+												r.count = 2
 												return r, true
 											default:
 												return
 											}
+										}
+										switch elem[0] {
+										case '/': // Prefix: "/"
+
+											if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											// Param: "comment_id"
+											// Leaf parameter, slashes are prohibited
+											idx := strings.IndexByte(elem, '/')
+											if idx >= 0 {
+												break
+											}
+											args[2] = elem
+											elem = ""
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "DELETE":
+													r.name = V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteOperation
+													r.summary = "Delete comment for the post"
+													r.operationID = ""
+													r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}"
+													r.args = args
+													r.count = 3
+													return r, true
+												case "PUT":
+													r.name = V1APIGroupGroupIDPostPostIDCommentCommentIDPutOperation
+													r.summary = "Update comment"
+													r.operationID = ""
+													r.pathPattern = "/v1/api/group/{group_id}/post/{post_id}/comment/{comment_id}"
+													r.args = args
+													r.count = 3
+													return r, true
+												default:
+													return
+												}
+											}
+
 										}
 
 									}
@@ -1128,47 +1182,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 						}
 
-					}
-
-				case 'i': // Prefix: "interest/"
-
-					if l := len("interest/"); len(elem) >= l && elem[0:l] == "interest/" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					// Param: "interest_id"
-					// Leaf parameter, slashes are prohibited
-					idx := strings.IndexByte(elem, '/')
-					if idx >= 0 {
-						break
-					}
-					args[0] = elem
-					elem = ""
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "DELETE":
-							r.name = V1APIInterestInterestIDDeleteOperation
-							r.summary = "Delete interest from the user"
-							r.operationID = ""
-							r.pathPattern = "/v1/api/interest/{interest_id}"
-							r.args = args
-							r.count = 1
-							return r, true
-						case "POST":
-							r.name = V1APIInterestInterestIDPostOperation
-							r.summary = "Add interest to the user"
-							r.operationID = ""
-							r.pathPattern = "/v1/api/interest/{interest_id}"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
-						}
 					}
 
 				case 'l': // Prefix: "logout"
@@ -1246,6 +1259,72 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
+						case 'c': // Prefix: "contact"
+
+							if l := len("contact"); len(elem) >= l && elem[0:l] == "contact" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "POST":
+									r.name = V1APIProfileContactPostOperation
+									r.summary = "Add contact to the user"
+									r.operationID = ""
+									r.pathPattern = "/v1/api/profile/contact"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/"
+
+								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "contact_id"
+								// Leaf parameter, slashes are prohibited
+								idx := strings.IndexByte(elem, '/')
+								if idx >= 0 {
+									break
+								}
+								args[0] = elem
+								elem = ""
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "DELETE":
+										r.name = V1APIProfileContactContactIDDeleteOperation
+										r.summary = "Delete contact from the user"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/profile/contact/{contact_id}"
+										r.args = args
+										r.count = 1
+										return r, true
+									case "PUT":
+										r.name = V1APIProfileContactContactIDPutOperation
+										r.summary = "Update user's contact"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/profile/contact/{contact_id}"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+							}
+
 						case 'e': // Prefix: "email"
 
 							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
@@ -1270,38 +1349,85 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								}
 							}
 
-						case 'i': // Prefix: "image"
+						case 'i': // Prefix: "i"
 
-							if l := len("image"); len(elem) >= l && elem[0:l] == "image" {
+							if l := len("i"); len(elem) >= l && elem[0:l] == "i" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									r.name = V1APIProfileImagePostOperation
-									r.summary = "Upload new image"
-									r.operationID = ""
-									r.pathPattern = "/v1/api/profile/image"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
+								break
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'm': // Prefix: "mage"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("mage"); len(elem) >= l && elem[0:l] == "mage" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
-								// Param: "image_id"
+								if len(elem) == 0 {
+									switch method {
+									case "POST":
+										r.name = V1APIProfileImagePostOperation
+										r.summary = "Upload new image"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/profile/image"
+										r.args = args
+										r.count = 0
+										return r, true
+									default:
+										return
+									}
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "image_id"
+									// Leaf parameter, slashes are prohibited
+									idx := strings.IndexByte(elem, '/')
+									if idx >= 0 {
+										break
+									}
+									args[0] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "GET":
+											r.name = V1APIProfileImageImageIDGetOperation
+											r.summary = "Get image"
+											r.operationID = ""
+											r.pathPattern = "/v1/api/profile/image/{image_id}"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+								}
+
+							case 'n': // Prefix: "nterest/"
+
+								if l := len("nterest/"); len(elem) >= l && elem[0:l] == "nterest/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								// Param: "interest_id"
 								// Leaf parameter, slashes are prohibited
 								idx := strings.IndexByte(elem, '/')
 								if idx >= 0 {
@@ -1313,11 +1439,19 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									// Leaf node.
 									switch method {
-									case "GET":
-										r.name = V1APIProfileImageImageIDGetOperation
-										r.summary = "Get image"
+									case "DELETE":
+										r.name = V1APIProfileInterestInterestIDDeleteOperation
+										r.summary = "Delete interest from the user"
 										r.operationID = ""
-										r.pathPattern = "/v1/api/profile/image/{image_id}"
+										r.pathPattern = "/v1/api/profile/interest/{interest_id}"
+										r.args = args
+										r.count = 1
+										return r, true
+									case "POST":
+										r.name = V1APIProfileInterestInterestIDPostOperation
+										r.summary = "Add interest to the user"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/profile/interest/{interest_id}"
 										r.args = args
 										r.count = 1
 										return r, true

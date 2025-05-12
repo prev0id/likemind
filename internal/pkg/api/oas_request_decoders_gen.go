@@ -19,262 +19,6 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeV1APIContactContactIDPutRequest(r *http.Request) (
-	req *Contact,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/x-www-form-urlencoded":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		form, err := ht.ParseForm(r)
-		if err != nil {
-			return req, close, errors.Wrap(err, "parse form")
-		}
-
-		var request Contact
-		q := uri.NewQueryDecoder(form)
-		{
-			cfg := uri.QueryParameterDecodingConfig{
-				Name:    "platform",
-				Style:   uri.QueryStyleForm,
-				Explode: true,
-			}
-			if err := q.HasParam(cfg); err == nil {
-				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					request.Platform = c
-					return nil
-				}); err != nil {
-					return req, close, errors.Wrap(err, "decode \"platform\"")
-				}
-				if err := func() error {
-					if err := (validate.String{
-						MinLength:    0,
-						MinLengthSet: false,
-						MaxLength:    50,
-						MaxLengthSet: true,
-						Email:        false,
-						Hostname:     false,
-						Regex:        nil,
-					}).Validate(string(request.Platform)); err != nil {
-						return errors.Wrap(err, "string")
-					}
-					return nil
-				}(); err != nil {
-					return req, close, errors.Wrap(err, "validate")
-				}
-			} else {
-				return req, close, errors.Wrap(err, "query")
-			}
-		}
-		{
-			cfg := uri.QueryParameterDecodingConfig{
-				Name:    "link",
-				Style:   uri.QueryStyleForm,
-				Explode: true,
-			}
-			if err := q.HasParam(cfg); err == nil {
-				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					request.Link = c
-					return nil
-				}); err != nil {
-					return req, close, errors.Wrap(err, "decode \"link\"")
-				}
-				if err := func() error {
-					if err := (validate.String{
-						MinLength:    0,
-						MinLengthSet: false,
-						MaxLength:    50,
-						MaxLengthSet: true,
-						Email:        false,
-						Hostname:     false,
-						Regex:        nil,
-					}).Validate(string(request.Link)); err != nil {
-						return errors.Wrap(err, "string")
-					}
-					return nil
-				}(); err != nil {
-					return req, close, errors.Wrap(err, "validate")
-				}
-			} else {
-				return req, close, errors.Wrap(err, "query")
-			}
-		}
-		return &request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
-func (s *Server) decodeV1APIContactPostRequest(r *http.Request) (
-	req *Contact,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/x-www-form-urlencoded":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		form, err := ht.ParseForm(r)
-		if err != nil {
-			return req, close, errors.Wrap(err, "parse form")
-		}
-
-		var request Contact
-		q := uri.NewQueryDecoder(form)
-		{
-			cfg := uri.QueryParameterDecodingConfig{
-				Name:    "platform",
-				Style:   uri.QueryStyleForm,
-				Explode: true,
-			}
-			if err := q.HasParam(cfg); err == nil {
-				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					request.Platform = c
-					return nil
-				}); err != nil {
-					return req, close, errors.Wrap(err, "decode \"platform\"")
-				}
-				if err := func() error {
-					if err := (validate.String{
-						MinLength:    0,
-						MinLengthSet: false,
-						MaxLength:    50,
-						MaxLengthSet: true,
-						Email:        false,
-						Hostname:     false,
-						Regex:        nil,
-					}).Validate(string(request.Platform)); err != nil {
-						return errors.Wrap(err, "string")
-					}
-					return nil
-				}(); err != nil {
-					return req, close, errors.Wrap(err, "validate")
-				}
-			} else {
-				return req, close, errors.Wrap(err, "query")
-			}
-		}
-		{
-			cfg := uri.QueryParameterDecodingConfig{
-				Name:    "link",
-				Style:   uri.QueryStyleForm,
-				Explode: true,
-			}
-			if err := q.HasParam(cfg); err == nil {
-				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					request.Link = c
-					return nil
-				}); err != nil {
-					return req, close, errors.Wrap(err, "decode \"link\"")
-				}
-				if err := func() error {
-					if err := (validate.String{
-						MinLength:    0,
-						MinLengthSet: false,
-						MaxLength:    50,
-						MaxLengthSet: true,
-						Email:        false,
-						Hostname:     false,
-						Regex:        nil,
-					}).Validate(string(request.Link)); err != nil {
-						return errors.Wrap(err, "string")
-					}
-					return nil
-				}(); err != nil {
-					return req, close, errors.Wrap(err, "validate")
-				}
-			} else {
-				return req, close, errors.Wrap(err, "query")
-			}
-		}
-		return &request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
 func (s *Server) decodeV1APIGroupGroupIDPostPostRequest(r *http.Request) (
 	req *Post,
 	close func() error,
@@ -855,6 +599,262 @@ func (s *Server) decodeV1APIGroupPostRequest(r *http.Request) (
 						Hostname:     false,
 						Regex:        nil,
 					}).Validate(string(request.Description)); err != nil {
+						return errors.Wrap(err, "string")
+					}
+					return nil
+				}(); err != nil {
+					return req, close, errors.Wrap(err, "validate")
+				}
+			} else {
+				return req, close, errors.Wrap(err, "query")
+			}
+		}
+		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeV1APIProfileContactContactIDPutRequest(r *http.Request) (
+	req *Contact,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/x-www-form-urlencoded":
+		if r.ContentLength == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+		form, err := ht.ParseForm(r)
+		if err != nil {
+			return req, close, errors.Wrap(err, "parse form")
+		}
+
+		var request Contact
+		q := uri.NewQueryDecoder(form)
+		{
+			cfg := uri.QueryParameterDecodingConfig{
+				Name:    "platform",
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			}
+			if err := q.HasParam(cfg); err == nil {
+				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					request.Platform = c
+					return nil
+				}); err != nil {
+					return req, close, errors.Wrap(err, "decode \"platform\"")
+				}
+				if err := func() error {
+					if err := (validate.String{
+						MinLength:    0,
+						MinLengthSet: false,
+						MaxLength:    50,
+						MaxLengthSet: true,
+						Email:        false,
+						Hostname:     false,
+						Regex:        nil,
+					}).Validate(string(request.Platform)); err != nil {
+						return errors.Wrap(err, "string")
+					}
+					return nil
+				}(); err != nil {
+					return req, close, errors.Wrap(err, "validate")
+				}
+			} else {
+				return req, close, errors.Wrap(err, "query")
+			}
+		}
+		{
+			cfg := uri.QueryParameterDecodingConfig{
+				Name:    "link",
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			}
+			if err := q.HasParam(cfg); err == nil {
+				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					request.Link = c
+					return nil
+				}); err != nil {
+					return req, close, errors.Wrap(err, "decode \"link\"")
+				}
+				if err := func() error {
+					if err := (validate.String{
+						MinLength:    0,
+						MinLengthSet: false,
+						MaxLength:    50,
+						MaxLengthSet: true,
+						Email:        false,
+						Hostname:     false,
+						Regex:        nil,
+					}).Validate(string(request.Link)); err != nil {
+						return errors.Wrap(err, "string")
+					}
+					return nil
+				}(); err != nil {
+					return req, close, errors.Wrap(err, "validate")
+				}
+			} else {
+				return req, close, errors.Wrap(err, "query")
+			}
+		}
+		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeV1APIProfileContactPostRequest(r *http.Request) (
+	req *Contact,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/x-www-form-urlencoded":
+		if r.ContentLength == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+		form, err := ht.ParseForm(r)
+		if err != nil {
+			return req, close, errors.Wrap(err, "parse form")
+		}
+
+		var request Contact
+		q := uri.NewQueryDecoder(form)
+		{
+			cfg := uri.QueryParameterDecodingConfig{
+				Name:    "platform",
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			}
+			if err := q.HasParam(cfg); err == nil {
+				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					request.Platform = c
+					return nil
+				}); err != nil {
+					return req, close, errors.Wrap(err, "decode \"platform\"")
+				}
+				if err := func() error {
+					if err := (validate.String{
+						MinLength:    0,
+						MinLengthSet: false,
+						MaxLength:    50,
+						MaxLengthSet: true,
+						Email:        false,
+						Hostname:     false,
+						Regex:        nil,
+					}).Validate(string(request.Platform)); err != nil {
+						return errors.Wrap(err, "string")
+					}
+					return nil
+				}(); err != nil {
+					return req, close, errors.Wrap(err, "validate")
+				}
+			} else {
+				return req, close, errors.Wrap(err, "query")
+			}
+		}
+		{
+			cfg := uri.QueryParameterDecodingConfig{
+				Name:    "link",
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			}
+			if err := q.HasParam(cfg); err == nil {
+				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					request.Link = c
+					return nil
+				}); err != nil {
+					return req, close, errors.Wrap(err, "decode \"link\"")
+				}
+				if err := func() error {
+					if err := (validate.String{
+						MinLength:    0,
+						MinLengthSet: false,
+						MaxLength:    50,
+						MaxLengthSet: true,
+						Email:        false,
+						Hostname:     false,
+						Regex:        nil,
+					}).Validate(string(request.Link)); err != nil {
 						return errors.Wrap(err, "string")
 					}
 					return nil

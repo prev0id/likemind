@@ -236,30 +236,30 @@ templ updateInterests(state *view.Profile) {
 			})
 		}
 		@common_widget.Modal(view.Modal{
-			ID:    "modal_update_interests",
-			Title: "Update your interests",
+			ID:             "modal_update_interests",
+			Title:          "Update your interests",
+			RefreshOnClose: true,
 		}) {
-			<div class="grid grid-flow-row gap-2">
-				@widget.SelectInterests(state.Interests)
-			</div>
+			@widget.SelectInterests(state.Interests, domain.PathAPIProfileInterestID)
 		}
 	} else {
 		@common_widget.Semibold(state.Nickname + "'s interests")
 	}
 	@tag.Container() {
+		{{ atLeastOneInterest := false }}
 		for _, group := range state.Interests {
 			for _, interest := range group.Interests {
 				if interest.Selected {
+					{{ atLeastOneInterest = true }}
 					@tag.Interest(interest)
 				}
 			}
 		}
-	}
-	if state.About != "" {
-		<div>{ state.About }</div>
-	} else if state.Owner {
-		<div>Add your interests</div>
-	} else {
-		<div>{ state.Nickname } doesn't provide their interests yet</div>
+		if !atLeastOneInterest && state.Owner {
+			Add interests to you profile
+		}
+		if !atLeastOneInterest && !state.Owner {
+			{ state.Nickname } doesn't provided their interests yet
+		}
 	}
 }

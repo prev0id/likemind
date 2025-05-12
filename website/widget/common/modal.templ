@@ -14,6 +14,9 @@ templ Modal(modal view.Modal) {
 		</div>
 		{ children... }
 	</div>
+	if modal.RefreshOnClose {
+		@templ.JSFuncCall("refreshOnModalClose", modal.ID)
+	}
 }
 
 templ ModalCloseButton(modal view.Modal) {

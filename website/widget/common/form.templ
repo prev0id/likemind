@@ -81,7 +81,10 @@ templ SettingsButton(button view.Button) {
 }
 
 templ Details(details view.Details) {
-	<details class="group border-t border-pink pt-4">
+	<details
+		class="group border-t border-pink pt-4"
+		open?={ details.Open }
+	>
 		<summary class="list-none flex items-center p-2 cursor-pointer">
 			<svg class="group-open:hidden w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

@@ -7,3 +7,11 @@ addr = "postgres://user:password@localhost:5432/likemind"
 
 [auth]
 expiration = "48h"
+
+[s3]
+endpoint = "localhost:9000"
+access_key_id = "ZEKdHR6v1Ml8S05AhJr8"
+secret_access_key = "Cd1BjLXKRgzB7ma5Xx2UWCTkigOwTuZ2yB3GcUov"
+bucket_name = "aaaaaaaaaaaaa"
+location = ""
+use_ssl = false

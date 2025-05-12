@@ -13,7 +13,9 @@ import (
 )
 
 func (s *Server) V1PageGroupGet(ctx context.Context) (desc.V1PageGroupGetRes, error) {
-	return nil, nil
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, page.Group(&group_page.State)),
+	}, nil
 }
 
 func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGroupGroupIDGetParams) (desc.V1PageGroupGroupIDGetRes, error) {

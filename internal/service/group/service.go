@@ -2,7 +2,6 @@ package group
 
 import (
 	"context"
-
 	"likemind/internal/database/adapter/group_adapter"
 	"likemind/internal/domain"
 )
@@ -13,6 +12,7 @@ type Service interface {
 	DeleteGroup(ctx context.Context, id domain.GroupID) error
 	GetGroup(ctx context.Context, id domain.GroupID) (domain.Group, error)
 	ListGroups(ctx context.Context) ([]domain.Group, error)
+	ListSubscribedGroups(ctx context.Context, id domain.UserID) ([]domain.GroupID, error)
 
 	CreatePost(ctx context.Context, post domain.Post) (domain.PostID, error)
 	UpdatePost(ctx context.Context, post domain.Post) error

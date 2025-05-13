@@ -2,9 +2,10 @@ package api
 
 import (
 	"context"
-
 	"likemind/internal/common"
 	"likemind/internal/domain"
+	"likemind/website/widget"
+
 	desc "likemind/internal/pkg/api"
 )
 
@@ -19,8 +20,16 @@ func (s *Server) V1APIProfileContactContactIDDelete(ctx context.Context, params 
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	// TODO:
-	return &desc.HTMLResponse{}, nil
+	contacts, err := s.profile.GetContacts(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	component := widget.UpdateContacts(contactsDomainToView(contacts))
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, component),
+	}, nil
 }
 
 func (s *Server) V1APIProfileContactContactIDPut(ctx context.Context, req *desc.Contact, params desc.V1APIProfileContactContactIDPutParams) (desc.V1APIProfileContactContactIDPutRes, error) {
@@ -37,8 +46,16 @@ func (s *Server) V1APIProfileContactContactIDPut(ctx context.Context, req *desc.
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	// TODO:
-	return &desc.HTMLResponse{}, nil
+	contacts, err := s.profile.GetContacts(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	component := widget.UpdateContacts(contactsDomainToView(contacts))
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, component),
+	}, nil
 }
 
 func (s *Server) V1APIProfileContactPost(ctx context.Context, req *desc.Contact) (desc.V1APIProfileContactPostRes, error) {
@@ -49,8 +66,16 @@ func (s *Server) V1APIProfileContactPost(ctx context.Context, req *desc.Contact)
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	// TODO:
-	return &desc.HTMLResponse{}, nil
+	contacts, err := s.profile.GetContacts(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	component := widget.UpdateContacts(contactsDomainToView(contacts))
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, component),
+	}, nil
 }
 
 func convertContactToDomain(req *desc.Contact) domain.Contact {

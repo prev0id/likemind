@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"likemind/internal/domain"
 	"likemind/website/view"
 )
@@ -69,4 +70,66 @@ func interestsDomainToView(interests []domain.Interest) []view.Interest {
 		})
 	}
 	return result
+}
+
+func (s *Server) groupDomainToView(ctx context.Context, group domain.Group, posts []domain.Post, intersts []domain.InterestGroup) (*view.Group, error) {
+	convertedPosts := make([]*view.Post, 0, len(posts))
+	for _, post := range posts {
+		converted, err := s.postDomainToView(ctx, post)
+		if err != nil {
+			return nil, err
+		}
+		convertedPosts = append(convertedPosts, converted)
+	}
+
+	author, err := s.getProfile(ctx, group.Author)
+	if err != nil {
+		return nil, err
+	}
+
+	return &view.Group{
+		Name:        group.Name,
+		Description: group.Description,
+		Author:      author,
+		Posts:       convertedPosts,
+		Interests:   interestGroupDomainToView(intersts),
+	}, nil
+}
+
+func (s *Server) postDomainToView(ctx context.Context, post domain.Post) (*view.Post, error) {
+	comments := make([]*view.Comment, 0, len(post.Comments))
+	for _, comment := range post.Comments {
+		converted, err := s.commentDomainToView(ctx, comment)
+		if err != nil {
+			return nil, err
+		}
+		comments = append(comments, converted)
+	}
+
+	author, err := s.getProfile(ctx, post.Author)
+	if err != nil {
+		return nil, err
+	}
+
+	return &view.Post{
+		Author:    author,
+		Comments:  comments,
+		Content:   post.Content,
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
+	}, nil
+}
+
+func (s *Server) commentDomainToView(ctx context.Context, comment domain.Comment) (*view.Comment, error) {
+	author, err := s.getProfile(ctx, comment.Author)
+	if err != nil {
+		return nil, err
+	}
+
+	return &view.Comment{
+		Content:   comment.Content,
+		Author:    author,
+		CreatedAt: comment.CreatedAt,
+		UpdatedAt: comment.CreatedAt,
+	}, nil
 }

@@ -2,21 +2,21 @@ package bootstrap
 
 import (
 	"fmt"
+	"likemind/internal/api"
+	"likemind/internal/config"
+	"likemind/internal/domain"
+	"likemind/internal/service/image"
+	"likemind/internal/service/interests"
+	"likemind/internal/service/profile"
+	"likemind/internal/service/session"
+	"likemind/website"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/zerolog/log"
 
-	"likemind/internal/api"
-	"likemind/internal/config"
-	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
-	"likemind/internal/service/image"
-	"likemind/internal/service/interests"
-	"likemind/internal/service/profile"
-	"likemind/internal/service/session"
-	"likemind/website"
 )
 
 func Server(

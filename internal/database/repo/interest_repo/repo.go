@@ -2,10 +2,10 @@ package interest_repo
 
 import (
 	"context"
-	"time"
-
+	"fmt"
 	"likemind/internal/database"
 	"likemind/internal/database/model"
+	"time"
 
 	sql "github.com/huandu/go-sqlbuilder"
 )
@@ -166,4 +166,25 @@ func toInterfaceSlice(ints []int64) []any {
 		s[i] = v
 	}
 	return s
+}
+
+func (r *Repo) SearchUsers(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error) {
+	sql := `
+		SELECT
+			user_id AS id,
+			count(*) FILTER (WHERE interest_id = ANY($1)) AS commont
+		FROM user_interests
+		GROUP BY user_id
+		HEAVING
+			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY($2)) = cardinality($1)
+			AND COUNT(*) (WHERE interest_id = ANY($3)) = 0
+		ORDER BY commont DESC;
+	`
+
+	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql, userInterests, include, exlcude))
+	if err != nil {
+		return nil, fmt.Errorf("database.Select: %w", err)
+	}
+
+	return result, nil
 }

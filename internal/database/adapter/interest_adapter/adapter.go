@@ -3,7 +3,6 @@ package interest_adapter
 import (
 	"context"
 	"fmt"
-
 	"likemind/internal/database/model"
 	"likemind/internal/database/repo/interest_repo"
 	"likemind/internal/domain"

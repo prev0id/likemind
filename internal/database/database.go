@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-
 	"likemind/internal/config"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
@@ -31,6 +30,22 @@ func InitDB(ctx context.Context, cfg config.DB) error {
 
 type SQL interface {
 	Build() (string, []any)
+}
+
+func RawSQL(query string, args ...any) SQL {
+	return rawSQL{
+		query: query,
+		args:  args,
+	}
+}
+
+type rawSQL struct {
+	query string
+	args  []any
+}
+
+func (r rawSQL) Build() (string, []any) {
+	return r.query, r.args
 }
 
 func Exec(ctx context.Context, sql SQL) (int64, error) {

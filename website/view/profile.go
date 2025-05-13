@@ -3,6 +3,8 @@ package view
 import "time"
 
 type Profile struct {
+	ID int64
+
 	Nickname    string
 	Name        string
 	Surname     string

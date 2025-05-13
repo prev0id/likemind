@@ -3,7 +3,6 @@ package group
 import (
 	"context"
 	"fmt"
-
 	"likemind/internal/common"
 	"likemind/internal/domain"
 )
@@ -64,6 +63,15 @@ func (s *Implementation) ListGroups(ctx context.Context) ([]domain.Group, error)
 	groups, err := s.adapter.ListGroups(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("s.adapter.ListGroups: %w", err)
+	}
+
+	return groups, nil
+}
+
+func (i *Implementation) ListSubscribedGroups(ctx context.Context, id domain.UserID) ([]domain.GroupID, error) {
+	groups, err := i.adapter.ListSubscribedGroups(ctx, id)
+	if err != nil {
+		return nil, fmt.Errorf("s.adapter.ListSubscribedGroups: %w", err)
 	}
 
 	return groups, nil

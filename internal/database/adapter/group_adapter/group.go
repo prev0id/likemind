@@ -3,7 +3,6 @@ package group_adapter
 import (
 	"context"
 	"fmt"
-
 	"likemind/internal/common"
 	"likemind/internal/database"
 	"likemind/internal/domain"
@@ -71,4 +70,18 @@ func (i *Implementation) GetGroupPosts(ctx context.Context, groupID domain.Group
 	}
 
 	return common.Convert(posts, postModelToDomain), nil
+}
+
+func (i *Implementation) ListSubscribedGroups(ctx context.Context, id domain.UserID) ([]domain.GroupID, error) {
+	subscriptions, err := i.group.ListUserSubscriptions(ctx, int64(id))
+	if err != nil {
+		return nil, fmt.Errorf("i.group.ListUserSubscriptions: %w", err)
+	}
+
+	result := make([]domain.GroupID, 0, len(subscriptions))
+	for _, subscription := range subscriptions {
+		result = append(result, domain.GroupID(subscription.GroupID))
+	}
+
+	return result, nil
 }

@@ -204,3 +204,8 @@ type UserSubscription struct {
 	UserID    int64     `db:"user_id"`
 	CreatedAt time.Time `db:"created_at"`
 }
+
+type SearchResult struct {
+	ID     int64 `db:"id"`
+	Common int64 `db:"common"`
+}

@@ -2,32 +2,42 @@ package api
 
 import (
 	"context"
+	"likemind/internal/common"
+	"likemind/internal/domain"
+	"likemind/website/page"
+	"likemind/website/view"
+	"likemind/website/widget"
 	"net/http"
 
-	"likemind/internal/common"
 	desc "likemind/internal/pkg/api"
-	"likemind/website/page"
+
 	error_page "likemind/website/page/error"
-	group_page "likemind/website/page/group"
-	user_search_page "likemind/website/page/user_search"
 )
 
 func (s *Server) V1PageGroupGet(ctx context.Context) (desc.V1PageGroupGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	subscriptions, err := s.group.ListSubscribedGroups(ctx, userID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	groups := make([]*view.Group, 0, len(subscriptions))
+	for _, sub := range subscriptions {
+		group, err := s.getGroup(ctx, sub)
+		if err != nil {
+			continue
+		}
+		groups = append(groups, group)
+	}
+
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.Group(&group_page.State)),
+		Data: common.RenderComponent(ctx, page.GroupSubscriptions(groups)),
 	}, nil
 }
 
 func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGroupGroupIDGetParams) (desc.V1PageGroupGroupIDGetRes, error) {
-	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, group_page.Page(group_page.State)),
-	}, nil
-}
-
-func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
-	userID := common.UserIDFromContext(ctx)
-
-	profile, err := s.profile.GetUser(ctx, userID)
+	group, err := s.getGroup(ctx, domain.GroupID(params.GroupID))
 	if err != nil {
 		if common.ErrorIs(err, common.NotFoundErrorType) {
 			return &desc.NotFound{Data: common.ErrorMsg(err)}, nil
@@ -35,29 +45,29 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	if userID == profile.ID {
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, page.Group(group)),
+	}, nil
+}
+
+func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	profile, err := s.getProfile(ctx, userID)
+	if err != nil {
+		if common.ErrorIs(err, common.NotFoundErrorType) {
+			return &desc.NotFound{Data: common.ErrorMsg(err)}, nil
+		}
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	if int64(userID) == profile.ID {
 		return &desc.Redirect302{
 			Location: getProfilePage(),
 		}, nil
 	}
 
-	pictures, err := s.image.GetProfileImages(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	contacts, err := s.profile.GetContacts(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	interests, err := s.interests.GetUserInterests(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	state := profileFromDomainToView(userID, profile, contacts, pictures, interests)
-	pageComponent := page.Profile(state)
+	pageComponent := page.Profile(profile)
 
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, pageComponent),
@@ -67,28 +77,12 @@ func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1Pag
 func (s *Server) V1PageProfileGet(ctx context.Context) (desc.V1PageProfileGetRes, error) {
 	userID := common.UserIDFromContext(ctx)
 
-	profile, err := s.profile.GetUser(ctx, userID)
+	profile, err := s.getProfile(ctx, userID)
 	if err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	pictures, err := s.image.GetProfileImages(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	contacts, err := s.profile.GetContacts(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	interests, err := s.interests.GetUserInterests(ctx, userID)
-	if err != nil {
-		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
-	}
-
-	state := profileFromDomainToView(userID, profile, contacts, pictures, interests)
-	pageComponent := page.Profile(state)
+	pageComponent := page.Profile(profile)
 
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, pageComponent),
@@ -97,7 +91,7 @@ func (s *Server) V1PageProfileGet(ctx context.Context) (desc.V1PageProfileGetRes
 
 func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, error) {
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, user_search_page.Page()),
+		Data: common.RenderComponent(ctx, page.Search(widget.Placeholder())),
 	}, nil
 }
 

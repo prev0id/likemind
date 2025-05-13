@@ -2,10 +2,10 @@ package api
 
 import (
 	"context"
-	"net/url"
-
 	"likemind/internal/common"
 	"likemind/internal/domain"
+	"net/url"
+
 	desc "likemind/internal/pkg/api"
 )
 
@@ -72,7 +72,7 @@ func (s *Server) V1APIGroupGroupIDPut(
 	}
 
 	return &desc.HTMLResponse{
-		// TODO
+		// TODO:
 	}, nil
 }
 
@@ -118,6 +118,7 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentCommentIDPut(
 	req *desc.Post,
 	params desc.V1APIGroupGroupIDPostPostIDCommentCommentIDPutParams,
 ) (desc.V1APIGroupGroupIDPostPostIDCommentCommentIDPutRes, error) {
+	// TODO:
 	return nil, nil
 }
 
@@ -126,6 +127,7 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentPost(
 	req *desc.Post,
 	params desc.V1APIGroupGroupIDPostPostIDCommentPostParams,
 ) (desc.V1APIGroupGroupIDPostPostIDCommentPostRes, error) {
+	// TODO:
 	return nil, nil
 }
 
@@ -133,6 +135,7 @@ func (s *Server) V1APIGroupGroupIDPostPostIDDelete(
 	ctx context.Context,
 	params desc.V1APIGroupGroupIDPostPostIDDeleteParams,
 ) (desc.V1APIGroupGroupIDPostPostIDDeleteRes, error) {
+	// TODO:
 	return nil, nil
 }
 
@@ -155,6 +158,6 @@ func (s *Server) V1APIGroupGroupIDPostPostIDPut(
 	}
 
 	return &desc.HTMLResponse{
-		// TODO
+		// TODO: ...
 	}, nil
 }

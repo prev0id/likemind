@@ -3,7 +3,6 @@ package interests
 import (
 	"context"
 	"fmt"
-
 	"likemind/internal/database/adapter/interest_adapter"
 	"likemind/internal/domain"
 )
@@ -16,6 +15,8 @@ type Service interface {
 	GetGroupInterests(ctx context.Context, id domain.GroupID) ([]domain.InterestGroup, error)
 	AddInterestToGroup(ctx context.Context, groupID domain.GroupID, interestID domain.InterestID) ([]domain.InterestGroup, error)
 	DeleteInterestFromGroup(ctx context.Context, groupID domain.GroupID, interestID domain.InterestID) ([]domain.InterestGroup, error)
+	SearchGroups(ctx context.Context, add, exclude []int64) ([]domain.GroupID, error)
+	SearchUsers(ctx context.Context, add, exclude []int64) ([]domain.UserID, error)
 }
 
 type implementation struct {
@@ -91,4 +92,14 @@ func (i *implementation) DeleteInterestFromGroup(ctx context.Context, groupID do
 
 func (i *implementation) GetGroupInterests(ctx context.Context, id domain.GroupID) ([]domain.InterestGroup, error) {
 	return i.db.ListGroupInterests(ctx, id)
+}
+
+func (i *implementation) SearchGroups(ctx context.Context, add, exclude []int64) ([]domain.GroupID, error) {
+	// TODO:
+	return nil, nil
+}
+
+func (i *implementation) SearchUsers(ctx context.Context, add, exclude []int64) ([]domain.UserID, error) {
+	// TODO:
+	return nil, nil
 }

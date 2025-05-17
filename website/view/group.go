@@ -12,6 +12,7 @@ type Group struct {
 }
 
 type Post struct {
+	ID        int64
 	Content   string
 	Author    *Profile
 	Comments  []*Comment
@@ -20,6 +21,7 @@ type Post struct {
 }
 
 type Comment struct {
+	ID        int64
 	Content   string
 	Author    *Profile
 	CreatedAt time.Time

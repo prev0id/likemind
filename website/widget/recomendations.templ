@@ -1,17 +1,74 @@
 package widget
 
 import (
-"fmt"
-"likemind/website/view"
+	"fmt"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+	"likemind/internal/common"
+	"likemind/internal/domain"
+	"likemind/website/view"
+	"likemind/website/widget/card"
+	common_widget "likemind/website/widget/common"
+	tag "likemind/website/widget/interest"
 )
 
 templ GroupRecomendations(groups []*view.Group) {
+	for _, group := range groups {
+		@groupPreview(group)
+	}
 }
-
 
 templ UserRecomendations(users []*view.Profile) {
+	for _, user := range users {
+		@userPreview(user)
+	}
 }
 
-templ Placeholder() {
+templ groupPreview(group *view.Group) {
+	@card.Card(nil) {
+		@card.Header() {
+			{ group.Name }
+		}
+		@card.Text(group.Description)
+		@card.Footer() {
+			@interestsPreview(group.Interests)
+		}
+	}
+}
 
+templ userPreview(user *view.Profile) {
+	@card.Card(nil) {
+		@card.Header() {
+			@common_widget.Link(view.Link{
+				Text: fmt.Sprintf("%s %s (%s)", cases.Title(language.English).String(user.Name), cases.Title(language.English).String(user.Surname), user.Nickname),
+				Href: common.FillPath(
+					domain.PathPageProfile,
+					map[string]string{domain.PathParamUsername: user.Nickname},
+				),
+			})
+			if user.Location != "" {
+				@common_widget.TextSM() {
+					{ cases.Title(language.English).String(user.Location) }
+				}
+			}
+		}
+		if user.About != "" {
+			@card.Text(user.About)
+		}
+		@card.Footer() {
+			@interestsPreview(user.Interests)
+		}
+	}
+}
+
+templ interestsPreview(interests []view.GroupedInterests) {
+	@tag.Container() {
+		for _, interestGroup := range interests {
+			for _, interest := range interestGroup.Interests {
+				if interest.Selected {
+					@tag.Interest(interest)
+				}
+			}
+		}
+	}
 }

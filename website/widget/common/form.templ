@@ -106,6 +106,7 @@ templ TextArea(state view.TextArea) {
 		class="w-full p-3 rounded-lg rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 focus:outline-hidden focus:ring-orange focus:border-orange"
 		placeholder={ state.Placeholder }
 		rows={ strconv.Itoa(state.Rows) }
+		required?={ state.Required }
 	></textarea>
 }
 

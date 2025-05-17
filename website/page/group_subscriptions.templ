@@ -1,9 +1,61 @@
 package page
 
 import (
-"likemind/website/view"
+	"likemind/internal/domain"
+	"likemind/website/view"
+	"likemind/website/widget"
+	"likemind/website/widget/card"
+	common_widget "likemind/website/widget/common"
+	tag "likemind/website/widget/interest"
 )
 
 templ GroupSubscriptions(state []*view.Group) {
-
+	@StandardLayout(view.GroupTab) {
+		@card.Container() {
+			@card.Card(nil) {
+				<div class="mx-auto flex flex-wrap items-center gap-5">
+					if len(state) == 0 {
+						@common_widget.Link(view.Link{
+							Text: "You don`t subscribed to any group. Click to search them! or",
+							Href: domain.PathPageSearch,
+						})
+					} else {
+						@common_widget.Link(view.Link{
+							Text: "Click here to search groups or",
+							Href: domain.PathPageSearch,
+						})
+					}
+					<div class="">
+						@common_widget.Button(view.Button{
+							PopoverAction: "show",
+							PopoverTarget: "create-group-modal",
+						}) {
+							create your own group.
+						}
+					</div>
+				</div>
+				@common_widget.Modal(view.Modal{
+					ID:    "create-group-modal",
+					Title: "Create your new group!",
+				}) {
+					@widget.CreateGroupsForm()
+				}
+			}
+			for _, group := range state {
+				@card.Card(nil) {
+					@card.Header() {
+						{ group.Name }
+					}
+					@card.Text(group.Description)
+					@card.Footer() {
+						for _, interestGroup := range group.Interests {
+							for _, interest := range interestGroup.Interests {
+								@tag.Interest(interest)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

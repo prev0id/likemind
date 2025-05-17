@@ -430,3 +430,64 @@ func userInterestCheckboxState(interest view.Interest, path string) view.Checkbo
 		ID:      fmt.Sprintf("interest-%d", interest.ID),
 	}
 }
+
+templ CreateGroupsForm() {
+	@common_widget.Form(view.Form{
+		Htmx: view.HTMX{
+			Post: domain.PathAPIGroup,
+		},
+	}) {
+		<div>
+			@common_widget.InputLabel(view.InputLabel{
+				Text: "Cozy Baking Enthusiasts 🧁",
+				For:  "name",
+			})
+			@common_widget.Input(view.Input{
+				Name:        "name",
+				Type:        "text",
+				Placeholder: "",
+				Required:    true,
+			})
+		</div>
+		<div>
+			@common_widget.InputLabel(view.InputLabel{
+				Text: "Add description",
+				For:  "name",
+			})
+			@common_widget.TextArea(view.TextArea{
+				Name:        "descpription",
+				Placeholder: "Tell people more about your new group!",
+				Required:    true,
+			})
+		</div>
+		@common_widget.Button(view.Button{
+			Type: "submit",
+		}) {
+			Submit
+		}
+	}
+}
+
+templ FormAddPost(postID int64) {
+}
+
+templ FormAddComment(postID int64) {
+	@common_widget.Form(view.Form{
+		Htmx: view.HTMX{
+			Post: common.FillPath(domain.PathAPGroupIComment, map[string]string{
+				domain.PathParamPostID: strconv.FormatInt(postID, 10),
+			}),
+		},
+	}) {
+		@common_widget.TextArea(view.TextArea{
+			Name:        "new_comment",
+			Placeholder: "Write a warm comment...",
+			Rows:        2,
+		})
+		@common_widget.Button(view.Button{
+			Type: "submit",
+		}) {
+			Post Comment
+		}
+	}
+}

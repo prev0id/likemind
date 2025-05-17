@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+
 	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
 	"likemind/internal/service/group"
@@ -28,12 +29,14 @@ func NewServer(
 	profile profile.Service,
 	image image.Service,
 	interests interests.Service,
+	group group.Service,
 ) *Server {
 	return &Server{
 		session:   session,
 		profile:   profile,
 		image:     image,
 		interests: interests,
+		group:     group,
 	}
 }
 

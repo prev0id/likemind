@@ -2,15 +2,17 @@ package bootstrap
 
 import (
 	"fmt"
+	"net/http"
+
 	"likemind/internal/api"
 	"likemind/internal/config"
 	"likemind/internal/domain"
+	"likemind/internal/service/group"
 	"likemind/internal/service/image"
 	"likemind/internal/service/interests"
 	"likemind/internal/service/profile"
 	"likemind/internal/service/session"
 	"likemind/website"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -24,9 +26,10 @@ func Server(
 	sessionService session.Service,
 	profileService profile.Service,
 	imageService image.Service,
-	interests interests.Service,
+	interestsService interests.Service,
+	groupService group.Service,
 ) error {
-	server := api.NewServer(sessionService, profileService, imageService, interests)
+	server := api.NewServer(sessionService, profileService, imageService, interestsService, groupService)
 	security := api.NewSecurityHandler(sessionService)
 
 	router := chi.NewRouter()

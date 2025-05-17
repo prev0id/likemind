@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+
 	"likemind/internal/common"
 	"likemind/website/view"
 	"likemind/website/widget"
@@ -14,9 +15,11 @@ import (
 func (s *Server) V1APISearchGet(ctx context.Context, req *desc.Search) (desc.V1APISearchGetRes, error) {
 	var result templ.Component
 
+	userID := common.UserIDFromContext(ctx)
+
 	switch req.GetType() {
 	case desc.SearchTypeProfile:
-		userIDs, err := s.interests.SearchUsers(ctx, req.IncludeInterests, req.ExcludeInterests)
+		userIDs, err := s.interests.SearchUsers(ctx, userID, req.IncludeInterests, req.ExcludeInterests)
 		if err != nil {
 			return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 		}
@@ -31,7 +34,7 @@ func (s *Server) V1APISearchGet(ctx context.Context, req *desc.Search) (desc.V1A
 		result = widget.UserRecomendations(users)
 
 	case desc.SearchTypeGroup:
-		groupIDs, err := s.interests.SearchGroups(ctx, req.IncludeInterests, req.ExcludeInterests)
+		groupIDs, err := s.interests.SearchGroups(ctx, userID, req.IncludeInterests, req.ExcludeInterests)
 		if err != nil {
 			return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 		}

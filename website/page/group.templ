@@ -1,8 +1,11 @@
 package page
 
 import (
+	"fmt"
 	"likemind/website/view"
+	"likemind/website/widget"
 	"likemind/website/widget/card"
+	common_widget "likemind/website/widget/common"
 	tag "likemind/website/widget/interest"
 )
 
@@ -15,14 +18,58 @@ templ Group(state *view.Group) {
 				}
 				@card.Text(state.Description)
 				@tag.Container() {
-					for _, interest := range state.Interests {
-						@tag.Interest(interest)
+					for _, group := range state.Interests {
+						for _, interest := range group.Interests {
+							@tag.Interest(interest)
+						}
 					}
 				}
 			}
-			// for _, post := range state.Posts {
-			//  @PostComponent(post)
-			// }
+			for _, post := range state.Posts {
+				@Post(post)
+			}
 		}
 	}
+}
+
+templ Post(post *view.Post) {
+	@card.Card(nil) {
+		@card.Header() {
+			@card.Author(post.Author.Nickname)
+			@card.Date(post.CreatedAt)
+		}
+		@card.Text(post.Content)
+		@card.Footer() {
+			@CommentSection(post)
+		}
+	}
+}
+
+templ CommentSection(post *view.Post) {
+	@common_widget.Details(view.Details{
+		Summary: numberOfComments(len(post.Comments)),
+		Open:    false,
+	}) {
+		for _, comment := range post.Comments {
+			@Comment(comment)
+		}
+		@widget.FormAddComment(post.ID)
+	}
+}
+
+templ Comment(comment *view.Comment) {
+	@card.PinkCard() {
+		@card.Header() {
+			@card.AuthorSM(comment.Author.Nickname)
+			@card.Date(comment.CreatedAt)
+		}
+		@card.TextSM(comment.Content)
+	}
+}
+
+func numberOfComments(number int) string {
+	if number == 1 {
+		return "1 comment"
+	}
+	return fmt.Sprintf("%d comments", number)
 }

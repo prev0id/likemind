@@ -3,9 +3,10 @@ package interest_repo
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"likemind/internal/database"
 	"likemind/internal/database/model"
-	"time"
 
 	sql "github.com/huandu/go-sqlbuilder"
 )
@@ -22,6 +23,9 @@ type DB interface {
 	GetGroupInterestsByID(ctx context.Context, groupID int64) ([]model.GroupInterest, error)
 	AddInterestToGroup(ctx context.Context, interest model.GroupInterest) error
 	RemoveInterestFromGroup(ctx context.Context, groupID, interestID int64) error
+
+	SearchUsers(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error)
+	SearchGroups(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error)
 }
 
 var _ DB = (*Repo)(nil)
@@ -172,13 +176,34 @@ func (r *Repo) SearchUsers(ctx context.Context, userInterests, include, exlcude 
 	sql := `
 		SELECT
 			user_id AS id,
-			count(*) FILTER (WHERE interest_id = ANY($1)) AS commont
+			count(*) FILTER (WHERE interest_id = ANY($1)) AS common
 		FROM user_interests
 		GROUP BY user_id
-		HEAVING
+		HAVING
 			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY($2)) = cardinality($1)
-			AND COUNT(*) (WHERE interest_id = ANY($3)) = 0
-		ORDER BY commont DESC;
+			AND COUNT(*) FILTER (WHERE interest_id = ANY($3)) = 0
+		ORDER BY common, user_id DESC;
+	`
+
+	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql, userInterests, include, exlcude))
+	if err != nil {
+		return nil, fmt.Errorf("database.Select: %w", err)
+	}
+
+	return result, nil
+}
+
+func (r *Repo) SearchGroups(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error) {
+	sql := `
+		SELECT
+			group_id AS id,
+			count(*) FILTER (WHERE interest_id = ANY($1)) AS common
+		FROM group_interests
+		GROUP BY group_id
+		HAVING
+			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY($2)) = cardinality($1)
+			AND COUNT(*) FILTER (WHERE interest_id = ANY($3)) = 0
+		ORDER BY common, group_id DESC;
 	`
 
 	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql, userInterests, include, exlcude))

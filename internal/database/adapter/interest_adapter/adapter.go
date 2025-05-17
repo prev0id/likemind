@@ -3,6 +3,7 @@ package interest_adapter
 import (
 	"context"
 	"fmt"
+
 	"likemind/internal/database/model"
 	"likemind/internal/database/repo/interest_repo"
 	"likemind/internal/domain"
@@ -18,6 +19,9 @@ type Adapter interface {
 	ListGroupInterests(ctx context.Context, id domain.GroupID) ([]domain.InterestGroup, error)
 	AddInterestToGroup(ctx context.Context, groupID domain.GroupID, interestID domain.InterestID) error
 	DeleteInterestFromGroup(ctx context.Context, groupID domain.GroupID, interestID domain.InterestID) error
+
+	SearchUsers(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.UserID, error)
+	SearchGroups(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.GroupID, error)
 }
 
 var _ (Adapter) = (*Implementation)(nil)
@@ -122,4 +126,32 @@ func (i *Implementation) ListInterests(ctx context.Context) ([]domain.InterestGr
 	}
 
 	return repoUserInterestsToDomain(nil, groups, interests), nil
+}
+
+func (i *Implementation) SearchGroups(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.GroupID, error) {
+	interests, err := i.repo.GetUserInterestsByID(ctx, int64(userID))
+	if err != nil {
+		return nil, fmt.Errorf("i.repo.GetUserInterestsByID: %w", err)
+	}
+
+	ids, err := i.repo.SearchGroups(ctx, repoInterestIDs(interests), include, exlcude)
+	if err != nil {
+		return nil, fmt.Errorf("i.repo.SearchGroups: %w", err)
+	}
+
+	return repoGroupIDsToDomain(ids), nil
+}
+
+func (i *Implementation) SearchUsers(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.UserID, error) {
+	interests, err := i.repo.GetUserInterestsByID(ctx, int64(userID))
+	if err != nil {
+		return nil, fmt.Errorf("i.repo.GetUserInterestsByID: %w", err)
+	}
+
+	ids, err := i.repo.SearchUsers(ctx, repoInterestIDs(interests), include, exlcude)
+	if err != nil {
+		return nil, fmt.Errorf("i.repo.SearchUsers: %w", err)
+	}
+
+	return repoUserIDsToDomain(ids), nil
 }

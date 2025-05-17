@@ -75,6 +75,7 @@ type TextArea struct {
 	Placeholder string
 	Rows        int
 	Value       string
+	Required    bool
 }
 type Checkbox struct {
 	ID      string

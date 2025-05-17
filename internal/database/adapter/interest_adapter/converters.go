@@ -56,3 +56,27 @@ func repoGroupInterestsToDomain(groupInterests []model.GroupInterest, groups []m
 	}
 	return result
 }
+
+func repoInterestIDs(interests []model.UserInterest) []int64 {
+	result := make([]int64, 0, len(interests))
+	for _, interest := range interests {
+		result = append(result, int64(interest.InterestID))
+	}
+	return result
+}
+
+func repoUserIDsToDomain(results []model.SearchResult) []domain.UserID {
+	result := make([]domain.UserID, 0, len(results))
+	for _, id := range results {
+		result = append(result, domain.UserID(id.ID))
+	}
+	return result
+}
+
+func repoGroupIDsToDomain(ids []model.SearchResult) []domain.GroupID {
+	result := make([]domain.GroupID, 0, len(ids))
+	for _, id := range ids {
+		result = append(result, domain.GroupID(id.ID))
+	}
+	return result
+}

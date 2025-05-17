@@ -2,12 +2,13 @@ package api
 
 import (
 	"context"
+	"net/http"
+
 	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/page"
 	"likemind/website/view"
 	"likemind/website/widget"
-	"net/http"
 
 	desc "likemind/internal/pkg/api"
 
@@ -90,8 +91,25 @@ func (s *Server) V1PageProfileGet(ctx context.Context) (desc.V1PageProfileGetRes
 }
 
 func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, error) {
+	userID := common.UserIDFromContext(ctx)
+
+	userIDs, err := s.interests.SearchUsers(ctx, userID, nil, nil)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+	users := make([]*view.Profile, 0, len(userIDs))
+	for _, userId := range userIDs {
+		user, err := s.getProfile(ctx, userId)
+		if err != nil {
+			continue
+		}
+		users = append(users, user)
+	}
+
+	recomendations := widget.UserRecomendations(users)
+
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.Search(widget.Placeholder())),
+		Data: common.RenderComponent(ctx, page.Search(recomendations)),
 	}, nil
 }
 

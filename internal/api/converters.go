@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+
 	"likemind/internal/domain"
 	"likemind/website/view"
 )
@@ -92,6 +93,7 @@ func (s *Server) groupDomainToView(ctx context.Context, group domain.Group, post
 		Description: group.Description,
 		Author:      author,
 		Posts:       convertedPosts,
+		Subscribed:  group.Subscribed,
 		Interests:   interestGroupDomainToView(intersts),
 	}, nil
 }

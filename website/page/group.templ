@@ -2,37 +2,61 @@ package page
 
 import (
 	"fmt"
+	"likemind/internal/common"
+	"likemind/internal/domain"
 	"likemind/website/view"
 	"likemind/website/widget"
 	"likemind/website/widget/card"
 	common_widget "likemind/website/widget/common"
-	tag "likemind/website/widget/interest"
+	"strconv"
 )
 
-templ Group(state *view.Group) {
+templ Group(state *view.Group, userID int64) {
 	@StandardLayout(view.GroupTab) {
 		@card.Container() {
 			@card.Card(nil) {
 				@card.Header() {
-					@card.Title(state.Name)
+					<div class="flex justify-between items-center">
+						@card.Title(state.Name)
+						if state.Author.ID == userID {
+							@withIcon() {
+								@common_widget.SettingsButton(view.Button{
+									PopoverTarget: "modal_update_interests",
+									PopoverAction: "show",
+								})
+							}
+							@common_widget.Modal(view.Modal{
+								ID:             "modal_update_interests",
+								Title:          "Update your interests",
+								RefreshOnClose: true,
+							}) {
+								@SelectInterests(state.Interests, state.ID)
+							}
+						} else {
+							<div class="flex">
+								@widget.SubscribeButton(state.ID, state.Subscribed)
+							</div>
+						}
+					</div>
 				}
 				@card.Text(state.Description)
-				@tag.Container() {
-					for _, group := range state.Interests {
-						for _, interest := range group.Interests {
-							@tag.Interest(interest)
-						}
-					}
-				}
+				@widget.InterestsPreview(state.Interests)
 			}
-			for _, post := range state.Posts {
-				@Post(post)
-			}
+			@widget.FormAddPost(state)
+			@Posts(state)
 		}
 	}
 }
 
-templ Post(post *view.Post) {
+templ Posts(group *view.Group) {
+	<div id="posts-container" class="space-y-8">
+		for _, post := range group.Posts {
+			@Post(group, post)
+		}
+	</div>
+}
+
+templ Post(group *view.Group, post *view.Post) {
 	@card.Card(nil) {
 		@card.Header() {
 			@card.Author(post.Author.Nickname)
@@ -40,21 +64,26 @@ templ Post(post *view.Post) {
 		}
 		@card.Text(post.Content)
 		@card.Footer() {
-			@CommentSection(post)
+			@CommentSection(group, post)
 		}
 	}
 }
 
-templ CommentSection(post *view.Post) {
+templ CommentSection(group *view.Group, post *view.Post) {
 	@common_widget.Details(view.Details{
 		Summary: numberOfComments(len(post.Comments)),
 		Open:    false,
+		ID:      "comment-section",
 	}) {
-		for _, comment := range post.Comments {
-			@Comment(comment)
-		}
-		@widget.FormAddComment(post.ID)
+		@Comments(group, post)
 	}
+}
+
+templ Comments(group *view.Group, post *view.Post) {
+	for _, comment := range post.Comments {
+		@Comment(comment)
+	}
+	@widget.FormAddComment(group, post)
 }
 
 templ Comment(comment *view.Comment) {
@@ -72,4 +101,43 @@ func numberOfComments(number int) string {
 		return "1 comment"
 	}
 	return fmt.Sprintf("%d comments", number)
+}
+
+templ SelectInterests(groups []view.GroupedInterests, groupID int64) {
+	<div id="select-interests-wrapper">
+		for _, group := range groups {
+			@common_widget.Details(view.Details{
+				Summary: group.Name,
+				Open:    true,
+			}) {
+				for _, interest := range group.Interests {
+					@common_widget.Checkbox(userInterestCheckboxState(interest, groupID))
+				}
+			}
+		}
+	</div>
+}
+
+func userInterestCheckboxState(interest view.Interest, groupID int64) view.Checkbox {
+	resultPath := common.FillPath(domain.PathAPIGroupInterestID, map[string]string{
+		domain.PathParamInterestID: strconv.FormatInt(interest.ID, 10),
+		domain.PathParamGroupID:    strconv.FormatInt(groupID, 10),
+	})
+
+	htmx := view.HTMX{
+		Target: "#select-interests-wrapper",
+		Swap:   "outer",
+	}
+	if interest.Selected {
+		htmx.Delete = resultPath
+	} else {
+		htmx.Post = resultPath
+	}
+
+	return view.Checkbox{
+		Text:    interest.Name,
+		Checked: interest.Selected,
+		Htmx:    htmx,
+		ID:      fmt.Sprintf("interest-%d", interest.ID),
+	}
 }

@@ -66,6 +66,7 @@ func (htmx HTMX) Attributes() templ.Attributes {
 }
 
 type Details struct {
+	ID      string
 	Summary string
 	Open    bool
 }
@@ -84,4 +85,10 @@ type Checkbox struct {
 	Text    string
 	Checked bool
 	Htmx    HTMX
+}
+type Radio struct {
+	Name  string
+	Value string
+	Label string
+	ID    string
 }

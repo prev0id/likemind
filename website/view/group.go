@@ -9,6 +9,7 @@ type Group struct {
 	Author      *Profile
 	Posts       []*Post
 	Interests   []GroupedInterests
+	Subscribed  bool
 }
 
 type Post struct {

@@ -1,6 +1,3 @@
-## TODO
-+ code gen `npx @redocly/cli build-docs api/openapi.yaml`
-
 ## Resources
 + https://www.svgrepo.com/svg/458824/out
 + https://good.store/

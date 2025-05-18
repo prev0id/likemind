@@ -6,6 +6,7 @@ import (
 	"likemind/internal/common"
 	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
+	"likemind/website/page"
 	"likemind/website/widget"
 )
 
@@ -45,7 +46,7 @@ func (s *Server) V1APIGroupGroupIDInterestInterestIDDelete(ctx context.Context, 
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	form := widget.SelectInterests(interestGroupDomainToView(interests), domain.PathAPIGroupInterestID)
+	form := page.SelectInterests(interestGroupDomainToView(interests), params.GroupID)
 
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, form),
@@ -58,7 +59,7 @@ func (s *Server) V1APIGroupGroupIDInterestInterestIDPost(ctx context.Context, pa
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	form := widget.SelectInterests(interestGroupDomainToView(interests), domain.PathAPIGroupInterestID)
+	form := page.SelectInterests(interestGroupDomainToView(interests), params.GroupID)
 
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, form),

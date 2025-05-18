@@ -28,7 +28,6 @@ func (r *Repo) AddContact(ctx context.Context, contact model.Contact) error {
 
 	q := sql.InsertInto(model.TableContacts)
 	q.Cols(
-		model.ContactID,
 		model.ContactUserID,
 		model.ContactPlatform,
 		model.ContactValue,
@@ -36,7 +35,6 @@ func (r *Repo) AddContact(ctx context.Context, contact model.Contact) error {
 		model.ContactUpdatedAt,
 	)
 	q.Values(
-		contact.ID,
 		contact.UserID,
 		contact.Platform,
 		contact.Value,

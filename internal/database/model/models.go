@@ -195,7 +195,7 @@ type GroupInterest struct {
 
 const (
 	UserSubscriptionUserID   = "user_id"
-	UserSubscriptionGroupID  = "user_id"
+	UserSubscriptionGroupID  = "group_id"
 	UserSubscriptionCreateAt = "created_at"
 )
 

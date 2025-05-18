@@ -41,6 +41,14 @@ type V1APIGroupGroupIDPutRes interface {
 	v1APIGroupGroupIDPutRes()
 }
 
+type V1APIGroupGroupIDSubscribeDeleteRes interface {
+	v1APIGroupGroupIDSubscribeDeleteRes()
+}
+
+type V1APIGroupGroupIDSubscribePostRes interface {
+	v1APIGroupGroupIDSubscribePostRes()
+}
+
 type V1APIGroupPostRes interface {
 	v1APIGroupPostRes()
 }

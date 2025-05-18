@@ -24,6 +24,7 @@ templ Input(input view.Input) {
 		class="w-full px-4 py-3 rounded-lg bg-pink-300 border-2 border-pink-600 placholder:text-black-200 font-semibold focus:outline-hidden focus:ring-orange focus:border-orange disabled:bg-pink-100 disabled:text-black-200"
 		required?={ input.Required }
 		disabled?={ input.Disabled }
+		autocomplete="off"
 		{ input.Attributes... }
 	/>
 }
@@ -94,7 +95,7 @@ templ Details(details view.Details) {
 			</svg>
 			<p class="font-medium ml-2">{ details.Summary }</p>
 		</summary>
-		<div class="my-2 mx-4 space-y-2">
+		<div id={ details.ID } class="my-2 mx-4 space-y-2">
 			{ children... }
 		</div>
 	</details>
@@ -107,6 +108,7 @@ templ TextArea(state view.TextArea) {
 		placeholder={ state.Placeholder }
 		rows={ strconv.Itoa(state.Rows) }
 		required?={ state.Required }
+		autocomplete="off"
 	></textarea>
 }
 
@@ -119,6 +121,27 @@ templ XButton(state view.HTMX) {
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
 		</svg>
 	</button>
+}
+
+templ RadioButtons(radios []view.Radio) {
+	for _, radio := range radios {
+		<div class="flex">
+			<input
+				type="radio"
+				id={ radio.ID }
+				value={ radio.Value }
+				name={ radio.Name }
+				class="mr-2 accent-black"
+				autocomplete="off"
+			/>
+			<label
+				class="text-black-400 font-medium"
+				for={ radio.ID }
+			>
+				{ radio.Label }
+			</label>
+		</div>
+	}
 }
 
 templ Checkbox(checkbox view.Checkbox) {

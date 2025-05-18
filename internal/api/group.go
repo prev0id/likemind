@@ -2,14 +2,20 @@ package api
 
 import (
 	"context"
+	"fmt"
+	"net/url"
+
 	"likemind/internal/common"
 	"likemind/internal/domain"
-	"net/url"
+	"likemind/website/page"
+	"likemind/website/widget"
 
 	desc "likemind/internal/pkg/api"
 )
 
 func (s *Server) V1APIGroupPost(ctx context.Context, req *desc.Group) (desc.V1APIGroupPostRes, error) {
+	fmt.Println("aaaaaaaaaaaaaaaaaaaa")
+
 	group := domain.Group{
 		Name:        req.GetName(),
 		Description: req.GetDescription(),
@@ -20,6 +26,10 @@ func (s *Server) V1APIGroupPost(ctx context.Context, req *desc.Group) (desc.V1AP
 		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
 	}
 	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	if err := s.group.Subscribe(ctx, common.UserIDFromContext(ctx), id); err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
@@ -81,8 +91,9 @@ func (s *Server) V1APIGroupGroupIDPostPost(
 	req *desc.Post,
 	params desc.V1APIGroupGroupIDPostPostParams,
 ) (desc.V1APIGroupGroupIDPostPostRes, error) {
+	groupID := domain.GroupID(params.GroupID)
 	post := domain.Post{
-		Group:   domain.GroupID(params.GroupID),
+		Group:   groupID,
 		Content: req.GetContent(),
 	}
 
@@ -94,8 +105,13 @@ func (s *Server) V1APIGroupGroupIDPostPost(
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
+	group, err := s.getGroup(ctx, groupID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
 	return &desc.HTMLResponse{
-		// TODO
+		Data: common.RenderComponent(ctx, page.Posts(group)),
 	}, nil
 }
 
@@ -103,14 +119,8 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentCommentIDDelete(
 	ctx context.Context,
 	params desc.V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteParams,
 ) (desc.V1APIGroupGroupIDPostPostIDCommentCommentIDDeleteRes, error) {
-	err := s.group.DeleteComment(ctx, domain.CommentID(params.CommentID))
-	if common.ErrorIs(err, common.PermissionDeniedErrorType) {
-		return &desc.NotAuthorized{Data: common.ErrorMsg(err)}, nil
-	}
-
-	return &desc.HTMLResponse{
-		// TODO:
-	}, nil
+	// TODO:
+	return nil, nil
 }
 
 func (s *Server) V1APIGroupGroupIDPostPostIDCommentCommentIDPut(
@@ -127,8 +137,28 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentPost(
 	req *desc.Post,
 	params desc.V1APIGroupGroupIDPostPostIDCommentPostParams,
 ) (desc.V1APIGroupGroupIDPostPostIDCommentPostRes, error) {
-	// TODO:
-	return nil, nil
+	groupID := domain.GroupID(params.GroupID)
+	post := domain.Comment{
+		PostID:  domain.PostID(params.PostID),
+		Content: req.GetContent(),
+	}
+
+	_, err := s.group.CreateComment(ctx, post)
+	if common.ErrorIs(err, common.BadRequestErrorType) {
+		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
+	}
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	group, err := s.getGroup(ctx, groupID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, page.Posts(group)),
+	}, nil
 }
 
 func (s *Server) V1APIGroupGroupIDPostPostIDDelete(
@@ -144,20 +174,32 @@ func (s *Server) V1APIGroupGroupIDPostPostIDPut(
 	req *desc.Post,
 	params desc.V1APIGroupGroupIDPostPostIDPutParams,
 ) (desc.V1APIGroupGroupIDPostPostIDPutRes, error) {
-	post := domain.Post{
-		Group:   domain.GroupID(params.GroupID),
-		Content: req.GetContent(),
-	}
+	// TODO
+	return nil, nil
+}
 
-	_, err := s.group.CreatePost(ctx, post)
-	if common.ErrorIs(err, common.BadRequestErrorType) {
-		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
-	}
-	if err != nil {
+func (s *Server) V1APIGroupGroupIDSubscribeDelete(ctx context.Context, params desc.V1APIGroupGroupIDSubscribeDeleteParams) (desc.V1APIGroupGroupIDSubscribeDeleteRes, error) {
+	userID := common.UserIDFromContext(ctx)
+	groupID := domain.GroupID(params.GroupID)
+
+	if err := s.group.Unsubscribe(ctx, userID, groupID); err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
 	return &desc.HTMLResponse{
-		// TODO: ...
+		Data: common.RenderComponent(ctx, widget.SubscribeButton(int64(groupID), false)),
+	}, nil
+}
+
+func (s *Server) V1APIGroupGroupIDSubscribePost(ctx context.Context, params desc.V1APIGroupGroupIDSubscribePostParams) (desc.V1APIGroupGroupIDSubscribePostRes, error) {
+	userID := common.UserIDFromContext(ctx)
+	groupID := domain.GroupID(params.GroupID)
+
+	if err := s.group.Subscribe(ctx, userID, groupID); err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	return &desc.HTMLResponse{
+		Data: common.RenderComponent(ctx, widget.SubscribeButton(int64(groupID), true)),
 	}, nil
 }

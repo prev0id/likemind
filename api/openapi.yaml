@@ -49,6 +49,8 @@ paths:
     $ref: "./paths/api.yaml#/create_group"
   /v1/api/group/{group_id}:
     $ref: "./paths/api.yaml#/group"
+  /v1/api/group/{group_id}/subscribe:
+    $ref: "./paths/api.yaml#/subscribe"
   /v1/api/group/{group_id}/post:
     $ref: "./paths/api.yaml#/create_post"
   /v1/api/group/{group_id}/post/{post_id}:

@@ -6,7 +6,6 @@ import (
 	"likemind/website/widget"
 	"likemind/website/widget/card"
 	common_widget "likemind/website/widget/common"
-	tag "likemind/website/widget/interest"
 )
 
 templ GroupSubscriptions(state []*view.Group) {
@@ -41,21 +40,7 @@ templ GroupSubscriptions(state []*view.Group) {
 					@widget.CreateGroupsForm()
 				}
 			}
-			for _, group := range state {
-				@card.Card(nil) {
-					@card.Header() {
-						{ group.Name }
-					}
-					@card.Text(group.Description)
-					@card.Footer() {
-						for _, interestGroup := range group.Interests {
-							for _, interest := range interestGroup.Interests {
-								@tag.Interest(interest)
-							}
-						}
-					}
-				}
-			}
+			@widget.GroupRecomendations(state)
 		}
 	}
 }

@@ -156,6 +156,8 @@ func (*HTMLResponse) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostRes()                         {}
 func (*HTMLResponse) v1APIGroupGroupIDPutRes()                              {}
+func (*HTMLResponse) v1APIGroupGroupIDSubscribeDeleteRes()                  {}
+func (*HTMLResponse) v1APIGroupGroupIDSubscribePostRes()                    {}
 func (*HTMLResponse) v1APIProfileContactContactIDDeleteRes()                {}
 func (*HTMLResponse) v1APIProfileContactContactIDPutRes()                   {}
 func (*HTMLResponse) v1APIProfileContactPostRes()                           {}
@@ -229,6 +231,8 @@ func (*InternalError) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*InternalError) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*InternalError) v1APIGroupGroupIDPostPostRes()                         {}
 func (*InternalError) v1APIGroupGroupIDPutRes()                              {}
+func (*InternalError) v1APIGroupGroupIDSubscribeDeleteRes()                  {}
+func (*InternalError) v1APIGroupGroupIDSubscribePostRes()                    {}
 func (*InternalError) v1APIGroupPostRes()                                    {}
 func (*InternalError) v1APILogoutPostRes()                                   {}
 func (*InternalError) v1APIProfileContactContactIDDeleteRes()                {}
@@ -277,6 +281,8 @@ func (*NotAuthorized) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*NotAuthorized) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*NotAuthorized) v1APIGroupGroupIDPostPostRes()                         {}
 func (*NotAuthorized) v1APIGroupGroupIDPutRes()                              {}
+func (*NotAuthorized) v1APIGroupGroupIDSubscribeDeleteRes()                  {}
+func (*NotAuthorized) v1APIGroupGroupIDSubscribePostRes()                    {}
 func (*NotAuthorized) v1APIProfileEmailPutRes()                              {}
 func (*NotAuthorized) v1APIProfileImageImageIDGetRes()                       {}
 func (*NotAuthorized) v1APIProfileImagePostRes()                             {}
@@ -307,6 +313,8 @@ func (s NotFound) Read(p []byte) (n int, err error) {
 
 func (*NotFound) v1APIGroupGroupIDInterestInterestIDDeleteRes() {}
 func (*NotFound) v1APIGroupGroupIDInterestInterestIDPostRes()   {}
+func (*NotFound) v1APIGroupGroupIDSubscribeDeleteRes()          {}
+func (*NotFound) v1APIGroupGroupIDSubscribePostRes()            {}
 func (*NotFound) v1APIProfileContactContactIDDeleteRes()        {}
 func (*NotFound) v1APIProfileContactContactIDPutRes()           {}
 func (*NotFound) v1APIProfileContactPostRes()                   {}

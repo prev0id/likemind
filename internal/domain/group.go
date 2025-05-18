@@ -16,6 +16,7 @@ type Group struct {
 	Name        string
 	Description string
 	Author      UserID
+	Subscribed  bool
 }
 
 type Post struct {

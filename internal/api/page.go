@@ -47,7 +47,7 @@ func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGr
 	}
 
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.Group(group)),
+		Data: common.RenderComponent(ctx, page.Group(group, int64(common.UserIDFromContext(ctx)))),
 	}, nil
 }
 
@@ -126,6 +126,11 @@ func (s *Server) V1PageSignupGet(ctx context.Context, params desc.V1PageSignupGe
 }
 
 func (s *Server) NotFound(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/v1/page/" || r.URL.Path == "/v1/page" {
+		http.Redirect(w, r, "/profile", http.StatusFound)
+		return
+	}
+
 	page := error_page.Page(error_page.State{Code: http.StatusNotFound})
 
 	w.WriteHeader(http.StatusNotFound)

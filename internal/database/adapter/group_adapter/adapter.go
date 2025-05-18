@@ -2,6 +2,7 @@ package group_adapter
 
 import (
 	"context"
+
 	"likemind/internal/database/repo/comment_repo"
 	"likemind/internal/database/repo/group_repo"
 	"likemind/internal/database/repo/post_repo"
@@ -27,6 +28,9 @@ type Adapter interface {
 	DeleteComment(ctx context.Context, id domain.CommentID) error
 	GetPostComments(ctx context.Context, id domain.PostID) ([]domain.Comment, error)
 	GetCommentByID(ctx context.Context, id domain.CommentID) (domain.Comment, error)
+
+	Subscribe(ctx context.Context, userID domain.UserID, groupID domain.GroupID) error
+	Unsubscribe(ctx context.Context, userID domain.UserID, groupID domain.GroupID) error
 }
 
 type Implementation struct {

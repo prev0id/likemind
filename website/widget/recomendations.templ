@@ -10,6 +10,7 @@ import (
 	"likemind/website/widget/card"
 	common_widget "likemind/website/widget/common"
 	tag "likemind/website/widget/interest"
+	"strconv"
 )
 
 templ GroupRecomendations(groups []*view.Group) {
@@ -27,11 +28,22 @@ templ UserRecomendations(users []*view.Profile) {
 templ groupPreview(group *view.Group) {
 	@card.Card(nil) {
 		@card.Header() {
-			{ group.Name }
+			<div class="flex justify-between items-center">
+				@common_widget.Link(view.Link{
+					Text: group.Name,
+					Href: common.FillPath(
+						domain.PathPageGroup,
+						map[string]string{domain.PathParamGroupID: strconv.FormatInt(group.ID, 10)},
+					),
+				})
+				<div class="flex">
+					@SubscribeButton(group.ID, group.Subscribed)
+				</div>
+			</div>
 		}
 		@card.Text(group.Description)
 		@card.Footer() {
-			@interestsPreview(group.Interests)
+			@InterestsPreview(group.Interests)
 		}
 	}
 }
@@ -56,12 +68,12 @@ templ userPreview(user *view.Profile) {
 			@card.Text(user.About)
 		}
 		@card.Footer() {
-			@interestsPreview(user.Interests)
+			@InterestsPreview(user.Interests)
 		}
 	}
 }
 
-templ interestsPreview(interests []view.GroupedInterests) {
+templ InterestsPreview(interests []view.GroupedInterests) {
 	@tag.Container() {
 		for _, interestGroup := range interests {
 			for _, interest := range interestGroup.Interests {

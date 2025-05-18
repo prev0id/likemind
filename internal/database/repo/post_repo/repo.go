@@ -30,7 +30,6 @@ func (r *Repo) Create(ctx context.Context, post model.Post) (int64, error) {
 
 	q := sql.InsertInto(model.TablePosts)
 	q.Cols(
-		model.PostID,
 		model.PostGroupID,
 		model.PostContent,
 		model.PostAuthorID,
@@ -38,7 +37,6 @@ func (r *Repo) Create(ctx context.Context, post model.Post) (int64, error) {
 		model.PostUpdatedAt,
 	)
 	q.Values(
-		post.ID,
 		post.GroupID,
 		post.Content,
 		post.AuthorID,
@@ -108,6 +106,7 @@ func (r *Repo) ListByGroupID(ctx context.Context, groupID int64) ([]model.Post, 
 	q.Where(
 		q.Equal(model.PostGroupID, groupID),
 	)
+	q.Desc().OrderBy(model.PostUpdatedAt)
 
 	posts, err := database.Select[model.Post](ctx, q)
 	if err != nil {

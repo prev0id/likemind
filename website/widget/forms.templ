@@ -151,7 +151,7 @@ templ UpdateProfileData(state *view.Profile) {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Target: domain.PathAPIProfile,
+				Post: domain.PathAPIProfile,
 			},
 		}) {
 			<div>
@@ -233,7 +233,7 @@ templ UpdatePassword() {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Target: domain.PathAPIPassword,
+				Post: domain.PathAPIPassword,
 			},
 		}) {
 			<div>
@@ -439,23 +439,23 @@ templ CreateGroupsForm() {
 	}) {
 		<div>
 			@common_widget.InputLabel(view.InputLabel{
-				Text: "Cozy Baking Enthusiasts 🧁",
+				Text: "Come up with a name",
 				For:  "name",
 			})
 			@common_widget.Input(view.Input{
 				Name:        "name",
 				Type:        "text",
-				Placeholder: "",
+				Placeholder: "Cozy Baking Enthusiasts 🧁",
 				Required:    true,
 			})
 		</div>
 		<div>
 			@common_widget.InputLabel(view.InputLabel{
 				Text: "Add description",
-				For:  "name",
+				For:  "descpription",
 			})
 			@common_widget.TextArea(view.TextArea{
-				Name:        "descpription",
+				Name:        "description",
 				Placeholder: "Tell people more about your new group!",
 				Required:    true,
 			})
@@ -468,19 +468,72 @@ templ CreateGroupsForm() {
 	}
 }
 
-templ FormAddPost(postID int64) {
+templ SubscribeButton(groupID int64, subscribed bool) {
+	if subscribed {
+		@common_widget.Button(view.Button{
+			Htmx: view.HTMX{
+				Delete: common.FillPath(
+					domain.PathAPIGroupIDSubscribe,
+					map[string]string{domain.PathParamGroupID: strconv.FormatInt(groupID, 10)},
+				),
+				Swap:    "outerHTML",
+				Trigger: "click",
+			},
+		}) {
+			Unsubscribe
+		}
+	} else {
+		@common_widget.Button(view.Button{
+			Htmx: view.HTMX{
+				Post: common.FillPath(
+					domain.PathAPIGroupIDSubscribe,
+					map[string]string{domain.PathParamGroupID: strconv.FormatInt(groupID, 10)},
+				),
+				Swap:    "outerHTML",
+				Trigger: "click",
+			},
+		}) {
+			Subscribe
+		}
+	}
 }
 
-templ FormAddComment(postID int64) {
+templ FormAddPost(group *view.Group) {
 	@common_widget.Form(view.Form{
 		Htmx: view.HTMX{
-			Post: common.FillPath(domain.PathAPGroupIComment, map[string]string{
-				domain.PathParamPostID: strconv.FormatInt(postID, 10),
+			Post: common.FillPath(domain.PathAPIGroupIDPost, map[string]string{
+				domain.PathParamGroupID: strconv.FormatInt(group.ID, 10),
 			}),
+			Target: "#posts-container",
+			Swap:   "outerHTML",
 		},
 	}) {
 		@common_widget.TextArea(view.TextArea{
-			Name:        "new_comment",
+			Name:        "content",
+			Placeholder: "Write new post...",
+			Rows:        2,
+		})
+		@common_widget.Button(view.Button{
+			Type: "submit",
+		}) {
+			Add new post
+		}
+	}
+}
+
+templ FormAddComment(group *view.Group, post *view.Post) {
+	@common_widget.Form(view.Form{
+		Htmx: view.HTMX{
+			Post: common.FillPath(domain.PathAPIGroupIDComment, map[string]string{
+				domain.PathParamPostID:  strconv.FormatInt(post.ID, 10),
+				domain.PathParamGroupID: strconv.FormatInt(group.ID, 10),
+			}),
+			Target: "#comment-section",
+			Swap:   "innerHTML",
+		},
+	}) {
+		@common_widget.TextArea(view.TextArea{
+			Name:        "content",
 			Placeholder: "Write a warm comment...",
 			Rows:        2,
 		})
@@ -489,5 +542,49 @@ templ FormAddComment(postID int64) {
 		}) {
 			Post Comment
 		}
+	}
+}
+
+templ FromSearchInterests(name string, interests []view.GroupedInterests) {
+	for _, group := range interests {
+		@common_widget.Details(view.Details{
+			Summary: group.Name,
+			Open:    true,
+		}) {
+			for _, interest := range group.Interests {
+				@common_widget.Checkbox(view.Checkbox{
+					Text:    interest.Name,
+					Checked: interest.Selected,
+					Name:    name,
+					ID:      fmt.Sprintf("interest-%d", interest.ID),
+				})
+			}
+		}
+	}
+}
+
+templ FromSearch() {
+	@common_widget.Form(view.Form{
+		Htmx: view.HTMX{
+			Post:    domain.PathPageSearch,
+			Trigger: "submit",
+		},
+	}) {
+		Search
+		@common_widget.LineBreak()
+		@common_widget.RadioButtons([]view.Radio{
+			{
+				Label: "Group",
+				ID:    "group-radio-button",
+				Value: "group",
+				Name:  "type",
+			},
+			{
+				Label: "User",
+				ID:    "user-radio-button",
+				Value: "user",
+				Name:  "type",
+			},
+		})
 	}
 }

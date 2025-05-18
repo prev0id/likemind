@@ -299,6 +299,32 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 								}
 
+							case 's': // Prefix: "subscribe"
+
+								if l := len("subscribe"); len(elem) >= l && elem[0:l] == "subscribe" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "DELETE":
+										s.handleV1APIGroupGroupIDSubscribeDeleteRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									case "POST":
+										s.handleV1APIGroupGroupIDSubscribePostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "DELETE,POST")
+									}
+
+									return
+								}
+
 							}
 
 						}
@@ -1176,6 +1202,38 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 									}
 
+								}
+
+							case 's': // Prefix: "subscribe"
+
+								if l := len("subscribe"); len(elem) >= l && elem[0:l] == "subscribe" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "DELETE":
+										r.name = V1APIGroupGroupIDSubscribeDeleteOperation
+										r.summary = "Unsubscribe"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/group/{group_id}/subscribe"
+										r.args = args
+										r.count = 1
+										return r, true
+									case "POST":
+										r.name = V1APIGroupGroupIDSubscribePostOperation
+										r.summary = "Subscribe"
+										r.operationID = ""
+										r.pathPattern = "/v1/api/group/{group_id}/subscribe"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
 								}
 
 							}

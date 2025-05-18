@@ -3,8 +3,10 @@ package group_adapter
 import (
 	"context"
 	"fmt"
+
 	"likemind/internal/common"
 	"likemind/internal/database"
+	"likemind/internal/database/model"
 	"likemind/internal/domain"
 )
 
@@ -51,6 +53,7 @@ func (i *Implementation) GetGroup(ctx context.Context, id domain.GroupID) (domai
 	if err != nil {
 		return domain.Group{}, fmt.Errorf("i.group.GetByID: %w", err)
 	}
+
 	return groupModelToDomain(m), nil
 }
 
@@ -84,4 +87,18 @@ func (i *Implementation) ListSubscribedGroups(ctx context.Context, id domain.Use
 	}
 
 	return result, nil
+}
+
+func (i *Implementation) Subscribe(ctx context.Context, userID domain.UserID, groupID domain.GroupID) error {
+	return i.group.AddUserSubscription(ctx, model.UserSubscription{
+		UserID:  int64(userID),
+		GroupID: int64(groupID),
+	})
+}
+
+func (i *Implementation) Unsubscribe(ctx context.Context, userID domain.UserID, groupID domain.GroupID) error {
+	return i.group.DeleteUserSubscription(ctx, model.UserSubscription{
+		UserID:  int64(userID),
+		GroupID: int64(groupID),
+	})
 }

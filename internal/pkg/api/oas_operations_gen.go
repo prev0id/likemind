@@ -16,6 +16,8 @@ const (
 	V1APIGroupGroupIDPostPostIDDeleteOperation                 OperationName = "V1APIGroupGroupIDPostPostIDDelete"
 	V1APIGroupGroupIDPostPostIDPutOperation                    OperationName = "V1APIGroupGroupIDPostPostIDPut"
 	V1APIGroupGroupIDPutOperation                              OperationName = "V1APIGroupGroupIDPut"
+	V1APIGroupGroupIDSubscribeDeleteOperation                  OperationName = "V1APIGroupGroupIDSubscribeDelete"
+	V1APIGroupGroupIDSubscribePostOperation                    OperationName = "V1APIGroupGroupIDSubscribePost"
 	V1APIGroupPostOperation                                    OperationName = "V1APIGroupPost"
 	V1APILogoutPostOperation                                   OperationName = "V1APILogoutPost"
 	V1APIProfileContactContactIDDeleteOperation                OperationName = "V1APIProfileContactContactIDDelete"

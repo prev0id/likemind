@@ -30,7 +30,6 @@ func (r *Repo) Create(ctx context.Context, comment model.Comment) (int64, error)
 
 	q := sql.InsertInto(model.TableComments)
 	q.Cols(
-		model.CommentID,
 		model.CommentPostID,
 		model.CommentContent,
 		model.CommentAuthorID,
@@ -38,7 +37,6 @@ func (r *Repo) Create(ctx context.Context, comment model.Comment) (int64, error)
 		model.CommentUpdatedAt,
 	)
 	q.Values(
-		comment.ID,
 		comment.PostID,
 		comment.Content,
 		comment.AuthorID,
@@ -110,6 +108,7 @@ func (r *Repo) ListByPost(ctx context.Context, postID int64) ([]model.Comment, e
 	q.Where(
 		q.Equal(model.CommentPostID, postID),
 	)
+	q.Asc().OrderBy(model.CommentUpdatedAt)
 
 	comments, err := database.Select[model.Comment](ctx, q)
 	if err != nil {

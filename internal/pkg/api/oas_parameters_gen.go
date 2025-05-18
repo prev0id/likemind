@@ -1159,6 +1159,138 @@ func decodeV1APIGroupGroupIDPutParams(args [1]string, argsEscaped bool, r *http.
 	return params, nil
 }
 
+// V1APIGroupGroupIDSubscribeDeleteParams is parameters of DELETE /v1/api/group/{group_id}/subscribe operation.
+type V1APIGroupGroupIDSubscribeDeleteParams struct {
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDSubscribeDeleteParams(packed middleware.Parameters) (params V1APIGroupGroupIDSubscribeDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDSubscribeDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDSubscribeDeleteParams, _ error) {
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1APIGroupGroupIDSubscribePostParams is parameters of POST /v1/api/group/{group_id}/subscribe operation.
+type V1APIGroupGroupIDSubscribePostParams struct {
+	// The group id.
+	GroupID int64
+}
+
+func unpackV1APIGroupGroupIDSubscribePostParams(packed middleware.Parameters) (params V1APIGroupGroupIDSubscribePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "group_id",
+			In:   "path",
+		}
+		params.GroupID = packed[key].(int64)
+	}
+	return params
+}
+
+func decodeV1APIGroupGroupIDSubscribePostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1APIGroupGroupIDSubscribePostParams, _ error) {
+	// Decode path: group_id.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "group_id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt64(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "group_id",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1APIProfileContactContactIDDeleteParams is parameters of DELETE /v1/api/profile/contact/{contact_id} operation.
 type V1APIProfileContactContactIDDeleteParams struct {
 	ContactID int64

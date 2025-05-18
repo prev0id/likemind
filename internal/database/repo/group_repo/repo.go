@@ -19,7 +19,7 @@ type DB interface {
 	Delete(ctx context.Context, id int64) error
 	ListUserSubscriptions(ctx context.Context, id int64) ([]model.UserSubscription, error)
 	AddUserSubscription(ctx context.Context, sub model.UserSubscription) error
-	DeleteUserSubscriptions(ctx context.Context, sub model.UserSubscription) error
+	DeleteUserSubscription(ctx context.Context, sub model.UserSubscription) error
 }
 
 var _ DB = (*Repo)(nil)
@@ -143,7 +143,7 @@ func (r *Repo) ListUserSubscriptions(ctx context.Context, id int64) ([]model.Use
 }
 
 func (r *Repo) AddUserSubscription(ctx context.Context, sub model.UserSubscription) error {
-	q := sql.InsertInto(model.TableGroups)
+	q := sql.InsertInto(model.TableUserSubscriptions)
 	q.Cols(
 		model.UserSubscriptionUserID,
 		model.UserSubscriptionGroupID,
@@ -162,7 +162,7 @@ func (r *Repo) AddUserSubscription(ctx context.Context, sub model.UserSubscripti
 	return nil
 }
 
-func (r *Repo) DeleteUserSubscriptions(ctx context.Context, sub model.UserSubscription) error {
+func (r *Repo) DeleteUserSubscription(ctx context.Context, sub model.UserSubscription) error {
 	q := sql.DeleteFrom(model.TableUserSubscriptions)
 	q.Where(
 		q.Equal(model.UserSubscriptionUserID, sub.UserID),

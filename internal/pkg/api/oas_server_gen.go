@@ -68,6 +68,18 @@ type Handler interface {
 	//
 	// PUT /v1/api/group/{group_id}
 	V1APIGroupGroupIDPut(ctx context.Context, req *Group, params V1APIGroupGroupIDPutParams) (V1APIGroupGroupIDPutRes, error)
+	// V1APIGroupGroupIDSubscribeDelete implements DELETE /v1/api/group/{group_id}/subscribe operation.
+	//
+	// Unsubscribe to group.
+	//
+	// DELETE /v1/api/group/{group_id}/subscribe
+	V1APIGroupGroupIDSubscribeDelete(ctx context.Context, params V1APIGroupGroupIDSubscribeDeleteParams) (V1APIGroupGroupIDSubscribeDeleteRes, error)
+	// V1APIGroupGroupIDSubscribePost implements POST /v1/api/group/{group_id}/subscribe operation.
+	//
+	// Subscribe to group.
+	//
+	// POST /v1/api/group/{group_id}/subscribe
+	V1APIGroupGroupIDSubscribePost(ctx context.Context, params V1APIGroupGroupIDSubscribePostParams) (V1APIGroupGroupIDSubscribePostRes, error)
 	// V1APIGroupPost implements POST /v1/api/group operation.
 	//
 	// Creates new group. If ok redirects to created group page.

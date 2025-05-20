@@ -15,15 +15,15 @@ likemind.localhost {
 
 likemind.tech {
     handle /v1/api/* {
-        reverse_proxy http://host.docker.internal:6969
+        reverse_proxy localhost:6969
     }
 
     handle /static/* {
-        reverse_proxy http://host.docker.internal:6969
+        reverse_proxy localhost:6969
     }
 
     handle {
         rewrite * /v1/page{uri}
-        reverse_proxy http://host.docker.internal:6969
+        reverse_proxy localhost6969
     }
 }

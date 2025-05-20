@@ -114,12 +114,24 @@ func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, 
 }
 
 func (s *Server) V1PageSigninGet(ctx context.Context, params desc.V1PageSigninGetParams) (desc.V1PageSigninGetRes, error) {
+	if common.UserIDFromContext(ctx) > 0 {
+		return &desc.Redirect302{
+			Location: getProfilePage(),
+		}, nil
+	}
+
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, page.SignIn()),
 	}, nil
 }
 
 func (s *Server) V1PageSignupGet(ctx context.Context, params desc.V1PageSignupGetParams) (desc.V1PageSignupGetRes, error) {
+	if common.UserIDFromContext(ctx) > 0 {
+		return &desc.Redirect302{
+			Location: getProfilePage(),
+		}, nil
+	}
+
 	return &desc.HTMLResponse{
 		Data: common.RenderComponent(ctx, page.SignUp()),
 	}, nil
@@ -127,7 +139,7 @@ func (s *Server) V1PageSignupGet(ctx context.Context, params desc.V1PageSignupGe
 
 func (s *Server) NotFound(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/v1/page/" || r.URL.Path == "/v1/page" {
-		http.Redirect(w, r, "/profile", http.StatusFound)
+		http.Redirect(w, r, "/signin", http.StatusFound)
 		return
 	}
 

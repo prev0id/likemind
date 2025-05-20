@@ -6,6 +6,9 @@ signin:
       - page
     parameters:
       - $ref: "../components/parameters.yaml#/session"
+    security:
+      - {}
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
@@ -22,6 +25,9 @@ signup:
       - page
     parameters:
       - $ref: "../components/parameters.yaml#/session"
+    security:
+      - {}
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"

@@ -2,6 +2,7 @@ package page
 
 import (
 	"likemind/website/view"
+	"likemind/website/widget"
 	"likemind/website/widget/card"
 )
 
@@ -9,7 +10,7 @@ templ Search(searchResuls templ.Component) {
 	@StandardLayout(view.SearchTab) {
 		@card.Container() {
 			@card.Card(nil) {
-				hello
+				@widget.FromSearch()
 			}
 			@searchResuls
 		}

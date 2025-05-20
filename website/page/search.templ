@@ -6,13 +6,18 @@ import (
 	"likemind/website/widget/card"
 )
 
-templ Search(searchResuls templ.Component) {
+templ Search(interests []view.GroupedInterests, searchResuls templ.Component) {
 	@StandardLayout(view.SearchTab) {
 		@card.Container() {
 			@card.Card(nil) {
-				@widget.FromSearch()
+				@widget.FromSearch(interests)
 			}
-			@searchResuls
+			<div
+				id="search-results-container"
+				class="max-w-3xl mx-auto space-y-8"
+			>
+				@searchResuls
+			</div>
 		}
 	}
 }

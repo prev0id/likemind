@@ -108,8 +108,13 @@ func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, 
 
 	recomendations := widget.UserRecomendations(users)
 
+	interests, err := s.interests.ListInterests(ctx)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.Search(recomendations)),
+		Data: common.RenderComponent(ctx, page.Search(interestGroupDomainToView(interests), recomendations)),
 	}, nil
 }
 

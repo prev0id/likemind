@@ -19,6 +19,8 @@ type Service interface {
 
 	SearchUsers(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.UserID, error)
 	SearchGroups(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.GroupID, error)
+
+	ListInterests(ctx context.Context) ([]domain.InterestGroup, error)
 }
 
 type implementation struct {
@@ -35,6 +37,15 @@ func (i *implementation) GetUserInterests(ctx context.Context, id domain.UserID)
 	interests, err := i.db.ListUserInterests(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("i.db.ListUserInterests: %w", err)
+	}
+
+	return interests, nil
+}
+
+func (i *implementation) ListInterests(ctx context.Context) ([]domain.InterestGroup, error) {
+	interests, err := i.db.ListInterests(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("i.db.ListInterests: %w", err)
 	}
 
 	return interests, nil

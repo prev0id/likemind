@@ -563,28 +563,72 @@ templ FromSearchInterests(name string, interests []view.GroupedInterests) {
 	}
 }
 
-templ FromSearch() {
+templ FromSearch(interests []view.GroupedInterests) {
 	@common_widget.Form(view.Form{
 		Htmx: view.HTMX{
-			Post:    domain.PathPageSearch,
-			Trigger: "submit",
+			Post:     domain.PathPageSearch,
+			Trigger:  "submit",
+			Encoding: "application/json",
+			Target:   "#search-results-container",
+			Swap:     "innerHTML",
 		},
 	}) {
 		Search
 		@common_widget.LineBreak()
-		@common_widget.RadioButtons([]view.Radio{
-			{
-				Label: "Group",
-				ID:    "group-radio-button",
-				Value: "group",
-				Name:  "type",
-			},
-			{
-				Label: "User",
-				ID:    "user-radio-button",
-				Value: "user",
-				Name:  "type",
-			},
-		})
+		<div class="grid grid-cols-2 gap-8">
+			<div class="grid grid-flow-rows gap-2">
+				@common_widget.RadioButtons([]view.Radio{
+					{
+						Label: "Group",
+						ID:    "group-radio-button",
+						Value: "group",
+						Name:  "type",
+					},
+					{
+						Label: "User",
+						ID:    "user-radio-button",
+						Value: "user",
+						Name:  "type",
+					},
+				})
+			</div>
+			<div class="grid grid-flow-rows items-center justify-items-center">
+				// <div flex="flex justify-center items-center">
+				@common_widget.Button(view.Button{
+					PopoverTarget: "select-interests-include-modal",
+					PopoverAction: "show",
+				}) {
+					Include interests
+				}
+				// </div>
+				// <div flex="flex justify-center items-center">
+				@common_widget.Button(view.Button{
+					PopoverTarget: "select-interests-exclude-modal",
+					PopoverAction: "show",
+				}) {
+					Exclude interests
+				}
+				// </div>
+			</div>
+			@common_widget.Modal(view.Modal{
+				Title: "Select interests to include",
+				ID:    "select-interests-include-modal",
+			}) {
+				@FromSearchInterests("include", interests)
+			}
+			@common_widget.Modal(view.Modal{
+				Title: "Select interests to exclude",
+				ID:    "select-interests-exclude-modal",
+			}) {
+				@FromSearchInterests("exclude", interests)
+			}
+		</div>
+		<div flex="flex justify-center items-center">
+			@common_widget.Button(view.Button{
+				Type: "submit",
+			}) {
+				Search
+			}
+		</div>
 	}
 }

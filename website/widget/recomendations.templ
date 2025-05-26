@@ -13,9 +13,9 @@ import (
 	"strconv"
 )
 
-templ GroupRecomendations(groups []*view.Group) {
+templ GroupRecomendations(userID int64, groups []*view.Group) {
 	for _, group := range groups {
-		@groupPreview(group)
+		@groupPreview(userID, group)
 	}
 }
 
@@ -25,7 +25,7 @@ templ UserRecomendations(users []*view.Profile) {
 	}
 }
 
-templ groupPreview(group *view.Group) {
+templ groupPreview(userID int64, group *view.Group) {
 	@card.Card(nil) {
 		@card.Header() {
 			<div class="flex justify-between items-center">
@@ -36,9 +36,11 @@ templ groupPreview(group *view.Group) {
 						map[string]string{domain.PathParamGroupID: strconv.FormatInt(group.ID, 10)},
 					),
 				})
-				<div class="flex">
-					@SubscribeButton(group.ID, group.Subscribed)
-				</div>
+				if group.Author.ID != userID {
+					<div class="flex">
+						@SubscribeButton(group.ID, group.Subscribed)
+					</div>
+				}
 			</div>
 		}
 		@card.Text(group.Description)

@@ -81,10 +81,6 @@ type V1APIProfileImageImageIDGetRes interface {
 	v1APIProfileImageImageIDGetRes()
 }
 
-type V1APIProfileImagePostReq interface {
-	v1APIProfileImagePostReq()
-}
-
 type V1APIProfileImagePostRes interface {
 	v1APIProfileImagePostRes()
 }

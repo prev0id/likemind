@@ -55,6 +55,7 @@ func (r *Repo) GetProfilePicturesByUserID(ctx context.Context, userID int64) ([]
 	)
 	q.From(model.TableProfilePictures)
 	q.Where(q.Equal(model.ProfilePictureUserID, userID))
+	q.Desc().OrderBy(model.ProfilePictureUpdatedAt)
 
 	results, err := database.Select[model.ProfilePicture](ctx, q)
 	if err != nil {

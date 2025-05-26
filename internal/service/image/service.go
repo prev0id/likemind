@@ -3,9 +3,6 @@ package image
 import (
 	"context"
 	"fmt"
-	"image"
-	_ "image/jpeg"
-	_ "image/png"
 	"io"
 	"slices"
 	"strings"
@@ -16,21 +13,17 @@ import (
 	s3_image_repo "likemind/internal/s3/image_repo"
 
 	"github.com/google/uuid"
+	"github.com/ogen-go/ogen/http"
 )
 
 const (
 	MaxFileSize = 4 * 1024 * 1024 // 4MB
-
-	MaxDimension = 2048
-
-	MinAspectRatio = 8.0 / 19.0
-	MaxAspectRatio = 19.0 / 8.0
-
-	supportedFormats = "jpeg,png"
 )
 
+var supportedFormats = []string{"image/png", "image/jpeg"}
+
 type Service interface {
-	UploadImage(ctx context.Context, file io.Reader, fileSize int64) error
+	UploadImage(ctx context.Context, file http.MultipartFile) error
 	DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error
 	GetProfileImages(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
 	GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error)
@@ -53,54 +46,38 @@ func NewImageService(
 	}
 }
 
-func (s *implementation) UploadImage(ctx context.Context, file io.Reader, fileSize int64) error {
-	if file == nil {
+func (s *implementation) UploadImage(ctx context.Context, file http.MultipartFile) error {
+	if file.File == nil {
 		return fmt.Errorf("file reader is required")
 	}
-	if fileSize <= 0 {
+	if file.Size <= 0 {
 		return fmt.Errorf("invalid file size")
 	}
-	if fileSize > MaxFileSize {
+	if file.Size > MaxFileSize {
 		return domain.ErrFileSizeExceedsLimit
 	}
 
-	config, format, err := image.DecodeConfig(file)
-	if err != nil {
-		return fmt.Errorf("failed to decode image: %w", domain.ErrInvalidFile)
-	}
+	contentType := file.Header.Get("Content-Type")
 
-	format = strings.ToLower(format)
-	if !strings.Contains(supportedFormats, format) {
+	if !slices.Contains(supportedFormats, contentType) {
 		return domain.ErrUnsupportedImageFormat
 	}
 
-	contentType := fmt.Sprintf("image/%s", format)
-
-	if config.Width > MaxDimension || config.Height > MaxDimension {
-		return domain.ErrWrongResolution
-	}
-
-	ratio := float64(config.Width) / float64(config.Height)
-	if ratio < MinAspectRatio || ratio > MaxAspectRatio {
-		return domain.ErrWrongAspectRation
-	}
-
 	id := uuid.New()
-	ext := fmt.Sprintf(".%s", strings.ReplaceAll(format, "jpeg", "jpg"))
-	uniqueFilename := id.String() + ext
+	uniqueFilename := id.String() + "." + strings.TrimPrefix(contentType, "image/")
 
 	req := s3_image_repo.Image{
 		Name:        uniqueFilename,
 		ContentType: contentType,
-		Size:        fileSize,
-		Data:        file,
+		Size:        file.Size,
+		Data:        file.File,
 	}
 
 	if err := s.s3.UploadImage(ctx, req); err != nil {
 		return fmt.Errorf("failed to upload image: %w", err)
 	}
 
-	err = s.repo.AddProfilePicture(
+	err := s.repo.AddProfilePicture(
 		ctx,
 		common.UserIDFromContext(ctx),
 		domain.PictureID(uniqueFilename),

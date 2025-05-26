@@ -1680,6 +1680,177 @@ func decodeV1APIProfileInterestInterestIDPostParams(args [1]string, argsEscaped 
 	return params, nil
 }
 
+// V1APISearchGetParams is parameters of GET /v1/api/search operation.
+type V1APISearchGetParams struct {
+	Type    Type
+	Include []int64
+	Exclude []int64
+}
+
+func unpackV1APISearchGetParams(packed middleware.Parameters) (params V1APISearchGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "type",
+			In:   "query",
+		}
+		params.Type = packed[key].(Type)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "include",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Include = v.([]int64)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "exclude",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Exclude = v.([]int64)
+		}
+	}
+	return params
+}
+
+func decodeV1APISearchGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1APISearchGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: type.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Type = Type(c)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.Type.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "type",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: include.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "include",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotIncludeVal int64
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt64(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotIncludeVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Include = append(params.Include, paramsDotIncludeVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "include",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: exclude.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "exclude",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotExcludeVal int64
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt64(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotExcludeVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Exclude = append(params.Exclude, paramsDotExcludeVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "exclude",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1PageGroupGroupIDGetParams is parameters of GET /v1/page/group/{group_id} operation.
 type V1PageGroupGroupIDGetParams struct {
 	// The group id.

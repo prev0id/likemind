@@ -8,7 +8,7 @@ import (
 	common_widget "likemind/website/widget/common"
 )
 
-templ GroupSubscriptions(state []*view.Group) {
+templ GroupSubscriptions(userID int64, state []*view.Group) {
 	@StandardLayout(view.GroupTab) {
 		@card.Container() {
 			@card.Card(nil) {
@@ -40,7 +40,7 @@ templ GroupSubscriptions(state []*view.Group) {
 					@widget.CreateGroupsForm()
 				}
 			}
-			@widget.GroupRecomendations(state)
+			@widget.GroupRecomendations(userID, state)
 		}
 	}
 }

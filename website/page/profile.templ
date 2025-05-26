@@ -3,6 +3,7 @@ package page
 import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/view"
 	"likemind/website/widget"
@@ -88,7 +89,8 @@ templ About(state *view.Profile) {
 templ uploadNewImage() {
 	@common_widget.Form(view.Form{
 		Htmx: view.HTMX{
-			Target: domain.PathAPIImage,
+			Post:     domain.PathAPIImage,
+			Encoding: "multipart/form-data",
 		},
 		Attributes: templ.Attributes{
 			"id":    "upload_new_profile_image_dropbox",
@@ -114,6 +116,7 @@ templ uploadNewImage() {
 				type="file"
 				id="upload_new_profile_image_input"
 				accept="image/png, image/jpeg"
+				name="image"
 				class="hidden"
 			/>
 			<div class="m-auto">
@@ -140,12 +143,14 @@ templ uploadNewImage() {
 
 templ profileImagePreview(state *view.Profile) {
 	<div class="relative group bg-yellow w-full h-full rounded-3xl flex items-center justify-center">
-		<img
-			src="/static/img/img1.jpg"
-			alt="Profile picture"
-			class="max-w-full min-h-50 max-h-150 overflow-hidden rounded-3xl transition duration-300 ease-in-out data-owner:group-hover:blur-sm"
-			data-owner?={ state.Owner }
-		/>
+		if state.PictureID != "" {
+			<img
+				src={ common.FillPath(domain.PathAPIImageID, map[string]string{domain.PathParamImageID: state.PictureID}) }
+				alt="Profile picture"
+				class="max-w-full min-h-50 max-h-150 overflow-hidden rounded-3xl transition duration-300 ease-in-out data-owner:group-hover:blur-sm"
+				data-owner?={ state.Owner }
+			/>
+		}
 		if state.Owner {
 			<div
 				class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out flex items-center justify-center mx-auto"

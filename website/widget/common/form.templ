@@ -55,7 +55,11 @@ templ Button(button view.Button) {
 		}
 		disabled?={ button.Disabled }
 		autocomplete="off"
-		class="w-full bg-red text-white py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2 disabled:bg-black-100 hover:disabled:bg-black-100"
+		if button.Light {
+			class="w-full bg-pink text-black py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2 disabled:bg-black-100 hover:disabled:bg-black-100"
+		} else {
+			class="w-full bg-red text-white py-2 px-2 rounded-xl font-medium hover:bg-orange transition-colors flex items-center justify-center gap-2 disabled:bg-black-100 hover:disabled:bg-black-100"
+		}
 		{ button.Htmx.Attributes()... }
 		{ button.Attributes... }
 	>
@@ -125,7 +129,7 @@ templ XButton(state view.HTMX) {
 
 templ RadioButtons(radios []view.Radio) {
 	for _, radio := range radios {
-		<div class="flex">
+		<div class="flex items-center">
 			<input
 				type="radio"
 				id={ radio.ID }
@@ -133,6 +137,7 @@ templ RadioButtons(radios []view.Radio) {
 				name={ radio.Name }
 				class="mr-2 accent-black"
 				autocomplete="off"
+				checked?={ radio.Selected }
 			/>
 			<label
 				class="text-black-400 font-medium"

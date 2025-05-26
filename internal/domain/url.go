@@ -12,9 +12,8 @@ const (
 	PathPageGroup       = "/group/{group_id}"
 	PathPageSearch      = "/search"
 
-	PathAPIPing        = prefixAPI + "/ping"
-	PathAPISearchUser  = prefixAPI + "/search/user"
-	PathAPISearchGroup = prefixAPI + "/search/group"
+	PathAPIPing   = prefixAPI + "/ping"
+	PathAPISearch = prefixAPI + "/search"
 
 	PathAPISignin = prefixAPI + "/signin"
 	PathAPILogout = prefixAPI + "/logout"

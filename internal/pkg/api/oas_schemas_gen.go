@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+
+	ht "github.com/ogen-go/ogen/http"
 )
 
 // A plain text error message.
@@ -416,6 +418,52 @@ func (o OptInt64) Or(d int64) int64 {
 	return d
 }
 
+// NewOptMultipartFile returns new OptMultipartFile with value set to v.
+func NewOptMultipartFile(v ht.MultipartFile) OptMultipartFile {
+	return OptMultipartFile{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptMultipartFile is optional ht.MultipartFile.
+type OptMultipartFile struct {
+	Value ht.MultipartFile
+	Set   bool
+}
+
+// IsSet returns true if OptMultipartFile was set.
+func (o OptMultipartFile) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptMultipartFile) Reset() {
+	var v ht.MultipartFile
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptMultipartFile) SetTo(v ht.MultipartFile) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptMultipartFile) Get() (v ht.MultipartFile, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptMultipartFile) Or(d ht.MultipartFile) ht.MultipartFile {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -750,84 +798,6 @@ func (*Redirect302) v1PageProfileUsernameGetRes() {}
 func (*Redirect302) v1PageSigninGetRes()          {}
 func (*Redirect302) v1PageSignupGetRes()          {}
 
-// Ref: #/Search
-type Search struct {
-	Type             SearchType `json:"type"`
-	IncludeInterests []int64    `json:"include_interests"`
-	ExcludeInterests []int64    `json:"exclude_interests"`
-}
-
-// GetType returns the value of Type.
-func (s *Search) GetType() SearchType {
-	return s.Type
-}
-
-// GetIncludeInterests returns the value of IncludeInterests.
-func (s *Search) GetIncludeInterests() []int64 {
-	return s.IncludeInterests
-}
-
-// GetExcludeInterests returns the value of ExcludeInterests.
-func (s *Search) GetExcludeInterests() []int64 {
-	return s.ExcludeInterests
-}
-
-// SetType sets the value of Type.
-func (s *Search) SetType(val SearchType) {
-	s.Type = val
-}
-
-// SetIncludeInterests sets the value of IncludeInterests.
-func (s *Search) SetIncludeInterests(val []int64) {
-	s.IncludeInterests = val
-}
-
-// SetExcludeInterests sets the value of ExcludeInterests.
-func (s *Search) SetExcludeInterests(val []int64) {
-	s.ExcludeInterests = val
-}
-
-type SearchType string
-
-const (
-	SearchTypeProfile SearchType = "profile"
-	SearchTypeGroup   SearchType = "group"
-)
-
-// AllValues returns all SearchType values.
-func (SearchType) AllValues() []SearchType {
-	return []SearchType{
-		SearchTypeProfile,
-		SearchTypeGroup,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s SearchType) MarshalText() ([]byte, error) {
-	switch s {
-	case SearchTypeProfile:
-		return []byte(s), nil
-	case SearchTypeGroup:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *SearchType) UnmarshalText(data []byte) error {
-	switch SearchType(data) {
-	case SearchTypeProfile:
-		*s = SearchTypeProfile
-		return nil
-	case SearchTypeGroup:
-		*s = SearchTypeGroup
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
 type SessionAuth struct {
 	APIKey string
 }
@@ -868,34 +838,57 @@ func (s *SignIn) SetPassword(val string) {
 	s.Password = val
 }
 
-type V1APIProfileImagePostReqImageJpeg struct {
-	Data io.Reader
-}
+type Type string
 
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s V1APIProfileImagePostReqImageJpeg) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
+const (
+	TypeProfile Type = "profile"
+	TypeGroup   Type = "group"
+)
+
+// AllValues returns all Type values.
+func (Type) AllValues() []Type {
+	return []Type{
+		TypeProfile,
+		TypeGroup,
 	}
-	return s.Data.Read(p)
 }
 
-func (*V1APIProfileImagePostReqImageJpeg) v1APIProfileImagePostReq() {}
-
-type V1APIProfileImagePostReqImagePNG struct {
-	Data io.Reader
-}
-
-// Read reads data from the Data reader.
-//
-// Kept to satisfy the io.Reader interface.
-func (s V1APIProfileImagePostReqImagePNG) Read(p []byte) (n int, err error) {
-	if s.Data == nil {
-		return 0, io.EOF
+// MarshalText implements encoding.TextMarshaler.
+func (s Type) MarshalText() ([]byte, error) {
+	switch s {
+	case TypeProfile:
+		return []byte(s), nil
+	case TypeGroup:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
 	}
-	return s.Data.Read(p)
 }
 
-func (*V1APIProfileImagePostReqImagePNG) v1APIProfileImagePostReq() {}
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Type) UnmarshalText(data []byte) error {
+	switch Type(data) {
+	case TypeProfile:
+		*s = TypeProfile
+		return nil
+	case TypeGroup:
+		*s = TypeGroup
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1APIProfileImagePostReq struct {
+	Image OptMultipartFile `json:"image"`
+}
+
+// GetImage returns the value of Image.
+func (s *V1APIProfileImagePostReq) GetImage() OptMultipartFile {
+	return s.Image
+}
+
+// SetImage sets the value of Image.
+func (s *V1APIProfileImagePostReq) SetImage(val OptMultipartFile) {
+	s.Image = val
+}

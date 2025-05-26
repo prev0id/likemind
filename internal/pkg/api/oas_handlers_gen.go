@@ -3906,7 +3906,7 @@ func (s *Server) handleV1APIProfileImagePostRequest(args [0]string, argsEscaped 
 		}
 
 		type (
-			Request  = V1APIProfileImagePostReq
+			Request  = *V1APIProfileImagePostReq
 			Params   = V1APIProfileImagePostParams
 			Response = V1APIProfileImagePostRes
 		)
@@ -4919,21 +4919,16 @@ func (s *Server) handleV1APISearchGetRequest(args [0]string, argsEscaped bool, w
 			return
 		}
 	}
-	request, close, err := s.decodeV1APISearchGetRequest(r)
+	params, err := decodeV1APISearchGetParams(args, argsEscaped, r)
 	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
+		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
 			Err:              err,
 		}
-		defer recordError("DecodeRequest", err)
+		defer recordError("DecodeParams", err)
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
 
 	var response V1APISearchGetRes
 	if m := s.cfg.Middleware; m != nil {
@@ -4942,14 +4937,27 @@ func (s *Server) handleV1APISearchGetRequest(args [0]string, argsEscaped bool, w
 			OperationName:    V1APISearchGetOperation,
 			OperationSummary: "Search",
 			OperationID:      "",
-			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "type",
+					In:   "query",
+				}: params.Type,
+				{
+					Name: "include",
+					In:   "query",
+				}: params.Include,
+				{
+					Name: "exclude",
+					In:   "query",
+				}: params.Exclude,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = *Search
-			Params   = struct{}
+			Request  = struct{}
+			Params   = V1APISearchGetParams
 			Response = V1APISearchGetRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -4959,14 +4967,14 @@ func (s *Server) handleV1APISearchGetRequest(args [0]string, argsEscaped bool, w
 		](
 			m,
 			mreq,
-			nil,
+			unpackV1APISearchGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1APISearchGet(ctx, request)
+				response, err = s.h.V1APISearchGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1APISearchGet(ctx, request)
+		response, err = s.h.V1APISearchGet(ctx, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)

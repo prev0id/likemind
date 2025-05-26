@@ -25,6 +25,7 @@ type Button struct {
 	PopoverTarget string
 	PopoverAction string
 	Disabled      bool
+	Light         bool
 	Htmx          HTMX
 }
 
@@ -34,12 +35,14 @@ type Form struct {
 }
 
 type HTMX struct {
+	Get      string
 	Post     string
 	Delete   string
 	Target   string
 	Swap     string
 	Encoding string
 	Trigger  string
+	Enctype  string
 }
 
 func (htmx HTMX) Attributes() templ.Attributes {
@@ -49,6 +52,9 @@ func (htmx HTMX) Attributes() templ.Attributes {
 	}
 	if htmx.Delete != "" {
 		attributes["hx-delete"] = htmx.Delete
+	}
+	if htmx.Get != "" {
+		attributes["hx-get"] = htmx.Get
 	}
 	if htmx.Target != "" {
 		attributes["hx-target"] = htmx.Target
@@ -61,6 +67,9 @@ func (htmx HTMX) Attributes() templ.Attributes {
 	}
 	if htmx.Encoding != "" {
 		attributes["hx-encoding"] = htmx.Encoding
+	}
+	if htmx.Enctype != "" {
+		attributes["enctype"] = htmx.Enctype
 	}
 	return attributes
 }
@@ -87,8 +96,9 @@ type Checkbox struct {
 	Htmx    HTMX
 }
 type Radio struct {
-	Name  string
-	Value string
-	Label string
-	ID    string
+	Name     string
+	Value    string
+	Label    string
+	ID       string
+	Selected bool
 }

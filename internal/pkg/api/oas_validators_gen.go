@@ -526,40 +526,6 @@ func (s *ProfileUpdate) Validate() error {
 	return nil
 }
 
-func (s *Search) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Type.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "type",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s SearchType) Validate() error {
-	switch s {
-	case "profile":
-		return nil
-	case "group":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *SignIn) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -608,4 +574,15 @@ func (s *SignIn) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s Type) Validate() error {
+	switch s {
+	case "profile":
+		return nil
+	case "group":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }

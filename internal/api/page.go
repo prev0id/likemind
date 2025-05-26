@@ -13,6 +13,8 @@ import (
 	desc "likemind/internal/pkg/api"
 
 	error_page "likemind/website/page/error"
+
+	"github.com/rs/zerolog/log"
 )
 
 func (s *Server) V1PageGroupGet(ctx context.Context) (desc.V1PageGroupGetRes, error) {
@@ -33,7 +35,7 @@ func (s *Server) V1PageGroupGet(ctx context.Context) (desc.V1PageGroupGetRes, er
 	}
 
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.GroupSubscriptions(groups)),
+		Data: common.RenderComponent(ctx, page.GroupSubscriptions(int64(userID), groups)),
 	}, nil
 }
 
@@ -97,10 +99,14 @@ func (s *Server) V1PageSearchGet(ctx context.Context) (desc.V1PageSearchGetRes, 
 	if err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
+
+	log.Info().Interface("ids", userIDs).Int("size", len(userIDs)).Msg("page search")
+
 	users := make([]*view.Profile, 0, len(userIDs))
 	for _, userId := range userIDs {
 		user, err := s.getProfile(ctx, userId)
 		if err != nil {
+			log.Err(err).Str("id", userId.String()).Msg("[page/search] s.getProfile")
 			continue
 		}
 		users = append(users, user)

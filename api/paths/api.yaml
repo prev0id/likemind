@@ -452,8 +452,12 @@ search:
       - group
     security:
       - SessionAuth: []
-    requestBody:
-      $ref: "../components/requestBodies.yaml#/Search"
+    parameters:
+      - $ref: "../components/parameters.yaml#/Type"
+      - $ref: "../components/parameters.yaml#/Include"
+      - $ref: "../components/parameters.yaml#/Exclude"
+    # requestBody:
+    #   $ref: "../components/requestBodies.yaml#/Search"
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"

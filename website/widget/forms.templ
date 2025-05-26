@@ -556,7 +556,7 @@ templ FromSearchInterests(name string, interests []view.GroupedInterests) {
 					Text:    interest.Name,
 					Checked: interest.Selected,
 					Name:    name,
-					ID:      fmt.Sprintf("interest-%d", interest.ID),
+					Value:   strconv.FormatInt(interest.ID, 10),
 				})
 			}
 		}
@@ -566,64 +566,70 @@ templ FromSearchInterests(name string, interests []view.GroupedInterests) {
 templ FromSearch(interests []view.GroupedInterests) {
 	@common_widget.Form(view.Form{
 		Htmx: view.HTMX{
-			Post:     domain.PathPageSearch,
-			Trigger:  "submit",
-			Encoding: "application/json",
+			Get:      domain.PathAPISearch,
+			Encoding: "application/x-www-form-urlencoded",
 			Target:   "#search-results-container",
 			Swap:     "innerHTML",
 		},
+		Attributes: templ.Attributes{
+			"hx-params": "*",
+		},
 	}) {
-		Search
-		@common_widget.LineBreak()
-		<div class="grid grid-cols-2 gap-8">
-			<div class="grid grid-flow-rows gap-2">
-				@common_widget.RadioButtons([]view.Radio{
-					{
-						Label: "Group",
-						ID:    "group-radio-button",
-						Value: "group",
-						Name:  "type",
-					},
-					{
-						Label: "User",
-						ID:    "user-radio-button",
-						Value: "user",
-						Name:  "type",
-					},
-				})
-			</div>
-			<div class="grid grid-flow-rows items-center justify-items-center">
-				// <div flex="flex justify-center items-center">
-				@common_widget.Button(view.Button{
-					PopoverTarget: "select-interests-include-modal",
-					PopoverAction: "show",
+		<div class="w-xl">
+			Search
+			<div class="grid grid-cols-2 gap-8 w-full mb-4">
+				<div class="grid grid-flow-rows gap-2">
+					@common_widget.RadioButtons([]view.Radio{
+						{
+							Label: "Group",
+							ID:    "group-radio-button",
+							Value: "group",
+							Name:  "type",
+						},
+						{
+							Label:    "User",
+							ID:       "user-radio-button",
+							Value:    "profile",
+							Name:     "type",
+							Selected: true,
+						},
+					})
+				</div>
+				<div class="grid grid-flow-rows items-center justify-items-center gap-4">
+					<div flex="flex justify-center items-center">
+						@common_widget.Button(view.Button{
+							Type:          "button",
+							PopoverTarget: "select-interests-include-modal",
+							PopoverAction: "show",
+							Light:         true,
+						}) {
+							Include interests
+						}
+					</div>
+					<div flex="flex justify-center items-center">
+						@common_widget.Button(view.Button{
+							Type:          "button",
+							PopoverTarget: "select-interests-exclude-modal",
+							PopoverAction: "show",
+							Light:         true,
+						}) {
+							Exclude interests
+						}
+					</div>
+				</div>
+				@common_widget.Modal(view.Modal{
+					Title: "Select interests to include",
+					ID:    "select-interests-include-modal",
 				}) {
-					Include interests
+					@FromSearchInterests("include", interests)
 				}
-				// </div>
-				// <div flex="flex justify-center items-center">
-				@common_widget.Button(view.Button{
-					PopoverTarget: "select-interests-exclude-modal",
-					PopoverAction: "show",
+				@common_widget.Modal(view.Modal{
+					Title: "Select interests to exclude",
+					ID:    "select-interests-exclude-modal",
 				}) {
-					Exclude interests
+					@FromSearchInterests("exclude", interests)
 				}
-				// </div>
 			</div>
-			@common_widget.Modal(view.Modal{
-				Title: "Select interests to include",
-				ID:    "select-interests-include-modal",
-			}) {
-				@FromSearchInterests("include", interests)
-			}
-			@common_widget.Modal(view.Modal{
-				Title: "Select interests to exclude",
-				ID:    "select-interests-exclude-modal",
-			}) {
-				@FromSearchInterests("exclude", interests)
-			}
-		</div>
-		<div flex="flex justify-center items-center">
 			@common_widget.Button(view.Button{
 				Type: "submit",
 			}) {

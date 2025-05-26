@@ -1614,7 +1614,7 @@ func FromSearchInterests(name string, interests []view.GroupedInterests) templ.C
 						Text:    interest.Name,
 						Checked: interest.Selected,
 						Name:    name,
-						ID:      fmt.Sprintf("interest-%d", interest.ID),
+						Value:   strconv.FormatInt(interest.ID, 10),
 					}).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -1667,15 +1667,7 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "Search")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = common_widget.LineBreak().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, " <div class=\"grid grid-cols-2 gap-8\"><div class=\"grid grid-flow-rows gap-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "<div class=\"w-xl\">Search<div class=\"grid grid-cols-2 gap-8 w-full mb-4\"><div class=\"grid grid-flow-rows gap-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1687,16 +1679,17 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 					Name:  "type",
 				},
 				{
-					Label: "User",
-					ID:    "user-radio-button",
-					Value: "user",
-					Name:  "type",
+					Label:    "User",
+					ID:       "user-radio-button",
+					Value:    "profile",
+					Name:     "type",
+					Selected: true,
 				},
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "</div><div class=\"grid grid-flow-rows items-center justify-items-center\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 57, "</div><div class=\"grid grid-flow-rows items-center justify-items-center gap-4\"><div flex=\"flex justify-center items-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1712,16 +1705,22 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "Include interests")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "Include interests")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				return nil
 			})
 			templ_7745c5c3_Err = common_widget.Button(view.Button{
+				Type:          "button",
 				PopoverTarget: "select-interests-include-modal",
 				PopoverAction: "show",
+				Light:         true,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var45), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "</div><div flex=\"flex justify-center items-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1744,13 +1743,15 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 				return nil
 			})
 			templ_7745c5c3_Err = common_widget.Button(view.Button{
+				Type:          "button",
 				PopoverTarget: "select-interests-exclude-modal",
 				PopoverAction: "show",
+				Light:         true,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var46), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1804,7 +1805,7 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "</div><div flex=\"flex justify-center items-center\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1840,11 +1841,13 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 		})
 		templ_7745c5c3_Err = common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post:     domain.PathPageSearch,
-				Trigger:  "submit",
-				Encoding: "application/json",
-				Target:   "search-results-container",
+				Get:      domain.PathAPISearch,
+				Encoding: "application/x-www-form-urlencoded",
+				Target:   "#search-results-container",
 				Swap:     "innerHTML",
+			},
+			Attributes: templ.Attributes{
+				"hx-params": "*",
 			},
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var44), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {

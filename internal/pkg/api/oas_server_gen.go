@@ -133,7 +133,7 @@ type Handler interface {
 	// Creates new image. If ok returns redirect to updated profile.
 	//
 	// POST /v1/api/profile/image
-	V1APIProfileImagePost(ctx context.Context, req V1APIProfileImagePostReq, params V1APIProfileImagePostParams) (V1APIProfileImagePostRes, error)
+	V1APIProfileImagePost(ctx context.Context, req *V1APIProfileImagePostReq, params V1APIProfileImagePostParams) (V1APIProfileImagePostRes, error)
 	// V1APIProfileInterestInterestIDDelete implements DELETE /v1/api/profile/interest/{interest_id} operation.
 	//
 	// Removes an interest with the specified ID from the user's profile.
@@ -169,7 +169,7 @@ type Handler interface {
 	// Search users of groups.
 	//
 	// GET /v1/api/search
-	V1APISearchGet(ctx context.Context, req *Search) (V1APISearchGetRes, error)
+	V1APISearchGet(ctx context.Context, params V1APISearchGetParams) (V1APISearchGetRes, error)
 	// V1APISigninPost implements POST /v1/api/signin operation.
 	//
 	// Redirects to profile page if ok.

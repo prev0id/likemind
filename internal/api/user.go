@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	"io"
+	"errors"
 	"net/url"
 
 	"likemind/internal/common"
@@ -89,7 +89,7 @@ func (s *Server) V1APIProfileEmailPut(ctx context.Context, req *desc.EmailUpdate
 	}
 
 	return &desc.Redirect302{
-		Location: getProfilePage(),
+		HxRedirect: getProfilePage(),
 	}, nil
 }
 
@@ -104,16 +104,18 @@ func (s *Server) V1APIProfileImageImageIDGet(ctx context.Context, params desc.V1
 	return &desc.ImageImageJpeg{Data: img}, nil
 }
 
-func (s *Server) V1APIProfileImagePost(ctx context.Context, req desc.V1APIProfileImagePostReq, params desc.V1APIProfileImagePostParams) (desc.V1APIProfileImagePostRes, error) {
-	data, ok := getImageData(req)
+func (s *Server) V1APIProfileImagePost(ctx context.Context, req *desc.V1APIProfileImagePostReq, params desc.V1APIProfileImagePostParams) (desc.V1APIProfileImagePostRes, error) {
+	file, ok := req.GetImage().Get()
 	if !ok {
-		return &desc.BadRequest{}, nil
+		return &desc.InternalError{Data: common.ErrorMsg(errors.New("fuuuuuck"))}, nil
 	}
 
-	s.image.UploadImage(ctx, data, params.ContentLength.Value)
+	if err := s.image.UploadImage(ctx, file); err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
 
 	return &desc.Redirect302{
-		Location: getProfilePage(),
+		HxRedirect: getProfilePage(),
 	}, nil
 }
 
@@ -132,7 +134,7 @@ func (s *Server) V1APIProfilePasswordPut(ctx context.Context, req *desc.Password
 	}
 
 	return &desc.Redirect302{
-		Location: getProfilePage(),
+		HxRedirect: getProfilePage(),
 	}, nil
 }
 
@@ -164,13 +166,13 @@ func updateUserFields(user domain.User, req *desc.ProfileUpdate) domain.User {
 	return user
 }
 
-func getImageData(req desc.V1APIProfileImagePostReq) (io.Reader, bool) {
-	switch request := req.(type) {
-	case *desc.V1APIProfileImagePostReqImageJpeg:
-		return request.Data, true
-	case *desc.V1APIProfileImagePostReqImagePNG:
-		return request.Data, true
-	default:
-		return nil, false
-	}
-}
+// func getImageData(req desc.V1APIProfileImagePostReq) (io.Reader, bool) {
+// 	switch request := req.(type) {
+// 	case *desc.V1APIProfileImagePostReqImageJpeg:
+// 		return request.Data, true
+// 	case *desc.V1APIProfileImagePostReqImagePNG:
+// 		return request.Data, true
+// 	default:
+// 		return nil, false
+// 	}
+// }

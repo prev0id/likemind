@@ -70,3 +70,28 @@ Content-Length:
   schema:
     type: integer
     format: int64
+
+Type:
+  name: type
+  in: query
+  required: true
+  schema:
+    type: string
+    enum: ["profile", "group"]
+
+Include:
+  name: include
+  in: query
+  schema:
+    type: array
+    items:
+      type: integer
+      format: int64
+Exclude:
+  name: exclude
+  in: query
+  schema:
+    type: array
+    items:
+      type: integer
+      format: int64

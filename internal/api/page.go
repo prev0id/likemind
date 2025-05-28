@@ -6,13 +6,11 @@ import (
 
 	"likemind/internal/common"
 	"likemind/internal/domain"
+	desc "likemind/internal/pkg/api"
 	"likemind/website/page"
+	error_page "likemind/website/page/error"
 	"likemind/website/view"
 	"likemind/website/widget"
-
-	desc "likemind/internal/pkg/api"
-
-	error_page "likemind/website/page/error"
 
 	"github.com/rs/zerolog/log"
 )

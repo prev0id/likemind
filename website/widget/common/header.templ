@@ -32,10 +32,10 @@ templ HeaderLogo(logo string) {
 }
 
 templ HeaderLogout() {
-	<a
-		href={ domain.PathAPILogout }
+	<div
+		hx-post={ domain.PathAPILogout }
+		hx-trigger="click"
 		class="group w-24 justify-self-end lg:mx-8"
-		data-state={ domain.PathPageSignIn }
 	>
 		<span class="block group-hover:hidden place-self-center text-md text-black">
 			Log out &rarr;
@@ -43,7 +43,7 @@ templ HeaderLogout() {
 		<span class="hidden group-hover:block place-self-center text-sm text-orange font-semibold">
 			┬┴┬┴┤･ω･)ﾉ
 		</span>
-	</a>
+	</div>
 }
 
 templ HeaderTab(tab view.Tab, selected view.Tab) {

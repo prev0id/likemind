@@ -635,7 +635,7 @@ func UpdateProfileData(state *view.Profile) templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Form(view.Form{
 				Htmx: view.HTMX{
-					Post: domain.PathAPIProfile,
+					Put: domain.PathAPIProfile,
 				},
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -790,7 +790,7 @@ func UpdatePassword() templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Form(view.Form{
 				Htmx: view.HTMX{
-					Post: domain.PathAPIPassword,
+					Put: domain.PathAPIPassword,
 				},
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var18), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -945,7 +945,7 @@ func UpdateEmail() templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Form(view.Form{
 				Htmx: view.HTMX{
-					Post: domain.PathAPIEmail,
+					Put: domain.PathAPIEmail,
 				},
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var22), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
@@ -1487,7 +1487,7 @@ func FormAddPost(group *view.Group) templ.Component {
 	})
 }
 
-func FormAddComment(group *view.Group, post *view.Post) templ.Component {
+func FormAddComment(groupID, postID int64) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -1561,10 +1561,10 @@ func FormAddComment(group *view.Group, post *view.Post) templ.Component {
 		templ_7745c5c3_Err = common_widget.Form(view.Form{
 			Htmx: view.HTMX{
 				Post: common.FillPath(domain.PathAPIGroupIDComment, map[string]string{
-					domain.PathParamPostID:  strconv.FormatInt(post.ID, 10),
-					domain.PathParamGroupID: strconv.FormatInt(group.ID, 10),
+					domain.PathParamPostID:  strconv.FormatInt(postID, 10),
+					domain.PathParamGroupID: strconv.FormatInt(groupID, 10),
 				}),
-				Target: "#comment-section",
+				Target: fmt.Sprintf("#comment-section-%d", postID),
 				Swap:   "innerHTML",
 			},
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var39), templ_7745c5c3_Buffer)
@@ -1829,6 +1829,7 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 			})
 			templ_7745c5c3_Err = common_widget.Button(view.Button{
 				Type: "submit",
+				ID:   "search-submit-button",
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var49), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -1850,6 +1851,120 @@ func FromSearch(interests []view.GroupedInterests) templ.Component {
 				"hx-params": "*",
 			},
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var44), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func UpdateGroupsForm(group *view.Group) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var50 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var50 == nil {
+			templ_7745c5c3_Var50 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var51 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "<div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = common_widget.InputLabel(view.InputLabel{
+				Text: "Update name",
+				For:  "name",
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = common_widget.Input(view.Input{
+				Name:     "name",
+				Type:     "text",
+				Required: true,
+				Value:    group.Name,
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "</div><div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = common_widget.InputLabel(view.InputLabel{
+				Text: "Update description",
+				For:  "descpription",
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = common_widget.TextArea(view.TextArea{
+				Name:     "description",
+				Required: true,
+				Value:    group.Description,
+			}).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "</div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var52 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "Submit")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return nil
+			})
+			templ_7745c5c3_Err = common_widget.Button(view.Button{
+				Type: "submit",
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var52), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = common_widget.Form(view.Form{
+			Htmx: view.HTMX{
+				Put: common.FillPath(domain.PathAPIGroupID, map[string]string{domain.PathParamGroupID: strconv.FormatInt(group.ID, 10)}),
+			},
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var51), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

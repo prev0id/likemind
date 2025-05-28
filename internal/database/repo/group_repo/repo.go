@@ -33,7 +33,6 @@ func (r *Repo) Create(ctx context.Context, group model.Group) (int64, error) {
 
 	q := sql.InsertInto(model.TableGroups)
 	q.Cols(
-		model.GroupID,
 		model.GroupName,
 		model.GroupDescription,
 		model.GroupAuthorID,
@@ -41,7 +40,6 @@ func (r *Repo) Create(ctx context.Context, group model.Group) (int64, error) {
 		model.GroupUpdatedAt,
 	)
 	q.Values(
-		group.ID,
 		group.Name,
 		group.Description,
 		group.AuthorID,
@@ -65,7 +63,6 @@ func (r *Repo) Update(ctx context.Context, group model.Group) error {
 	q.Set(
 		q.Assign(model.GroupName, group.Name),
 		q.Assign(model.GroupDescription, group.Description),
-		q.Assign(model.GroupAuthorID, group.AuthorID),
 		q.Assign(model.GroupUpdatedAt, group.UpdatedAt),
 	)
 	q.Where(q.Equal(model.GroupID, group.ID))
@@ -133,6 +130,7 @@ func (r *Repo) ListUserSubscriptions(ctx context.Context, id int64) ([]model.Use
 		model.UserSubscriptionCreateAt,
 	)
 	q.From(model.TableUserSubscriptions)
+	q.Where(q.E(model.UserSubscriptionUserID, id))
 
 	results, err := database.Select[model.UserSubscription](ctx, q)
 	if err != nil {

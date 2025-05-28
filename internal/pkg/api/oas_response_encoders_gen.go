@@ -530,15 +530,58 @@ func encodeV1APIGroupGroupIDPostPostIDPutResponse(response V1APIGroupGroupIDPost
 
 func encodeV1APIGroupGroupIDPutResponse(response V1APIGroupGroupIDPutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *HTMLResponse:
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		writer := w
-		if _, err := io.Copy(writer, response); err != nil {
-			return errors.Wrap(err, "write")
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
 		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
 
 		return nil
 
@@ -1591,15 +1634,58 @@ func encodeV1APIProfilePostResponse(response V1APIProfilePostRes, w http.Respons
 
 func encodeV1APIProfilePutResponse(response V1APIProfilePutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *HTMLResponse:
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		writer := w
-		if _, err := io.Copy(writer, response); err != nil {
-			return errors.Wrap(err, "write")
+	case *Redirect302:
+		// Encoding response headers.
+		{
+			h := uri.NewHeaderEncoder(w.Header())
+			// Encode "Hx-Redirect" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Hx-Redirect",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.HxRedirect.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Hx-Redirect header")
+				}
+			}
+			// Encode "Location" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Location",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.Location.Get(); ok {
+						return e.EncodeValue(conv.URLToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Location header")
+				}
+			}
+			// Encode "Set-Cookie" header.
+			{
+				cfg := uri.HeaderParameterEncodingConfig{
+					Name:    "Set-Cookie",
+					Explode: false,
+				}
+				if err := h.EncodeParam(cfg, func(e uri.Encoder) error {
+					if val, ok := response.SetCookie.Get(); ok {
+						return e.EncodeValue(conv.StringToString(val))
+					}
+					return nil
+				}); err != nil {
+					return errors.Wrap(err, "encode Set-Cookie header")
+				}
+			}
 		}
+		w.WriteHeader(302)
+		span.SetStatus(codes.Ok, http.StatusText(302))
 
 		return nil
 

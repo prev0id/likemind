@@ -29,7 +29,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"bg-red h-18 text-white font-semibold\"><div class=\"m-auto max-w-7xl p-6 lg:px-8 md:flex md:items-center md:justify-between\"><a href=\"https://deev.pro/\" class=\"hover:text-orange\">Deev Semyon <span class=\"text-sm sm:text-center\">(⌐⎚u⎚)</span></a><ul class=\"flex flex-wrap items-center mt-3 text-sm sm:mt-0\"><li><a href=\"https://github.com/prev0id/likemind/\" class=\"hover:text-orange me-4 md:me-6\">GitHub</a></li><li><a href=\"https://t.me/prevoid\" class=\"hover:text-orange\">Contact</a></li></ul></div></footer>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"bg-red h-18 text-white font-semibold\"><div class=\"m-auto max-w-7xl p-6 lg:px-8 md:flex md:items-center md:justify-between\"><div>Deev Semyon <span class=\"text-sm sm:text-center\">(⌐⎚u⎚)</span></div><ul class=\"flex flex-wrap items-center mt-3 text-sm sm:mt-0\"><li><a href=\"https://github.com/prev0id/likemind/\" class=\"hover:text-orange me-4 md:me-6\">GitHub</a></li><li><a href=\"https://t.me/prevoid\" class=\"hover:text-orange\">Contact</a></li></ul></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

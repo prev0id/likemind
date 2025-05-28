@@ -151,7 +151,7 @@ templ UpdateProfileData(state *view.Profile) {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post: domain.PathAPIProfile,
+				Put: domain.PathAPIProfile,
 			},
 		}) {
 			<div>
@@ -233,7 +233,7 @@ templ UpdatePassword() {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post: domain.PathAPIPassword,
+				Put: domain.PathAPIPassword,
 			},
 		}) {
 			<div>
@@ -287,7 +287,7 @@ templ UpdateEmail() {
 	}) {
 		@common_widget.Form(view.Form{
 			Htmx: view.HTMX{
-				Post: domain.PathAPIEmail,
+				Put: domain.PathAPIEmail,
 			},
 		}) {
 			<div>
@@ -521,14 +521,14 @@ templ FormAddPost(group *view.Group) {
 	}
 }
 
-templ FormAddComment(group *view.Group, post *view.Post) {
+templ FormAddComment(groupID, postID int64) {
 	@common_widget.Form(view.Form{
 		Htmx: view.HTMX{
 			Post: common.FillPath(domain.PathAPIGroupIDComment, map[string]string{
-				domain.PathParamPostID:  strconv.FormatInt(post.ID, 10),
-				domain.PathParamGroupID: strconv.FormatInt(group.ID, 10),
+				domain.PathParamPostID:  strconv.FormatInt(postID, 10),
+				domain.PathParamGroupID: strconv.FormatInt(groupID, 10),
 			}),
-			Target: "#comment-section",
+			Target: fmt.Sprintf("#comment-section-%d", postID),
 			Swap:   "innerHTML",
 		},
 	}) {
@@ -632,9 +632,47 @@ templ FromSearch(interests []view.GroupedInterests) {
 			</div>
 			@common_widget.Button(view.Button{
 				Type: "submit",
+				ID:   "search-submit-button",
 			}) {
 				Search
 			}
 		</div>
+	}
+}
+
+templ UpdateGroupsForm(group *view.Group) {
+	@common_widget.Form(view.Form{
+		Htmx: view.HTMX{
+			Put: common.FillPath(domain.PathAPIGroupID, map[string]string{domain.PathParamGroupID: strconv.FormatInt(group.ID, 10)}),
+		},
+	}) {
+		<div>
+			@common_widget.InputLabel(view.InputLabel{
+				Text: "Update name",
+				For:  "name",
+			})
+			@common_widget.Input(view.Input{
+				Name:     "name",
+				Type:     "text",
+				Required: true,
+				Value:    group.Name,
+			})
+		</div>
+		<div>
+			@common_widget.InputLabel(view.InputLabel{
+				Text: "Update description",
+				For:  "descpription",
+			})
+			@common_widget.TextArea(view.TextArea{
+				Name:     "description",
+				Required: true,
+				Value:    group.Description,
+			})
+		</div>
+		@common_widget.Button(view.Button{
+			Type: "submit",
+		}) {
+			Submit
+		}
 	}
 }

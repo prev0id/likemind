@@ -70,9 +70,9 @@ func (s *Server) getGroup(ctx context.Context, groupID domain.GroupID) (*view.Gr
 		return nil, fmt.Errorf("s.group.GetGroup: %w", err)
 	}
 
-	posts, err := s.group.GetPosts(ctx, groupID)
+	posts, err := s.getPosts(ctx, groupID)
 	if err != nil {
-		return nil, fmt.Errorf("s.group.GetPosts: %w", err)
+		return nil, err
 	}
 
 	interests, err := s.interests.GetGroupInterests(ctx, groupID)
@@ -81,4 +81,22 @@ func (s *Server) getGroup(ctx context.Context, groupID domain.GroupID) (*view.Gr
 	}
 
 	return s.groupDomainToView(ctx, group, posts, interests)
+}
+
+func (s *Server) getPosts(ctx context.Context, groupID domain.GroupID) ([]domain.Post, error) {
+	posts, err := s.group.GetPosts(ctx, groupID)
+	if err != nil {
+		return nil, fmt.Errorf("s.group.GetPosts: %w", err)
+	}
+
+	for idx, post := range posts {
+		comments, err := s.group.GetComments(ctx, post.ID)
+		if err != nil {
+			return nil, fmt.Errorf("s.group.GetComments: %w", err)
+		}
+
+		posts[idx].Comments = comments
+	}
+
+	return posts, nil
 }

@@ -2,7 +2,6 @@ package user_repo
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"likemind/internal/database"
@@ -100,8 +99,6 @@ func (r *Repo) GetByID(ctx context.Context, id int64) (model.User, error) {
 	)
 	q.From(model.TableUsers)
 	q.Where(q.Equal(model.UserID, id))
-
-	fmt.Println(q.Build())
 
 	result, err := database.Get[model.User](ctx, q)
 	if err != nil {

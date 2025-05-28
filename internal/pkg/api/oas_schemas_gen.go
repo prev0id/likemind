@@ -157,7 +157,6 @@ func (*HTMLResponse) v1APIGroupGroupIDPostPostIDCommentPostRes()            {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDDeleteRes()                 {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostIDPutRes()                    {}
 func (*HTMLResponse) v1APIGroupGroupIDPostPostRes()                         {}
-func (*HTMLResponse) v1APIGroupGroupIDPutRes()                              {}
 func (*HTMLResponse) v1APIGroupGroupIDSubscribeDeleteRes()                  {}
 func (*HTMLResponse) v1APIGroupGroupIDSubscribePostRes()                    {}
 func (*HTMLResponse) v1APIProfileContactContactIDDeleteRes()                {}
@@ -165,7 +164,6 @@ func (*HTMLResponse) v1APIProfileContactContactIDPutRes()                   {}
 func (*HTMLResponse) v1APIProfileContactPostRes()                           {}
 func (*HTMLResponse) v1APIProfileInterestInterestIDDeleteRes()              {}
 func (*HTMLResponse) v1APIProfileInterestInterestIDPostRes()                {}
-func (*HTMLResponse) v1APIProfilePutRes()                                   {}
 func (*HTMLResponse) v1APISearchGetRes()                                    {}
 func (*HTMLResponse) v1PageGroupGetRes()                                    {}
 func (*HTMLResponse) v1PageGroupGroupIDGetRes()                             {}
@@ -786,6 +784,7 @@ func (s *Redirect302) SetSetCookie(val OptString) {
 }
 
 func (*Redirect302) v1APIGroupGroupIDDeleteRes()  {}
+func (*Redirect302) v1APIGroupGroupIDPutRes()     {}
 func (*Redirect302) v1APIGroupPostRes()           {}
 func (*Redirect302) v1APILogoutPostRes()          {}
 func (*Redirect302) v1APIProfileDeleteRes()       {}
@@ -793,6 +792,7 @@ func (*Redirect302) v1APIProfileEmailPutRes()     {}
 func (*Redirect302) v1APIProfileImagePostRes()    {}
 func (*Redirect302) v1APIProfilePasswordPutRes()  {}
 func (*Redirect302) v1APIProfilePostRes()         {}
+func (*Redirect302) v1APIProfilePutRes()          {}
 func (*Redirect302) v1APISigninPostRes()          {}
 func (*Redirect302) v1PageProfileUsernameGetRes() {}
 func (*Redirect302) v1PageSigninGetRes()          {}

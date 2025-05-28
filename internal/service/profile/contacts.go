@@ -59,7 +59,7 @@ func (s *implementation) validateContactOwnership(ctx context.Context, userID do
 		return contact.ID == contactID
 	})
 
-	if idx != idxNotFound {
+	if idx == idxNotFound {
 		return domain.ErrNotFound
 	}
 

@@ -37,6 +37,7 @@ type Form struct {
 type HTMX struct {
 	Get      string
 	Post     string
+	Put      string
 	Delete   string
 	Target   string
 	Swap     string
@@ -49,6 +50,9 @@ func (htmx HTMX) Attributes() templ.Attributes {
 	attributes := make(templ.Attributes)
 	if htmx.Post != "" {
 		attributes["hx-post"] = htmx.Post
+	}
+	if htmx.Put != "" {
+		attributes["hx-put"] = htmx.Put
 	}
 	if htmx.Delete != "" {
 		attributes["hx-delete"] = htmx.Delete

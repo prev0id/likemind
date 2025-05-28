@@ -82,6 +82,8 @@ group:
       - page
     parameters:
       - $ref: "../components/parameters.yaml#/group_id"
+    security:
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
@@ -98,6 +100,8 @@ own_group:
     description: Returns an HTML page displaying details of a user's groups. Requires authentication.
     tags:
       - page
+    security:
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"
@@ -112,6 +116,8 @@ search:
     description: Returns an HTML page where users can search for other users, groups, or content.
     tags:
       - page
+    security:
+      - SessionAuth: []
     responses:
       "200":
         $ref: "../components/responses.yaml#/HTMLResponse"

@@ -3,6 +3,8 @@ package interest_repo
 import (
 	"context"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"likemind/internal/database"
@@ -173,19 +175,44 @@ func toInterfaceSlice(ints []int64) []any {
 }
 
 func (r *Repo) SearchUsers(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error) {
-	sql := `
+	sql := fmt.Sprintf(`
 		SELECT
 			user_id AS id,
-			count(*) FILTER (WHERE interest_id = ANY($1)) AS common
+			count(*) FILTER (WHERE interest_id = ANY(%s)) AS common
 		FROM user_interests
 		GROUP BY user_id
 		HAVING
-			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY($2)) = cardinality($1)
-			AND COUNT(*) FILTER (WHERE interest_id = ANY($3)) = 0
+			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY(%s)) = cardinality(%s)
+			AND COUNT(*) FILTER (WHERE interest_id = ANY(%s)) = 0
 		ORDER BY common, user_id DESC;
-	`
+	`, pgArray(userInterests), pgArray(include), pgArray(include), pgArray(exlcude))
 
-	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql, userInterests, include, exlcude))
+	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql))
+	if err != nil {
+		return nil, fmt.Errorf("database.Select: %w", err)
+	}
+
+	fmt.Println(result)
+	fmt.Println(userInterests, include, exlcude)
+	fmt.Println(result)
+
+	return result, nil
+}
+
+func (r *Repo) SearchGroups(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error) {
+	sql := fmt.Sprintf(`
+		SELECT
+			group_id AS id,
+			count(*) FILTER (WHERE interest_id = ANY(%s)) AS common
+		FROM group_interests
+		GROUP BY group_id
+		HAVING
+			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY(%s)) = cardinality(%s)
+			AND COUNT(*) FILTER (WHERE interest_id = ANY(%s)) = 0
+		ORDER BY common, group_id DESC;
+	`, pgArray(userInterests), pgArray(include), pgArray(include), pgArray(exlcude))
+
+	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql))
 	if err != nil {
 		return nil, fmt.Errorf("database.Select: %w", err)
 	}
@@ -193,23 +220,16 @@ func (r *Repo) SearchUsers(ctx context.Context, userInterests, include, exlcude 
 	return result, nil
 }
 
-func (r *Repo) SearchGroups(ctx context.Context, userInterests, include, exlcude []int64) ([]model.SearchResult, error) {
-	sql := `
-		SELECT
-			group_id AS id,
-			count(*) FILTER (WHERE interest_id = ANY($1)) AS common
-		FROM group_interests
-		GROUP BY group_id
-		HAVING
-			COUNT(DISTINCT interest_id) FILTER (WHERE interest_id = ANY($2)) = cardinality($1)
-			AND COUNT(*) FILTER (WHERE interest_id = ANY($3)) = 0
-		ORDER BY common, group_id DESC;
-	`
-
-	result, err := database.Select[model.SearchResult](ctx, database.RawSQL(sql, userInterests, include, exlcude))
-	if err != nil {
-		return nil, fmt.Errorf("database.Select: %w", err)
+func pgArray(ids []int64) string {
+	builder := &strings.Builder{}
+	builder.WriteString("ARRAY[")
+	for idx, id := range ids {
+		builder.WriteString(strconv.FormatInt(id, 10))
+		if idx+1 != len(ids) {
+			builder.WriteRune(',')
+		}
 	}
+	builder.WriteString("]::bigint[]")
 
-	return result, nil
+	return builder.String()
 }

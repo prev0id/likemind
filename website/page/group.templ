@@ -30,6 +30,7 @@ templ Group(state *view.Group, userID int64) {
 								Title:          "Update your interests",
 								RefreshOnClose: true,
 							}) {
+								@widget.UpdateGroupsForm(state)
 								@SelectInterests(state.Interests, state.ID)
 							}
 						} else {
@@ -73,17 +74,17 @@ templ CommentSection(group *view.Group, post *view.Post) {
 	@common_widget.Details(view.Details{
 		Summary: numberOfComments(len(post.Comments)),
 		Open:    false,
-		ID:      "comment-section",
+		ID:      fmt.Sprintf("comment-section-%d", post.ID),
 	}) {
-		@Comments(group, post)
+		@Comments(post.Comments, group.ID, post.ID)
 	}
 }
 
-templ Comments(group *view.Group, post *view.Post) {
-	for _, comment := range post.Comments {
+templ Comments(comments []*view.Comment, groupID, postID int64) {
+	for _, comment := range comments {
 		@Comment(comment)
 	}
-	@widget.FormAddComment(group, post)
+	@widget.FormAddComment(groupID, postID)
 }
 
 templ Comment(comment *view.Comment) {

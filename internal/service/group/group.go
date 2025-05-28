@@ -24,7 +24,12 @@ func (i *Implementation) CreateGroup(ctx context.Context, group domain.Group) (d
 }
 
 func (s *Implementation) UpdateGroup(ctx context.Context, group domain.Group) error {
-	if group.Author != common.UserIDFromContext(ctx) {
+	stored, err := s.adapter.GetGroup(ctx, group.ID)
+	if err != nil {
+		return fmt.Errorf("s.GetGroup: %w", err)
+	}
+
+	if stored.Author != common.UserIDFromContext(ctx) {
 		return fmt.Errorf("%w: not allowed to modify others groups", domain.ErrNotAuthenticated)
 	}
 

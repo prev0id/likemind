@@ -112,5 +112,17 @@ func (i *implementation) SearchGroups(ctx context.Context, userID domain.UserID,
 }
 
 func (i *implementation) SearchUsers(ctx context.Context, userID domain.UserID, include, exlcude []int64) ([]domain.UserID, error) {
-	return i.db.SearchUsers(ctx, userID, include, exlcude)
+	searched, err := i.db.SearchUsers(ctx, userID, include, exlcude)
+	if err != nil {
+		return nil, err
+	}
+
+	filtered := make([]domain.UserID, 0, len(searched))
+	for _, id := range searched {
+		if id != userID {
+			filtered = append(filtered, id)
+		}
+	}
+
+	return filtered, nil
 }

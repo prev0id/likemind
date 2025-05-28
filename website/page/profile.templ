@@ -216,8 +216,9 @@ templ contactsContainer(state *view.Profile) {
 				PopoverAction: "show",
 			})
 			@common_widget.Modal(view.Modal{
-				ID:    "modal_update_contacts",
-				Title: "Update your contacts",
+				ID:             "modal_update_contacts",
+				Title:          "Update your contacts",
+				RefreshOnClose: true,
 			}) {
 				@widget.UpdateContacts(state.Contacts)
 			}

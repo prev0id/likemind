@@ -886,8 +886,9 @@ func contactsContainer(state *view.Profile) templ.Component {
 					return nil
 				})
 				templ_7745c5c3_Err = common_widget.Modal(view.Modal{
-					ID:    "modal_update_contacts",
-					Title: "Update your contacts",
+					ID:             "modal_update_contacts",
+					Title:          "Update your contacts",
+					RefreshOnClose: true,
 				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var31), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -1064,7 +1065,7 @@ func updateInterests(state *view.Profile) templ.Component {
 				var templ_7745c5c3_Var37 string
 				templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(state.Nickname)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile.templ`, Line: 267, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `website/page/profile.templ`, Line: 268, Col: 19}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 				if templ_7745c5c3_Err != nil {

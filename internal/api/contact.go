@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"fmt"
+
 	"likemind/internal/common"
 	"likemind/internal/domain"
 	"likemind/website/widget"
@@ -11,6 +13,7 @@ import (
 
 func (s *Server) V1APIProfileContactContactIDDelete(ctx context.Context, params desc.V1APIProfileContactContactIDDeleteParams) (desc.V1APIProfileContactContactIDDeleteRes, error) {
 	userID := common.UserIDFromContext(ctx)
+	fmt.Println(userID, params.ContactID)
 
 	err := s.profile.RemoveContact(ctx, userID, params.ContactID)
 	if common.ErrorIs(err, common.NotFoundErrorType) {

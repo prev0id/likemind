@@ -113,7 +113,9 @@ templ TextArea(state view.TextArea) {
 		rows={ strconv.Itoa(state.Rows) }
 		required?={ state.Required }
 		autocomplete="off"
-	></textarea>
+	>
+		{ state.Value }
+	</textarea>
 }
 
 templ XButton(state view.HTMX) {

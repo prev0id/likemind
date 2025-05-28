@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+
 	"likemind/internal/config"
 
 	"github.com/georgysavva/scany/v2/pgxscan"

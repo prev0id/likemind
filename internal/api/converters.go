@@ -15,6 +15,7 @@ func profileFromDomainToView(
 	interests []domain.InterestGroup,
 ) *view.Profile {
 	return &view.Profile{
+		ID:          int64(userID),
 		Name:        user.Name,
 		Surname:     user.Surname,
 		Nickname:    user.Nickname,
@@ -89,6 +90,7 @@ func (s *Server) groupDomainToView(ctx context.Context, group domain.Group, post
 	}
 
 	return &view.Group{
+		ID:          int64(group.ID),
 		Name:        group.Name,
 		Description: group.Description,
 		Author:      author,
@@ -99,13 +101,9 @@ func (s *Server) groupDomainToView(ctx context.Context, group domain.Group, post
 }
 
 func (s *Server) postDomainToView(ctx context.Context, post domain.Post) (*view.Post, error) {
-	comments := make([]*view.Comment, 0, len(post.Comments))
-	for _, comment := range post.Comments {
-		converted, err := s.commentDomainToView(ctx, comment)
-		if err != nil {
-			return nil, err
-		}
-		comments = append(comments, converted)
+	comments, err := s.commentsDomainToView(ctx, post.Comments)
+	if err != nil {
+		return nil, err
 	}
 
 	author, err := s.getProfile(ctx, post.Author)
@@ -114,12 +112,26 @@ func (s *Server) postDomainToView(ctx context.Context, post domain.Post) (*view.
 	}
 
 	return &view.Post{
+		ID:        int64(post.ID),
 		Author:    author,
 		Comments:  comments,
 		Content:   post.Content,
 		CreatedAt: post.CreatedAt,
 		UpdatedAt: post.UpdatedAt,
 	}, nil
+}
+
+func (s *Server) commentsDomainToView(ctx context.Context, comments []domain.Comment) ([]*view.Comment, error) {
+	result := make([]*view.Comment, 0, len(comments))
+	for _, comment := range comments {
+		converted, err := s.commentDomainToView(ctx, comment)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, converted)
+	}
+
+	return result, nil
 }
 
 func (s *Server) commentDomainToView(ctx context.Context, comment domain.Comment) (*view.Comment, error) {
@@ -129,6 +141,7 @@ func (s *Server) commentDomainToView(ctx context.Context, comment domain.Comment
 	}
 
 	return &view.Comment{
+		ID:        int64(comment.ID),
 		Content:   comment.Content,
 		Author:    author,
 		CreatedAt: comment.CreatedAt,

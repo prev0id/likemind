@@ -14,8 +14,6 @@ import (
 )
 
 func (s *Server) V1APIGroupPost(ctx context.Context, req *desc.Group) (desc.V1APIGroupPostRes, error) {
-	fmt.Println("aaaaaaaaaaaaaaaaaaaa")
-
 	group := domain.Group{
 		Name:        req.GetName(),
 		Description: req.GetDescription(),
@@ -34,7 +32,7 @@ func (s *Server) V1APIGroupPost(ctx context.Context, req *desc.Group) (desc.V1AP
 	}
 
 	path := common.FillPath(
-		domain.PathAPIGroupID,
+		domain.PathPageGroup,
 		map[string]string{
 			domain.PathParamContactID: id.String(),
 		},
@@ -67,8 +65,9 @@ func (s *Server) V1APIGroupGroupIDPut(
 	req *desc.Group,
 	params desc.V1APIGroupGroupIDPutParams,
 ) (desc.V1APIGroupGroupIDPutRes, error) {
+	groupID := domain.GroupID(params.GroupID)
 	group := domain.Group{
-		ID:          domain.GroupID(params.GroupID),
+		ID:          groupID,
 		Name:        req.GetName(),
 		Description: req.GetDescription(),
 	}
@@ -81,8 +80,11 @@ func (s *Server) V1APIGroupGroupIDPut(
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	return &desc.HTMLResponse{
-		// TODO:
+	path := common.FillPath(domain.PathPageGroup, map[string]string{domain.PathParamGroupID: groupID.String()})
+	groupURL, _ := url.Parse(path)
+
+	return &desc.Redirect302{
+		HxRedirect: desc.NewOptURI(*groupURL),
 	}, nil
 }
 
@@ -138,12 +140,18 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentPost(
 	params desc.V1APIGroupGroupIDPostPostIDCommentPostParams,
 ) (desc.V1APIGroupGroupIDPostPostIDCommentPostRes, error) {
 	groupID := domain.GroupID(params.GroupID)
-	post := domain.Comment{
-		PostID:  domain.PostID(params.PostID),
+	postID := domain.PostID(params.PostID)
+	userID := common.UserIDFromContext(ctx)
+
+	comment := domain.Comment{
+		PostID:  postID,
 		Content: req.GetContent(),
+		Author:  userID,
 	}
 
-	_, err := s.group.CreateComment(ctx, post)
+	fmt.Printf("%+v\n", comment)
+
+	_, err := s.group.CreateComment(ctx, comment)
 	if common.ErrorIs(err, common.BadRequestErrorType) {
 		return &desc.BadRequest{Data: common.ErrorMsg(err)}, nil
 	}
@@ -151,13 +159,18 @@ func (s *Server) V1APIGroupGroupIDPostPostIDCommentPost(
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	group, err := s.getGroup(ctx, groupID)
+	comments, err := s.group.GetComments(ctx, postID)
+	if err != nil {
+		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
+	}
+
+	converted, err := s.commentsDomainToView(ctx, comments)
 	if err != nil {
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
 	return &desc.HTMLResponse{
-		Data: common.RenderComponent(ctx, page.Posts(group)),
+		Data: common.RenderComponent(ctx, page.Comments(converted, int64(groupID), int64(postID))),
 	}, nil
 }
 

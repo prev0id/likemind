@@ -53,8 +53,8 @@ profile:
     requestBody:
       $ref: "../components/requestBodies.yaml#/ProfileUpdate"
     responses:
-      "200":
-        $ref: "../components/responses.yaml#/HTMLResponse"
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
       "400":
         $ref: "../components/responses.yaml#/BadRequest"
       "500":
@@ -221,8 +221,8 @@ group:
     requestBody:
       $ref: "../components/requestBodies.yaml#/Group"
     responses:
-      "200":
-        $ref: "../components/responses.yaml#/HTMLResponse"
+      "302":
+        $ref: "../components/responses.yaml#/Redirect302"
       "400":
         $ref: "../components/responses.yaml#/BadRequest"
       "401":

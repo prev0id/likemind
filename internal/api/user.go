@@ -71,7 +71,9 @@ func (s *Server) V1APIProfilePut(ctx context.Context, req *desc.ProfileUpdate) (
 		return &desc.InternalError{Data: common.ErrorMsg(err)}, nil
 	}
 
-	return &desc.HTMLResponse{}, nil
+	return &desc.Redirect302{
+		HxRedirect: getProfilePage(),
+	}, nil
 }
 
 func (s *Server) V1APIProfileEmailPut(ctx context.Context, req *desc.EmailUpdate) (desc.V1APIProfileEmailPutRes, error) {

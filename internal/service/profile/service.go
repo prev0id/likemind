@@ -24,6 +24,7 @@ type Service interface {
 	UpdatePassword(ctx context.Context, id domain.UserID, login domain.Email, oldPassword, newPassword domain.Password) error
 	UpdateEmail(ctx context.Context, id domain.UserID, oldLogin, login domain.Email, password domain.Password) error
 	SignIn(ctx context.Context, login domain.Email, password domain.Password) (domain.User, error)
+	GetUserByUsername(ctx context.Context, username string) (domain.User, error)
 
 	GetContacts(ctx context.Context, id domain.UserID) ([]domain.Contact, error)
 	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
@@ -148,4 +149,12 @@ func passwordsEqual(hash []byte, password domain.Password, email domain.Email) b
 
 func addSalt(password domain.Password, email domain.Email) []byte {
 	return fmt.Appendf(nil, saltPattern, email, password)
+}
+
+func (s *implementation) GetUserByUsername(ctx context.Context, username string) (domain.User, error) {
+	user, err := s.db.GetUserByUsername(ctx, username)
+	if err != nil {
+		return domain.User{}, fmt.Errorf("s.db.GetUserByUsername: %w", err)
+	}
+	return user, nil
 }

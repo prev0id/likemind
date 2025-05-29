@@ -15,7 +15,7 @@ func profileFromDomainToView(
 	interests []domain.InterestGroup,
 ) *view.Profile {
 	return &view.Profile{
-		ID:       int64(userID),
+		ID:       int64(user.ID),
 		Name:     user.Name,
 		Surname:  user.Surname,
 		Nickname: user.Nickname,

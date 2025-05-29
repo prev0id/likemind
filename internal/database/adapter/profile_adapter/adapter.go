@@ -18,6 +18,7 @@ type Adapter interface {
 	RemoveUser(ctx context.Context, id domain.UserID) error
 	GetUserByLogin(ctx context.Context, login domain.Email) (domain.User, error)
 	GetUserByID(ctx context.Context, id domain.UserID) (domain.User, error)
+	GetUserByUsername(ctx context.Context, username string) (domain.User, error)
 
 	AddContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
 	UpdateContact(ctx context.Context, id domain.UserID, contact domain.Contact) error
@@ -159,4 +160,12 @@ func (i *Implementation) GetContactsByUserID(ctx context.Context, id domain.User
 	}
 
 	return common.Convert(contacts, modelContactToDomain), nil
+}
+
+func (i *Implementation) GetUserByUsername(ctx context.Context, username string) (domain.User, error) {
+	user, err := i.user.GetByUsername(ctx, username)
+	if err != nil {
+		return domain.User{}, fmt.Errorf("i.userDB.GetByUsername: %w", err)
+	}
+	return modelUserToDomain(user), nil
 }

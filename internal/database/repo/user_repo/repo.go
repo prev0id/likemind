@@ -15,6 +15,7 @@ type DB interface {
 	Update(ctx context.Context, user model.User) error
 	GetByID(ctx context.Context, id int64) (model.User, error)
 	GetByEmail(ctx context.Context, email string) (model.User, error)
+	GetByUsername(ctx context.Context, username string) (model.User, error)
 	List(ctx context.Context) ([]model.User, error)
 	Delete(ctx context.Context, userID int64) error
 }
@@ -99,6 +100,30 @@ func (r *Repo) GetByID(ctx context.Context, id int64) (model.User, error) {
 	)
 	q.From(model.TableUsers)
 	q.Where(q.Equal(model.UserID, id))
+
+	result, err := database.Get[model.User](ctx, q)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	return result, nil
+}
+
+func (r *Repo) GetByUsername(ctx context.Context, username string) (model.User, error) {
+	q := sql.Select(
+		model.UserID,
+		model.UserNickname,
+		model.UserName,
+		model.UserSurname,
+		model.UserAbout,
+		model.UserEmail,
+		model.UserPassword,
+		model.UserLocation,
+		model.UserCreatedAt,
+		model.UserUpdatedAt,
+	)
+	q.From(model.TableUsers)
+	q.Where(q.Equal(model.UserNickname, username))
 
 	result, err := database.Get[model.User](ctx, q)
 	if err != nil {

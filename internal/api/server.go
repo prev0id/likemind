@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"likemind/internal/common"
 	"likemind/internal/domain"
 	desc "likemind/internal/pkg/api"
 	"likemind/internal/service/group"
@@ -62,6 +63,30 @@ func (s *Server) getProfile(ctx context.Context, userID domain.UserID) (*view.Pr
 	}
 
 	return profileFromDomainToView(userID, profile, contacts, pictures, interests), nil
+}
+
+func (s *Server) getProfileByUsername(ctx context.Context, username string) (*view.Profile, error) {
+	profile, err := s.profile.GetUserByUsername(ctx, username)
+	if err != nil {
+		return nil, fmt.Errorf("s.profile.GetUserByLogin: %w", err)
+	}
+
+	pictures, err := s.image.GetProfileImages(ctx, profile.ID)
+	if err != nil {
+		return nil, fmt.Errorf("s.image.GetProfileImages: %w", err)
+	}
+
+	contacts, err := s.profile.GetContacts(ctx, profile.ID)
+	if err != nil {
+		return nil, fmt.Errorf("s.profile.GetContacts: %w", err)
+	}
+
+	interests, err := s.interests.GetUserInterests(ctx, profile.ID)
+	if err != nil {
+		return nil, fmt.Errorf("s.interests.GetUserInterests: %w", err)
+	}
+
+	return profileFromDomainToView(common.UserIDFromContext(ctx), profile, contacts, pictures, interests), nil
 }
 
 func (s *Server) getGroup(ctx context.Context, groupID domain.GroupID) (*view.Group, error) {

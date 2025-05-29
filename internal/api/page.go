@@ -54,7 +54,7 @@ func (s *Server) V1PageGroupGroupIDGet(ctx context.Context, params desc.V1PageGr
 func (s *Server) V1PageProfileUsernameGet(ctx context.Context, params desc.V1PageProfileUsernameGetParams) (desc.V1PageProfileUsernameGetRes, error) {
 	userID := common.UserIDFromContext(ctx)
 
-	profile, err := s.getProfile(ctx, userID)
+	profile, err := s.getProfileByUsername(ctx, params.Username)
 	if err != nil {
 		if common.ErrorIs(err, common.NotFoundErrorType) {
 			return &desc.NotFound{Data: common.ErrorMsg(err)}, nil

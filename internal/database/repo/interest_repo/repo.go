@@ -192,10 +192,6 @@ func (r *Repo) SearchUsers(ctx context.Context, userInterests, include, exlcude 
 		return nil, fmt.Errorf("database.Select: %w", err)
 	}
 
-	fmt.Println(result)
-	fmt.Println(userInterests, include, exlcude)
-	fmt.Println(result)
-
 	return result, nil
 }
 

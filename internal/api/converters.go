@@ -15,14 +15,13 @@ func profileFromDomainToView(
 	interests []domain.InterestGroup,
 ) *view.Profile {
 	return &view.Profile{
-		ID:          int64(userID),
-		Name:        user.Name,
-		Surname:     user.Surname,
-		Nickname:    user.Nickname,
-		About:       user.About,
-		Location:    user.Location,
-		DateOfBirth: user.DateOfBirth,
-		Owner:       userID == user.ID,
+		ID:       int64(userID),
+		Name:     user.Name,
+		Surname:  user.Surname,
+		Nickname: user.Nickname,
+		About:    user.About,
+		Location: user.Location,
+		Owner:    userID == user.ID,
 
 		PictureID: convertPicturesIDs(pictures),
 		Contacts:  contactsDomainToView(contacts),

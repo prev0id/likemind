@@ -608,12 +608,11 @@ func (s *Post) SetContent(val string) {
 
 // Ref: #/ProfileCreate
 type ProfileCreate struct {
-	Email       string    `json:"email"`
-	Password    string    `json:"password"`
-	Username    string    `json:"username"`
-	Name        string    `json:"name"`
-	Surname     string    `json:"surname"`
-	DateOfBirth time.Time `json:"date_of_birth"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Username string `json:"username"`
+	Name     string `json:"name"`
+	Surname  string `json:"surname"`
 }
 
 // GetEmail returns the value of Email.
@@ -641,11 +640,6 @@ func (s *ProfileCreate) GetSurname() string {
 	return s.Surname
 }
 
-// GetDateOfBirth returns the value of DateOfBirth.
-func (s *ProfileCreate) GetDateOfBirth() time.Time {
-	return s.DateOfBirth
-}
-
 // SetEmail sets the value of Email.
 func (s *ProfileCreate) SetEmail(val string) {
 	s.Email = val
@@ -669,11 +663,6 @@ func (s *ProfileCreate) SetName(val string) {
 // SetSurname sets the value of Surname.
 func (s *ProfileCreate) SetSurname(val string) {
 	s.Surname = val
-}
-
-// SetDateOfBirth sets the value of DateOfBirth.
-func (s *ProfileCreate) SetDateOfBirth(val time.Time) {
-	s.DateOfBirth = val
 }
 
 // Ref: #/ProfileUpdate

@@ -34,7 +34,7 @@ func (s *Server) V1APIGroupPost(ctx context.Context, req *desc.Group) (desc.V1AP
 	path := common.FillPath(
 		domain.PathPageGroup,
 		map[string]string{
-			domain.PathParamContactID: id.String(),
+			domain.PathParamGroupID: id.String(),
 		},
 	)
 

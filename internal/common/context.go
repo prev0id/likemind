@@ -21,3 +21,11 @@ func UserIDFromContext(ctx context.Context) domain.UserID {
 	}
 	return userID
 }
+
+func UserIDFromContextWithCheck(ctx context.Context) (domain.UserID, bool) {
+	userID, ok := ctx.Value(userIDKey).(domain.UserID)
+	if !ok {
+		return 0, false
+	}
+	return userID, true
+}

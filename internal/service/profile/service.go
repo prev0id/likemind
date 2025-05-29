@@ -111,6 +111,7 @@ func (s *implementation) UpdateEmail(ctx context.Context, id domain.UserID, oldE
 		return domain.ErrNotAuthenticated
 	}
 
+	user.Login = newEmail
 	user.HashedPassword = hash(password, newEmail)
 
 	if err := s.db.UpdateUser(ctx, user); err != nil {

@@ -27,7 +27,6 @@ ProfileCreate:
     - username
     - name
     - surname
-    - date_of_birth
   properties:
     email:
       type: string
@@ -50,9 +49,6 @@ ProfileCreate:
       type: string
       pattern: "^[a-zA-Z0-9_]+$"
       maxLength: 50
-    date_of_birth:
-      type: string
-      format: date
 
 ProfileUpdate:
   type: object

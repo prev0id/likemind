@@ -26,7 +26,7 @@ func modelUserToDomain(u model.User) domain.User {
 		Surname:        u.Surname,
 		About:          u.About,
 		HashedPassword: u.Password,
-		Login:          domain.Email(u.About),
+		Login:          domain.Email(u.Email),
 		Location:       u.Location,
 	}
 }

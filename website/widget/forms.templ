@@ -7,7 +7,6 @@ import (
 	"likemind/website/view"
 	common_widget "likemind/website/widget/common"
 	"strconv"
-	"time"
 )
 
 templ FormSignIn() {
@@ -113,16 +112,6 @@ templ FormSignUp() {
 					Placeholder: "Deev",
 				})
 			</div>
-			<div>
-				@common_widget.InputLabel(view.InputLabel{
-					Text: "Date of birth",
-					For:  "date_of_birth",
-				})
-				@common_widget.Input(view.Input{
-					Name: "date_of_birth",
-					Type: "date",
-				})
-			</div>
 			@common_widget.Button(view.Button{Type: "submit"}) {
 				Signup
 			}
@@ -193,17 +182,6 @@ templ UpdateProfileData(state *view.Profile) {
 					Type:        "text",
 					Placeholder: "City, Country",
 					Value:       state.Location,
-				})
-			</div>
-			<div>
-				@common_widget.InputLabel(view.InputLabel{
-					Text: "Birthday",
-					For:  "date_of_birth",
-				})
-				@common_widget.Input(view.Input{
-					Name:  "date_of_birth",
-					Type:  "date",
-					Value: state.DateOfBirth.Format(time.DateOnly),
 				})
 			</div>
 			<div>

@@ -17,7 +17,6 @@ func (s *Server) V1APIProfilePost(ctx context.Context, req *desc.ProfileCreate) 
 		Surname:     req.GetSurname(),
 		Login:       domain.Email(req.GetEmail()),
 		RawPassword: domain.Password(req.GetPassword()),
-		DateOfBirth: req.GetDateOfBirth(),
 	}
 
 	userID, err := s.profile.CreateUser(ctx, user)
@@ -155,9 +154,6 @@ func updateUserFields(user domain.User, req *desc.ProfileUpdate) domain.User {
 	}
 	if username := req.GetUsername(); username.IsSet() {
 		user.Nickname = username.Value
-	}
-	if dateOfBirth := req.GetDateOfBirth(); dateOfBirth.IsSet() {
-		user.DateOfBirth = dateOfBirth.Value
 	}
 	if about := req.GetAbout(); about.IsSet() {
 		user.About = about.Value

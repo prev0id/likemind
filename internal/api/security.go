@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"net/http"
 
 	"likemind/internal/common"
 	"likemind/internal/domain"
@@ -25,14 +26,35 @@ func NewSecurityHandler(sessionService session.Service) *Security {
 }
 
 func (s *Security) HandleSessionAuth(ctx context.Context, operationName desc.OperationName, t desc.SessionAuth) (context.Context, error) {
-	token := domain.SessionToken(t.GetAPIKey())
-
-	userID, err := s.sessions.ValidateSession(ctx, token)
-	if err != nil {
-		log.Warn().Msgf("permission denied, token=%q, reason=%q", token, err.Error())
-		return ctx, fmt.Errorf("s.sessions.ValidateSession: %w", err)
+	userID, ok := common.UserIDFromContextWithCheck(ctx)
+	if !ok {
+		return ctx, fmt.Errorf("permission denied")
 	}
 
 	log.Warn().Msgf("permission granted, user=%d, operation=%q", userID, operationName)
-	return common.ContextWithUserID(ctx, userID), nil
+
+	return ctx, nil
+}
+
+func (s *Security) AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie(domain.SessionName)
+		if err != nil {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		ctx := r.Context()
+
+		userID, err := s.sessions.ValidateSession(ctx, domain.SessionToken(cookie.Value))
+		if err != nil {
+			log.Err(err).Msg("s.sessions.ValidateSession")
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		ctx = common.ContextWithUserID(ctx, userID)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }

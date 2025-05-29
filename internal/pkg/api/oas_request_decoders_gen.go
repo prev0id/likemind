@@ -1534,33 +1534,6 @@ func (s *Server) decodeV1APIProfilePostRequest(r *http.Request) (
 				return req, close, errors.Wrap(err, "query")
 			}
 		}
-		{
-			cfg := uri.QueryParameterDecodingConfig{
-				Name:    "date_of_birth",
-				Style:   uri.QueryStyleForm,
-				Explode: true,
-			}
-			if err := q.HasParam(cfg); err == nil {
-				if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToDate(val)
-					if err != nil {
-						return err
-					}
-
-					request.DateOfBirth = c
-					return nil
-				}); err != nil {
-					return req, close, errors.Wrap(err, "decode \"date_of_birth\"")
-				}
-			} else {
-				return req, close, errors.Wrap(err, "query")
-			}
-		}
 		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)

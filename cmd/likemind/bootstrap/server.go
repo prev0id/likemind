@@ -40,6 +40,7 @@ func Server(
 		middleware.Heartbeat(domain.PathAPIPing),
 		middleware.StripSlashes,
 		middleware.Timeout(cfg.RequestTimeout),
+		security.AuthMiddleware,
 		middleware.Recoverer, // should be last
 	)
 

@@ -2,7 +2,6 @@ package domain
 
 import (
 	"strconv"
-	"time"
 )
 
 type (
@@ -20,7 +19,6 @@ type User struct {
 	About          string
 	Location       string
 	Login          Email
-	DateOfBirth    time.Time
 	HashedPassword []byte
 	RawPassword    Password
 }

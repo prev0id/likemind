@@ -26,7 +26,7 @@ type Service interface {
 	UploadImage(ctx context.Context, file http.MultipartFile) error
 	DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error
 	GetProfileImages(ctx context.Context, id domain.UserID) ([]domain.PictureID, error)
-	GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error)
+	GetImage(ctx context.Context, image domain.PictureID) (io.ReadCloser, error)
 }
 
 var _ (Service) = (*implementation)(nil)
@@ -90,13 +90,6 @@ func (s *implementation) UploadImage(ctx context.Context, file http.MultipartFil
 }
 
 func (s *implementation) DeleteImage(ctx context.Context, image domain.PictureID, userID domain.UserID) error {
-	if image == "" {
-		return fmt.Errorf("image name is required")
-	}
-	if userID <= 0 {
-		return fmt.Errorf("invalid user ID")
-	}
-
 	pics, err := s.repo.GetProfilePicturesByUserID(ctx, userID)
 	if err != nil {
 		return fmt.Errorf("failed to get profile pictures: %w", err)
@@ -117,26 +110,7 @@ func (s *implementation) DeleteImage(ctx context.Context, image domain.PictureID
 	return nil
 }
 
-func (s *implementation) GetImage(ctx context.Context, image domain.PictureID, userID domain.UserID) (io.ReadCloser, error) {
-	if ctx == nil {
-		return nil, fmt.Errorf("context is required")
-	}
-	if image == "" {
-		return nil, fmt.Errorf("image name is required")
-	}
-	if userID <= 0 {
-		return nil, fmt.Errorf("invalid user ID")
-	}
-
-	pics, err := s.repo.GetProfilePicturesByUserID(ctx, userID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get profile pictures: %w", err)
-	}
-
-	if !slices.Contains(pics, image) {
-		return nil, domain.ErrInvalidImageNameProvided
-	}
-
+func (s *implementation) GetImage(ctx context.Context, image domain.PictureID) (io.ReadCloser, error) {
 	data, err := s.s3.GetImage(ctx, string(image))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get image from S3: %w", err)

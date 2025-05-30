@@ -95,9 +95,7 @@ func (s *Server) V1APIProfileEmailPut(ctx context.Context, req *desc.EmailUpdate
 }
 
 func (s *Server) V1APIProfileImageImageIDGet(ctx context.Context, params desc.V1APIProfileImageImageIDGetParams) (desc.V1APIProfileImageImageIDGetRes, error) {
-	userID := common.UserIDFromContext(ctx)
-
-	img, err := s.image.GetImage(ctx, domain.PictureID(params.ImageID), userID)
+	img, err := s.image.GetImage(ctx, domain.PictureID(params.ImageID))
 	if err != nil {
 		return &desc.NotFound{Data: common.ErrorMsg(err)}, nil
 	}
